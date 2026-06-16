@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Honors — Fantasy Golf League</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav class="site-nav" id="site-nav">
+    <a href="#weekly-report">Weekly Report</a>
+    <a href="#member-profiles">Member Profiles</a>
+    <a href="#championship-history">Championship History</a>
+    <a href="#record-books">Record Books</a>
+  </nav>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <!-- Swap for <img class="hero-text-img" src="images/text.png" alt=""> once you have the asset -->
+    <div class="hero-text-placeholder">Text Goes Here</div>
+    <!-- Swap for <img class="hero-logo-img" src="images/logo.png" alt="The Honors"> once you have the asset -->
+    <div class="hero-logo-placeholder">Logo Goes Here</div>
+  </section>
+
+  <!-- Placeholder anchors so the nav links resolve to something while sections are TBD -->
+  <section class="scroll-spacer" id="weekly-report">
+    <h2>Weekly Report</h2>
+  </section>
+
+  <section class="scroll-spacer" id="member-profiles">
+    <h2>Member Profiles</h2>
+  </section>
+
+  <section class="scroll-spacer" id="championship-history">
+    <h2>Championship History</h2>
+  </section>
+
+  <section class="scroll-spacer" id="record-books">
+    <h2>Record Books</h2>
+  </section>
+
+  <script>
+    const hero     = document.getElementById('hero');
+    const heroBg   = document.querySelector('.hero-bg');
+    const heroText = document.querySelector('.hero-text-img') || document.querySelector('.hero-text-placeholder');
+    const heroLogo = document.querySelector('.hero-logo-img') || document.querySelector('.hero-logo-placeholder');
+    const nav      = document.getElementById('site-nav');
+
+    function updateHero() {
+      const scrollY  = window.scrollY;
+      const heroH    = hero.offsetHeight;
+      const progress = Math.min(scrollY / (heroH * 0.75), 1);
+      const opacity  = 1 - progress;
+
+      // hero-bg and text.png fade together, no drift on either
+      heroBg.style.opacity   = opacity;
+      heroText.style.opacity = opacity;
+
+      // logo.png drifts downward independently while fading, same as football site
+      const logoDrift   = scrollY * 1.5;
+      const logoOpacity = Math.max(1 - progress, 0);
+      heroLogo.style.transform = `translateX(-50%) translateY(${logoDrift}px)`;
+      heroLogo.style.opacity   = logoOpacity;
+
+      nav.classList.toggle('scrolled', scrollY > 40);
+    }
+
+    window.addEventListener('scroll', updateHero, { passive: true });
+    updateHero();
+  </script>
+
+</body>
+</html>

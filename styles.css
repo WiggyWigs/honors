@@ -1,0 +1,204 @@
+/* ============================================
+   THE HONORS — Fantasy Golf League
+   Starting point: hero + fixed nav + scroll mechanics
+   (Placeholder visuals — swap images when assets exist)
+============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --parchment: #f2e4c4;
+  --ink: #1a2a18;
+  --ink-mid: #2f4a2c;
+  --ink-light: #4c6b48;
+  --deco-green: #1a6b3a;
+  --deco-gold: #b8860b;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--parchment);
+  background-image: url('images/background.png');
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  background-position: top center;
+  color: var(--ink);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   FIXED TOP NAV
+   Stays pinned above everything, including hero.
+============================================ */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: 1rem 1.5rem;
+  background: rgba(26, 42, 24, 0.0);
+  transition: background 0.3s ease, padding 0.3s ease;
+}
+
+.site-nav.scrolled {
+  background: rgba(26, 42, 24, 0.85);
+  padding: 0.65rem 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.site-nav a {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav a:hover { opacity: 1; }
+
+/* ============================================
+   HERO SECTION
+   Fixed background fades out on scroll, logo drifts/fades.
+   Mechanics copied from football site, swap images later.
+============================================ */
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  max-height: 100vh;
+}
+
+.hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  max-height: 100vh;
+  background-image: url('images/hero.png');
+  background-color: var(--ink-mid); /* visible placeholder until image exists */
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 5;
+  will-change: opacity;
+}
+
+/* text.png — centered, slightly below center of hero.png.
+   Fades at the SAME rate as hero-bg, no independent drift.
+   absolute (not fixed) so it scrolls away with .hero once the section passes. */
+.hero-text-img {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(160px, 26vw, 460px);
+  height: auto;
+  z-index: 6;
+  will-change: opacity;
+}
+
+.hero-text-placeholder {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(160px, 26vw, 460px);
+  aspect-ratio: 3 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 228, 196, 0.15);
+  border: 2px dashed var(--deco-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  text-align: center;
+  z-index: 6;
+  will-change: opacity;
+}
+
+/* logo.png — acts exactly like the football site's logo.png:
+   fades AND drifts downward independently as you scroll. */
+.hero-logo-img {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(100px, 20vw, 380px);
+  height: auto;
+  z-index: 11;
+  will-change: transform, opacity;
+}
+
+.hero-logo-placeholder {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(100px, 20vw, 380px);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 228, 196, 0.15);
+  border: 2px dashed var(--deco-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  text-align: center;
+  z-index: 11;
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   SPACER — placeholder content below hero so
+   scroll mechanics are testable
+============================================ */
+.scroll-spacer {
+  position: relative;
+  z-index: 10;
+  min-height: 150vh;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.scroll-spacer h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  .hero-logo-img,
+  .hero-logo-placeholder { width: 50vw; }
+  .site-nav { gap: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-img,
+  .hero-logo-placeholder { transition: none; }
+}
