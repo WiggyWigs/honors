@@ -18,6 +18,7 @@
   --ink-mid: #2f4a2c;
   --ink-light: #4c6b48;
   --deco-green: #1a6b3a;
+  --masters-green: #006747;
   --deco-gold: #b8860b;
 }
 
@@ -48,17 +49,47 @@ body {
   z-index: 100;
   display: flex;
   justify-content: center;
-  gap: clamp(1rem, 4vw, 3rem);
+  align-items: center;
   padding: 1rem 1.5rem;
   background: rgba(26, 42, 24, 0.0);
   transition: background 0.3s ease, padding 0.3s ease;
 }
 
 .site-nav.scrolled {
-  background: rgba(26, 42, 24, 0.85);
   padding: 0.65rem 1.5rem;
-  backdrop-filter: blur(4px);
 }
+
+.site-nav-links {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+}
+
+/* Hamburger button — hidden on desktop, shown only on mobile (see breakpoint below) */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--masters-green);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Turns the three bars into an X when the menu is open */
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .site-nav a {
   font-family: 'Cinzel', serif;
@@ -66,7 +97,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--parchment);
+  color: var(--masters-green);
   text-decoration: none;
   white-space: nowrap;
   opacity: 0.9;
@@ -83,7 +114,7 @@ body {
 .hero {
   position: relative;
   width: 100%;
-  aspect-ratio: 1672 / 941;
+  aspect-ratio: 1536 / 1024;
   max-height: 100vh;
 }
 
@@ -92,50 +123,14 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  aspect-ratio: 1672 / 941;
+  aspect-ratio: 1536 / 1024;
   max-height: 100vh;
   background-image: url('images/hero.png');
   background-color: var(--ink-mid); /* visible placeholder until image exists */
-  background-size: 100% 100%;
+  background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   z-index: 5;
-  will-change: opacity;
-}
-
-/* text.png — centered, slightly below center of hero.png.
-   Fades at the SAME rate as hero-bg, no independent drift.
-   absolute (not fixed) so it scrolls away with .hero once the section passes. */
-.hero-text-img {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: clamp(160px, 26vw, 460px);
-  height: auto;
-  z-index: 6;
-  will-change: opacity;
-}
-
-.hero-text-placeholder {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: clamp(160px, 26vw, 460px);
-  aspect-ratio: 3 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(242, 228, 196, 0.15);
-  border: 2px dashed var(--deco-gold);
-  font-family: 'Cinzel', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--parchment);
-  text-align: center;
-  z-index: 6;
   will-change: opacity;
 }
 
@@ -175,6 +170,189 @@ body {
 }
 
 /* ============================================
+   HERO FADE SPACER
+   Invisible block sized in JS to match the logo's
+   fade-out scroll distance, so the next section can't
+   appear on screen until the logo has fully faded.
+============================================ */
+.hero-fade-spacer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* ============================================
+   SECTION HEADERS
+   Fade in from 0 to full opacity as they travel
+   from the bottom of the viewport to its vertical center.
+============================================ */
+.section-header {
+  opacity: 0;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-header { opacity: 1; transition: none; }
+}
+
+/* ============================================
+   MEMBER PROFILE CARD
+============================================ */
+.member-profiles-section {
+  text-align: left;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.member-profiles-section .section-header {
+  text-align: center;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.member-card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.member-photo {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.member-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.member-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.5rem;
+}
+
+/* Stat tables — grid instead of football's single flex-row,
+   since 10 stats total won't fit one row cleanly */
+.stat-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: rgba(0, 103, 71, 0.25);
+  border: 1px solid rgba(0, 103, 71, 0.3);
+  margin-bottom: 1rem;
+}
+
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: rgba(0, 103, 71, 0.08);
+  padding: 0.85rem 1rem;
+}
+
+.stat-cell .stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.stat-cell .stat-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--masters-green);
+}
+
+/* Grand Slam — own row, since "N/A — missing: X, Y" runs longer than a stat cell */
+.grand-slam-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: rgba(184, 134, 11, 0.1);
+  border-left: 3px solid var(--deco-gold);
+  margin-bottom: 1.25rem;
+}
+
+.grand-slam-row .stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+
+.grand-slam-row .stat-value {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-mid);
+}
+
+/* Unique stat slot — flexible container, no fixed shape.
+   Grows to fit whatever content (short stat or longer fun fact) goes inside. */
+.unique-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.unique-stat {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-mid);
+  padding: 0.7rem 1rem;
+  background: rgba(0, 103, 71, 0.06);
+  border-left: 3px solid var(--masters-green);
+}
+
+.member-narrative {
+  font-family: 'IM Fell English', serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--ink-mid);
+}
+
+@media (min-width: 650px) {
+  .member-card-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .member-photo {
+    flex: 0 0 380px;
+    max-width: 380px;
+    margin: 0;
+  }
+
+  .member-content {
+    flex: 1;
+  }
+}
+
+/* ============================================
    SPACER — placeholder content below hero so
    scroll mechanics are testable
 ============================================ */
@@ -193,9 +371,64 @@ body {
 }
 
 @media (max-width: 600px) {
+  .hero,
+  .hero-bg {
+    /* hero_m.png is portrait-shaped, unlike desktop's landscape hero.png,
+       so the box shape has to match or "cover" will crop it wrong */
+    aspect-ratio: 1024 / 1179;
+  }
+
+  .hero-bg {
+    background-image: url('images/hero_m.png');
+  }
+
   .hero-logo-img,
-  .hero-logo-placeholder { width: 50vw; }
-  .site-nav { gap: 0.75rem; }
+  .hero-logo-placeholder {
+    /* shifted down slightly from the desktop 45% so the logo clears the title
+       text in hero_m.png, which sits higher up than in the desktop hero */
+    top: 50%;
+  }
+
+  /* Hide the inline links, show the hamburger button instead */
+  .site-nav {
+    justify-content: flex-end;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: rgba(26, 42, 24, 0.92);
+    backdrop-filter: blur(4px);
+
+    /* Closed by default — slides/fades in when .open is added by JS */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+
+  .site-nav-links.open {
+    max-height: 400px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Masters Green is unreadable against the dark dropdown background,
+     so links go parchment-colored only while the mobile menu is open */
+  .site-nav-links.open a {
+    color: var(--parchment);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
