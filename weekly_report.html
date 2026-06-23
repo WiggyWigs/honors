@@ -97,7 +97,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 0;
+    padding: 8px 0;
   }
 
   .page {
@@ -107,6 +107,7 @@
     position: relative;
     overflow: visible;
     flex-shrink: 0;
+    padding: 0 10px;
   }
 
   /* Subtle contour texture overlay */
@@ -969,7 +970,7 @@
   @media (orientation: portrait) and (max-width: 700px) {
 
     /* Make .page a flex column so children can be reordered */
-    .page { display: flex; flex-direction: column; }
+    .page { display: flex; flex-direction: column; gap: 10px; padding: 0 8px; }
 
     /* Section stacking order */
     .hero             { order: 1; }
@@ -994,7 +995,7 @@
     .hero-left img { width: 100px !important; }
     .hero-center { width: 100%; }
     .hero-headline { font-size: 14px; }
-    .hero-subheadline { font-size: 11px; width: 100% !important; margin-left: 0 !important; }
+    .hero-subheadline { display: none; }
     .hero-right {
       display: flex;
       flex-direction: row;
@@ -1151,7 +1152,7 @@
      applies at all screen widths so the inline links never cover the
      report's own titles/headers. */
   .site-nav { justify-content: flex-end; }
-  .nav-toggle { display: flex; }
+  .nav-toggle { display: none; /* temporarily hidden — restore by changing to flex */ }
 
   .site-nav-links {
     position: fixed;
@@ -1208,7 +1209,7 @@
       <img src="https://www.dropbox.com/scl/fi/d4st1mpp5ry9pcv4svrnu/Honors-Logo-w-Text-transparent.png?rlkey=b6h6h6w4aifeohfb1e2p572oh&st=tbk0pfru&raw=1" alt="The Honors" style="width:180px;height:auto;">
     </div>
     <div class="hero-center">
-      <div class="hero-headline">Every Point Counts</div>
+      <div class="hero-headline">The Honors Weekly</div>
       <div class="hero-subheadline" style="width:115%;margin-left:-7.5%;">Greg leads Carlos by 41.3 points — 10 events remain</div>
     </div>
     <div class="hero-right">
@@ -1874,8 +1875,8 @@ buildHBars('qualityBars', DATA.quality, [
       const amt = r.amount > 0
         ? `<span style="font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:${isBonus ? 'var(--gold)' : '#D94040'};text-align:right;display:inline-block;">${'$'}${r.amount}</span>`
         : `<span style="font-size:27px;color:#8a7050;text-align:right;display:inline-block;">—</span>`;
-      return `<div style="display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:4px 0;">
-        <span style="font-size:26px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;width:90px;">${r.name.split(' ')[0]}</span>
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid rgba(0,103,71,0.12);">
+        <span style="font-size:22px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;min-width:70px;">${r.name.split(' ')[0]}</span>
         ${amt}
       </div>`;
     }).join('');
