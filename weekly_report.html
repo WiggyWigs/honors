@@ -318,6 +318,7 @@
     background: transparent;
     padding: 10px 14px 10px;
     border: 2px solid #4c6b48;
+    margin-bottom: 10px;
   }
 
   .card-title {
@@ -570,6 +571,15 @@
     padding: 3px 5px;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+  }
+  @media (orientation: portrait) and (max-width: 700px) {
+    .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
+    .standings-table td { white-space: normal; font-size: 10px; }
+    .standings-section { overflow-x: hidden; padding: 8px 6px; }
+    .standings-table { table-layout: fixed; width: 100%; }
+    /* Fix column widths for portrait */
+    .standings-table th:nth-child(1), .standings-table td:nth-child(1) { width: 18px; }
+    .standings-table th:nth-child(2), .standings-table td:nth-child(2) { width: 28%; }
   }
 
   .standings-table th:nth-child(1),
@@ -970,6 +980,7 @@
     .standings-section{ order: 6; }
     .callouts-grid    { order: 7; }
     .narratives-center{ order: 8; }
+    .page-footer      { order: 99; }  /* Always last */
 
     /* Hero: stack logo on top, center title, stats below */
     .hero {
@@ -992,7 +1003,8 @@
       width: 100%;
     }
     .hero-stat-label { font-size: 9px; }
-    .hero-stat-value { font-size: 18px; }
+    .hero-stat-value { font-size: 18px; text-align: center; }
+    .hero-stat { align-items: center; }
 
     /* Analytics row: stack vertically */
     .analytics-row {
@@ -1003,7 +1015,7 @@
     }
 
     /* hbar cards: stack vertically */
-    .hbar-row { flex-direction: column; }
+    .hbar-row { grid-template-columns: 1fr; }
 
     /* Bonuses/Penalties: stack to single column, full width */
     .callouts-top-row {
