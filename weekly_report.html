@@ -1059,9 +1059,10 @@
 
   
   /* ============================================================
-     LANDSCAPE MOBILE — phones in landscape (max-height 500px)
+     NARROW VIEWPORT — standings truncated below 900px wide
+     Covers phones in landscape, tablets, and compressed desktop
   ============================================================ */
-  @media (orientation: landscape) and (max-height: 500px) {
+  @media (max-width: 900px) {
     .standings-section { overflow-x: hidden; padding: 8px 6px; }
     .standings-table { table-layout: fixed; width: 100%; }
     .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
