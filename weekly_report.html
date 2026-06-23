@@ -83,7 +83,7 @@
   body {
     background-color: var(--bg-primary);
     background-image: url('images/background.png');
-    background-repeat: repeat-y;
+    background-repeat: repeat;
     background-size: 100% auto;
     background-position: top center;
     display: flex;
@@ -1063,6 +1063,7 @@
      Covers phones in landscape, tablets, and compressed desktop
   ============================================================ */
   @media (max-width: 900px) {
+    .page { max-width: 100%; }
     .standings-section { overflow-x: hidden; padding: 8px 6px; }
     .standings-table { table-layout: fixed; width: 100%; }
     .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
