@@ -955,24 +955,46 @@
 
   /* ============================================================
      PORTRAIT MOBILE — orientation: portrait and max-width 700px
-     Stacks all sections, switches chart to hbar, hides table cols
   ============================================================ */
   @media (orientation: portrait) and (max-width: 700px) {
 
-    /* Global wrapper stacks everything */
-    .page-wrap { display: flex; flex-direction: column; }
+    /* Make .page a flex column so children can be reordered */
+    .page { display: flex; flex-direction: column; }
 
-    /* Reorder sections via order property */
-    .section-chart          { order: 1; }
-    .winnings-section       { order: 2; }
-    .analytics-row          { order: 3; }  /* wins + best golfer finishes */
-    .hbar-row               { order: 4; }  /* quality + shitty */
-    .callouts-top-row       { order: 5; }  /* bonuses + penalties */
-    .standings-section      { order: 6; }
-    .callouts-grid          { order: 7; }
-    .narratives-center      { order: 8; }
+    /* Section stacking order */
+    .hero             { order: 1; }
+    .section-chart    { order: 2; }
+    .analytics-row    { order: 3; }   /* Tournament Winnings + Wins */
+    .hbar-row         { order: 4; }   /* Quality + Shitty Lineups */
+    .callouts-top-row { order: 5; }   /* Bonuses + Penalties */
+    .standings-section{ order: 6; }
+    .callouts-grid    { order: 7; }
+    .narratives-center{ order: 8; }
 
-    /* Analytics cards stack vertically */
+    /* Hero: stack logo on top, center title, stats below */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px 12px;
+      gap: 6px;
+    }
+    .hero-left img { width: 100px !important; }
+    .hero-center { width: 100%; }
+    .hero-headline { font-size: 14px; }
+    .hero-subheadline { font-size: 11px; width: 100% !important; margin-left: 0 !important; }
+    .hero-right {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+    .hero-stat-label { font-size: 9px; }
+    .hero-stat-value { font-size: 18px; }
+
+    /* Analytics row: stack vertically */
     .analytics-row {
       grid-template-columns: 1fr;
       border-top: none;
@@ -980,55 +1002,44 @@
       margin-bottom: 0;
     }
 
-    /* hbar row stacks vertically */
-    .hbar-row {
-      flex-direction: column;
+    /* hbar cards: stack vertically */
+    .hbar-row { flex-direction: column; }
+
+    /* Bonuses/Penalties: stack to single column, full width */
+    .callouts-top-row {
+      grid-template-columns: 1fr;
     }
 
-    /* Callouts grid: 2 columns on portrait */
+    /* Callouts grid: 2 columns */
     .callouts-grid {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Narratives stack */
-    .narratives-center {
-      grid-template-columns: 1fr;
-    }
+    /* Narratives: stack */
+    .narratives-center { grid-template-columns: 1fr; }
 
-    /* Hide the line chart canvas on portrait */
-    #trailChart { display: none; }
+    /* Keep line chart, hide mobile bar chart */
+    #trailMobileChart { display: none !important; }
 
-    /* Show the mobile bar chart instead */
-    #trailMobileChart { display: block !important; }
-
-    /* Standings: hide non-essential columns */
-    .standings-table th:nth-child(5),  /* Catchup */
+    /* Standings: keep #, Player, Points, Trailing, Made, Wins, Top Ten
+       Hide: Catchup(5), Miss(6), Cut%(8), Avg Fin(10), Avg Cont(12), 2nds(13) */
+    .standings-table th:nth-child(5),
     .standings-table td:nth-child(5),
-    .standings-table th:nth-child(6),  /* Miss */
+    .standings-table th:nth-child(6),
     .standings-table td:nth-child(6),
-    .standings-table th:nth-child(7),  /* Made */
-    .standings-table td:nth-child(7),
-    .standings-table th:nth-child(10), /* Avg Fin */
+    .standings-table th:nth-child(8),
+    .standings-table td:nth-child(8),
+    .standings-table th:nth-child(10),
     .standings-table td:nth-child(10),
-    .standings-table th:nth-child(12), /* Avg Cont */
+    .standings-table th:nth-child(12),
     .standings-table td:nth-child(12),
-    .standings-table th:nth-child(13), /* 2nds */
-    .standings-table td:nth-child(13) {
-      display: none;
-    }
+    .standings-table th:nth-child(13),
+    .standings-table td:nth-child(13) { display: none; }
 
-    /* Shrink table text on mobile */
+    /* Shrink table text */
     .standings-table th,
-    .standings-table td {
-      font-size: 10px;
-      padding: 5px 4px;
-      letter-spacing: 0;
-    }
-
-    /* Shrink standings title */
-    .standings-title {
-      font-size: 13px;
-    }
+    .standings-table td { font-size: 10px; padding: 5px 4px; letter-spacing: 0; }
+    .standings-title { font-size: 13px; }
   }
 
   </style>
@@ -1208,7 +1219,6 @@
     </div>
     <div class="trail-canvas-wrap">
       <canvas id="trailChart"></canvas>
-      <canvas id="trailMobileChart" style="display:none;width:100%;"></canvas>
     </div>
     <div class="trail-legend">
       <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--red)"></div>Carlos Flores</div>
@@ -1291,7 +1301,7 @@
           <th>Trailing</th>
           <th>Catchup</th>
           <th>Miss</th>
-          <th>Made</th>
+          <th>Cuts Made</th>
           <th>Cut%</th>
           <th>Wins</th>
           <th>Avg Fin</th>
@@ -1669,62 +1679,6 @@ new Chart(document.getElementById('trailChart'), {
   }
 });
 
-// ============================================================
-// MOBILE PORTRAIT: Horizontal bar chart — current gap to leader
-// ============================================================
-(function buildMobileTrail() {
-  const canvas = document.getElementById('trailMobileChart');
-  if (!canvas) return;
-  const players = DATA.trailing.players;
-  // Current trailing value = last value in each player's series
-  const rows = players.map(p => ({
-    name: p.name.split(' ')[0],
-    color: p.color,
-    gap: p.values[p.values.length - 1]
-  })).sort((a, b) => a.gap - b.gap); // leader (0) first
-
-  const maxGap = Math.max(...rows.map(r => r.gap), 1);
-  const BAR_HEIGHT = 28;
-  const NAME_W = 52;
-  const LABEL_W = 48;
-  const PAD = 12;
-  const TRACK_W = canvas.parentElement.offsetWidth - NAME_W - LABEL_W - PAD * 2;
-  canvas.width  = NAME_W + TRACK_W + LABEL_W + PAD * 2;
-  canvas.height = rows.length * (BAR_HEIGHT + 8) + 24;
-
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  rows.forEach((r, i) => {
-    const y = 20 + i * (BAR_HEIGHT + 8);
-    const barW = r.gap === 0 ? TRACK_W : Math.max((r.gap / maxGap) * TRACK_W, 4);
-    const x = PAD + NAME_W;
-
-    // Name
-    ctx.font = '700 12px Cinzel, serif';
-    ctx.fillStyle = r.color;
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(r.name, PAD + NAME_W - 6, y + BAR_HEIGHT / 2);
-
-    // Track background
-    ctx.fillStyle = 'rgba(0,103,71,0.08)';
-    ctx.fillRect(x, y, TRACK_W, BAR_HEIGHT);
-
-    // Bar
-    ctx.fillStyle = r.color;
-    ctx.globalAlpha = r.gap === 0 ? 0.9 : 0.75;
-    ctx.fillRect(x, y, barW, BAR_HEIGHT);
-    ctx.globalAlpha = 1;
-
-    // Label
-    const label = r.gap === 0 ? 'Leader' : '-' + r.gap.toFixed(1);
-    ctx.font = '600 11px Cinzel, serif';
-    ctx.fillStyle = r.color;
-    ctx.textAlign = 'left';
-    ctx.fillText(label, x + TRACK_W + 6, y + BAR_HEIGHT / 2);
-  });
-})();
 
 // ============================================================
 // DONUT CHART
