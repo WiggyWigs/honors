@@ -89,6 +89,7 @@
     justify-content: center;
     align-items: flex-start;
     font-family: 'IM Fell English', Georgia, serif;
+    overscroll-behavior: none;
   }
 
   .page-outer {
@@ -1053,6 +1054,24 @@
     .standings-table th,
     .standings-table td { font-size: 10px; padding: 5px 4px; letter-spacing: 0; }
     .standings-title { font-size: 13px; }
+  }
+
+  
+  /* ============================================================
+     LANDSCAPE MOBILE — phones in landscape (max-height 500px)
+  ============================================================ */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .standings-section { overflow-x: hidden; padding: 8px 6px; }
+    .standings-table { table-layout: fixed; width: 100%; }
+    .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
+    .standings-table td { font-size: 10px; padding: 4px 4px; }
+    .standings-table th:nth-child(5), .standings-table td:nth-child(5),
+    .standings-table th:nth-child(6), .standings-table td:nth-child(6),
+    .standings-table th:nth-child(8), .standings-table td:nth-child(8),
+    .standings-table th:nth-child(10), .standings-table td:nth-child(10),
+    .standings-table th:nth-child(12), .standings-table td:nth-child(12),
+    .standings-table th:nth-child(13), .standings-table td:nth-child(13) { display: none; }
+    .standings-table th:nth-child(2), .standings-table td:nth-child(2) { width: 28%; }
   }
 
   </style>
