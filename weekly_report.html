@@ -1282,7 +1282,7 @@ const DATA = {
   // Fixed 8-box grid below the top row, in this exact order.
   // No rotation — edit this array directly to change which stats show.
   ACTIVE_CALLOUTS: [
-    'made_cut_pct', 'winning_pct', 'quality_lineups', 'tournament_earnings',
+    'made_cut_pct', 'winning_pct', 'quality_lineups', 'highest_top10_pct',
     'losing_streak', 'lowest_top10_pct', 'second_place', 'last_place'
   ],
 
@@ -1430,7 +1430,7 @@ const DATA = {
     players: [
       { name: "Greg Wigton", color: "#3A9B4B", values: [87.3, 74.1, 69.0, 81.5, 0.0, 0.0, 0.0, 0.0, 12.8, 110.5, 78.4, 14.0, 0.0, 4.5, 49.9, 3.9, 0.0, 0.0, 0.0] },
       { name: "Carlos Flores", color: "#D94040", values: [54.1, 55.1, 2.5, 0.0, 13.5, 7.4, 65.5, 107.8, 0.0, 0.0, 0.0, 0.0, 35.5, 0.0, 0.0, 0.0, 4.2, 8.9, 41.3] },
-      { name: "William Sullivan", color: "#C9B830", values: [94.9, 154.8, 93.4, 241.0, 258.9, 173.7, 263.1, 373.3, 445.2, 440.2, 359.6, 369.6, 360.8, 344.4, 288.2, 310.4, 183.9, 117.2, 146.6] },
+      { name: "William Sullivan", color: "#8B7010", values: [94.9, 154.8, 93.4, 241.0, 258.9, 173.7, 263.1, 373.3, 445.2, 440.2, 359.6, 369.6, 360.8, 344.4, 288.2, 310.4, 183.9, 117.2, 146.6] },
       { name: "Kevin McNamara", color: "#3B72C9", values: [100.1, 204.6, 122.2, 175.7, 133.3, 99.7, 183.4, 244.4, 314.6, 392.2, 328.9, 317.4, 328.0, 457.2, 443.4, 386.9, 383.9, 336.8, 378.7] },
       { name: "Robert Bresnahan", color: "#7B4BB5", values: [0.0, 0.0, 0.0, 145.7, 141.4, 133.1, 167.9, 237.0, 319.4, 284.3, 241.1, 367.7, 421.4, 448.3, 532.3, 462.6, 433.0, 400.5, 471.7] }
     ]
@@ -1439,14 +1439,14 @@ const DATA = {
   winnings: [
     { name: "Greg Wigton", color: "#3A9B4B", amount: 300, pct: "36.4%" },
     { name: "Carlos Flores", color: "#D94040", amount: 175, pct: "21.2%" },
-    { name: "William Sullivan", color: "#C9B830", amount: 175, pct: "21.2%" },
+    { name: "William Sullivan", color: "#8B7010", amount: 175, pct: "21.2%" },
     { name: "Robert Bresnahan", color: "#7B4BB5", amount: 150, pct: "18.2%" },
     { name: "Kevin McNamara", color: "#3B72C9", amount: 25, pct: "3.0%" }
   ],
 
   wins: [
     { name: "Greg Wigton", color: "#3A9B4B", tour: 4, elevated: 2, major: 1 },
-    { name: "William Sullivan", color: "#C9B830", tour: 3, elevated: 2, major: 0 },
+    { name: "William Sullivan", color: "#8B7010", tour: 3, elevated: 2, major: 0 },
     { name: "Carlos Flores", color: "#D94040", tour: 1, elevated: 1, major: 1 },
     { name: "Robert Bresnahan", color: "#7B4BB5", tour: 2, elevated: 0, major: 1 },
     { name: "Kevin McNamara", color: "#3B72C9", tour: 1, elevated: 0, major: 0 }
@@ -1455,40 +1455,40 @@ const DATA = {
   maxTotalWins: 7,
 
   finishes: [
-    { name: "Greg Wigton", top10: 22, top1120: 19 },
-    { name: "Carlos Flores", top10: 27, top1120: 16 },
-    { name: "William Sullivan", top10: 26, top1120: 13 },
-    { name: "Kevin McNamara", top10: 25, top1120: 21 },
-    { name: "Robert Bresnahan", top10: 19, top1120: 19 }
+    { name: "Greg Wigton", color: "#3A9B4B", top10: 22, top1120: 19 },
+    { name: "Carlos Flores", color: "#D94040", top10: 27, top1120: 16 },
+    { name: "William Sullivan", color: "#8B7010", top10: 26, top1120: 13 },
+    { name: "Kevin McNamara", color: "#3B72C9", top10: 25, top1120: 21 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", top10: 19, top1120: 19 }
   ],
 
   quality: [
-    { name: "Greg Wigton", sixer: 2, fiver: 10 },
-    { name: "Carlos Flores", sixer: 1, fiver: 9 },
-    { name: "William Sullivan", sixer: 3, fiver: 3 },
-    { name: "Kevin McNamara", sixer: 2, fiver: 4 },
-    { name: "Robert Bresnahan", sixer: 1, fiver: 5 }
+    { name: "Greg Wigton", color: "#3A9B4B", sixer: 2, fiver: 10 },
+    { name: "Carlos Flores", color: "#D94040", sixer: 1, fiver: 9 },
+    { name: "William Sullivan", color: "#8B7010", sixer: 3, fiver: 3 },
+    { name: "Kevin McNamara", color: "#3B72C9", sixer: 2, fiver: 4 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", sixer: 1, fiver: 5 }
   ],
 
   shitty: [
     { name: "Carlos Flores", color: "#D94040", gopher: 0, solo: 0, deuce: 0 },
     { name: "Greg Wigton", color: "#3A9B4B", gopher: 0, solo: 0, deuce: 0 },
     { name: "Robert Bresnahan", color: "#7B4BB5", gopher: 0, solo: 0, deuce: 0 },
-    { name: "William Sullivan", color: "#C9B830", gopher: 0, solo: 0, deuce: 0 },
+    { name: "William Sullivan", color: "#8B7010", gopher: 0, solo: 0, deuce: 0 },
     { name: "Kevin McNamara", color: "#3B72C9", gopher: 0, solo: 0, deuce: 1 }
   ],
 
   standings: [
     { rank:1, name:"Greg Wigton", color:"#3A9B4B", pts:8354.9, trail:"LEADER", catchup:"-", miss:16, made:74, cutpct:"82.2%", wins:7, avgFin:27.8, top10s:22, avgCont:2.6, seconds:2, boldMade:true, boldWins:true, boldTop10:false },
     { rank:2, name:"Carlos Flores", color:"#D94040", pts:8313.6, trail:"41.3", catchup:"4.1", miss:19, made:71, cutpct:"78.9%", wins:3, avgFin:25.8, top10s:27, avgCont:3.1, seconds:2, boldMade:false, boldWins:false, boldTop10:true },
-    { rank:3, name:"William Sullivan", color:"#C9B830", pts:8208.3, trail:"146.6", catchup:"14.7", miss:24, made:66, cutpct:"73.3%", wins:5, avgFin:25.3, top10s:26, avgCont:2.9, seconds:5, boldMade:false, boldWins:false, boldTop10:false },
+    { rank:3, name:"William Sullivan", color:"#8B7010", pts:8208.3, trail:"146.6", catchup:"14.7", miss:24, made:66, cutpct:"73.3%", wins:5, avgFin:25.3, top10s:26, avgCont:2.9, seconds:5, boldMade:false, boldWins:false, boldTop10:false },
     { rank:4, name:"Kevin McNamara", color:"#3B72C9", pts:7976.2, trail:"378.7", catchup:"37.9", miss:26, made:64, cutpct:"71.1%", wins:1, avgFin:24.6, top10s:25, avgCont:3.1, seconds:7, boldMade:false, boldWins:false, boldTop10:false },
     { rank:5, name:"Robert Bresnahan", color:"#7B4BB5", pts:7883.2, trail:"471.7", catchup:"47.2", miss:23, made:67, cutpct:"74.4%", wins:3, avgFin:27.0, top10s:19, avgCont:3.3, seconds:3, boldMade:false, boldWins:false, boldTop10:false }
   ],
 
   bonuses: [
     { name: "Greg Wigton", color: "#3A9B4B", amount: 40 },
-    { name: "William Sullivan", color: "#C9B830", amount: 40 },
+    { name: "William Sullivan", color: "#8B7010", amount: 40 },
     { name: "Kevin McNamara", color: "#3B72C9", amount: 15 },
     { name: "Robert Bresnahan", color: "#7B4BB5", amount: 15 },
     { name: "Carlos Flores", color: "#D94040", amount: 5 }
@@ -1499,14 +1499,14 @@ const DATA = {
     { name: "Carlos Flores", color: "#D94040", amount: 0 },
     { name: "Greg Wigton", color: "#3A9B4B", amount: 0 },
     { name: "Robert Bresnahan", color: "#7B4BB5", amount: 0 },
-    { name: "William Sullivan", color: "#C9B830", amount: 0 }
+    { name: "William Sullivan", color: "#8B7010", amount: 0 }
   ],
 
   streaks: [
     { name: "Kevin McNamara", color: "#3B72C9", streak: 16 },
     { name: "Carlos Flores", color: "#D94040", streak: 5 },
     { name: "Robert Bresnahan", color: "#7B4BB5", streak: 3 },
-    { name: "William Sullivan", color: "#C9B830", streak: 1 },
+    { name: "William Sullivan", color: "#8B7010", streak: 1 },
     { name: "Greg Wigton", color: "#3A9B4B", streak: 0 }
   ]
 };
@@ -1669,13 +1669,13 @@ new Chart(document.getElementById('trailChart'), {
     const total = p.tour + p.elevated + p.major;
     let segs = '';
     if (p.tour > 0) {
-      segs += `<div class="wins-bar-seg" style="background:#8A9098;width:${(p.tour/maxTotal)*100}%" title="Tour: ${p.tour}">${p.tour}</div>`;
+      segs += `<div class="wins-bar-seg" style="background:#8A9098;width:${(p.tour/maxTotal)*100}%" title="Tour: ${p.tour}"></div>`;
     }
     if (p.elevated > 0) {
-      segs += `<div class="wins-bar-seg" style="background:#3A9B4B;width:${(p.elevated/maxTotal)*100}%" title="Elevated: ${p.elevated}">${p.elevated}</div>`;
+      segs += `<div class="wins-bar-seg" style="background:#3A9B4B;width:${(p.elevated/maxTotal)*100}%" title="Elevated: ${p.elevated}"></div>`;
     }
     if (p.major > 0) {
-      segs += `<div class="wins-bar-seg" style="background:#C9A84C;width:${(p.major/maxTotal)*100}%" title="Major: ${p.major}">${p.major}</div>`;
+      segs += `<div class="wins-bar-seg" style="background:#C9A84C;width:${(p.major/maxTotal)*100}%" title="Major: ${p.major}"></div>`;
     }
 
     container.innerHTML += `
@@ -1747,9 +1747,9 @@ buildHBars('qualityBars', DATA.quality, [
   DATA.shitty.forEach(p => {
     const total = p.gopher + p.solo + p.deuce;
     let segs = '';
-    if (p.gopher > 0) segs += `<div class="hbar-seg" style="background:#C0392B;width:${(p.gopher/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Gophers">${p.gopher}</div>`;
-    if (p.solo   > 0) segs += `<div class="hbar-seg" style="background:#E8563A;width:${(p.solo/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Solos">${p.solo}</div>`;
-    if (p.deuce  > 0) segs += `<div class="hbar-seg" style="background:#8B4513;width:${(p.deuce/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Deuces">${p.deuce}</div>`;
+    if (p.gopher > 0) segs += `<div class="hbar-seg" style="background:#C0392B;width:${(p.gopher/maxVal)*100}%;" title="Gophers: ${p.gopher}"></div>`;
+    if (p.solo   > 0) segs += `<div class="hbar-seg" style="background:#E8563A;width:${(p.solo/maxVal)*100}%;" title="Solos: ${p.solo}"></div>`;
+    if (p.deuce  > 0) segs += `<div class="hbar-seg" style="background:#8B4513;width:${(p.deuce/maxVal)*100}%;" title="Deuces: ${p.deuce}"></div>`;
     container.innerHTML += `
       <div class="hbar-row-item">
         <span class="hbar-name" style="color:${p.color}">${p.name.split(' ')[0]}</span>
