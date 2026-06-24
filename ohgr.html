@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Honors — OHGR</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
+
+  :root {
+    --bg-primary:   #f2e4c4;
+    --bg-panel:     #ece0c2;
+    --gold:         #006747;
+    --gold-light:   #1a8a64;
+    --silver:       #4c6b48;
+    --ink:          #1a2a18;
+    --border:       rgba(0,103,71,0.18);
+    --border-gold:  rgba(0,103,71,0.3);
+    --red:    #D94040;
+    --green:  #3A9B4B;
+    --blue:   #3B72C9;
+    --purple: #7B4BB5;
+    --yellow: #8B7010;
+    --page-w: 860px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg-primary);
+    background-image: url('images/background.png');
+    background-repeat: repeat;
+    background-size: 100% auto;
+    background-position: top center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'IM Fell English', Georgia, serif;
+    overscroll-behavior: none;
+  }
+
+  /* ── NAV ── */
+  .site-nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: flex-end; align-items: center;
+    padding: 1rem 1.5rem;
+    background: rgba(26,42,24,0.0);
+    transition: background 0.3s ease;
+  }
+  .site-nav.scrolled { background: rgba(26,42,24,0.85); backdrop-filter: blur(4px); padding: 0.65rem 1.5rem; }
+  .site-nav-links { display: flex; justify-content: center; gap: clamp(1rem,4vw,3rem); }
+  .nav-toggle {
+    display: none; /* hidden — restore with flex */
+    flex-direction: column; justify-content: center; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 101;
+  }
+  .nav-toggle span { display: block; width: 24px; height: 2px; background: #006747; transition: transform 0.25s ease, opacity 0.25s ease; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .site-nav a {
+    font-family: 'Cinzel', serif; font-size: clamp(0.65rem,1.4vw,0.8rem);
+    font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #006747; text-decoration: none; white-space: nowrap;
+    opacity: 0.9; transition: opacity 0.2s ease;
+  }
+  .site-nav a:hover { opacity: 1; }
+  .site-nav-links {
+    position: fixed; top: 0; left: 0; right: 0;
+    flex-direction: column; align-items: center; gap: 1.1rem;
+    padding: 64px 1.5rem 1.5rem;
+    background: rgba(26,42,24,0.92); backdrop-filter: blur(4px);
+    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+  .site-nav-links.open { max-height: 400px; opacity: 1; pointer-events: auto; }
+  .site-nav-links.open a { color: #f2e4c4; }
+
+  /* ── PAGE WRAPPER ── */
+  .page-outer { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 8px 0; }
+  .page { width: 100%; max-width: var(--page-w); background: transparent; position: relative; padding: 0 10px; }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 12px;
+    padding: 10px 16px;
+    border: 2px solid var(--border-gold);
+    margin-bottom: 10px;
+  }
+  .hero-center { text-align: center; }
+  .hero-headline {
+    font-family: 'Cinzel', serif; font-weight: 900;
+    font-size: clamp(1.1rem,3vw,1.6rem); letter-spacing: 3px;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .hero-subheadline {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: clamp(0.7rem,1.5vw,0.9rem);
+    color: var(--silver); margin-top: 3px; letter-spacing: 1px;
+  }
+  .hero-stat { display: flex; flex-direction: column; align-items: center; }
+  .hero-stat-label {
+    font-family: 'Cinzel', serif; font-size: 10px;
+    letter-spacing: 1.5px; color: var(--silver); text-transform: uppercase;
+  }
+  .hero-stat-value {
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 22px;
+    color: var(--ink); line-height: 1;
+  }
+
+  /* ── SECTION WRAPPERS ── */
+  .ohgr-section {
+    border: 2px solid #4c6b48;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .section-label {
+    font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--silver); border-bottom: 1px solid var(--border);
+    padding-bottom: 6px; margin-bottom: 10px;
+  }
+
+  /* ── TOP ROW: chart + leader photo ── */
+  .top-row {
+    display: grid; grid-template-columns: 1fr 160px; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .chart-wrap { position: relative; height: 200px; }
+  .chart-wrap canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 8px 14px;
+    margin-top: 8px; justify-content: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--silver); }
+  .legend-swatch { width: 18px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+
+  .leader-card {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 8px;
+    border: 2px solid var(--border-gold); padding: 10px;
+  }
+  .leader-label {
+    font-family: 'Cinzel', serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--gold);
+  }
+  .leader-photo-wrap {
+    width: 110px; height: 145px; overflow: hidden;
+    border: 1.5px solid var(--border-gold);
+    border-radius: 3px;
+  }
+  .leader-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .leader-name {
+    font-family: 'Cinzel', serif; font-weight: 900; font-size: 14px;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--gold);
+    text-align: center;
+  }
+
+  /* ── MID ROW: rankings + weeks-at-1 ── */
+  .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+  .ranking-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 0; border-bottom: 1px solid var(--border);
+  }
+  .ranking-row:last-child { border-bottom: none; }
+  .rank-num {
+    font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px;
+    width: 22px; flex-shrink: 0; color: rgba(26,42,24,0.2); line-height: 1;
+  }
+  .rank-num-leader { color: var(--gold) !important; }
+  .rank-photo-wrap { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid var(--border-gold); }
+  .rank-photo { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .rank-details { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+  .rank-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rank-meta { font-size: 10px; color: var(--silver); font-style: italic; }
+  .rank-score-col { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+  .rank-score { font-family: 'Cinzel', serif; font-weight: 700; font-size: 15px; }
+  .rank-delta { font-size: 10px; }
+  .delta-up { color: #2f6b3a; font-weight: 700; }
+  .delta-down { color: #a03d2f; font-weight: 700; }
+  .delta-neutral { color: var(--silver); }
+
+  .weeks-row {
+    display: flex; align-items: center; gap: 8px; padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .weeks-row:last-child { border-bottom: none; }
+  .weeks-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 12px; width: 52px; flex-shrink: 0; }
+  .weeks-track { flex: 1; height: 12px; background: rgba(0,103,71,0.08); border: 1px solid var(--border); }
+  .weeks-fill { height: 100%; }
+  .weeks-stat { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .weeks-pct { font-size: 10px; color: var(--silver); }
+
+  /* ── RANK CHART ── */
+  .rank-chart-wrap { position: relative; height: 180px; }
+  .rank-chart-wrap canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  /* ── NARRATIVE ── */
+  .narrative-section {
+    border: 2px solid var(--border-gold);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .narrative-label {
+    font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .narrative-text {
+    font-family: 'IM Fell English', serif; font-size: 15px;
+    line-height: 1.75; color: var(--ink);
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    text-align: center; padding: 12px 0 18px;
+    border-top: 1px solid var(--border); margin-top: 4px; order: 99;
+  }
+  .footer-text { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--silver); }
+  .footer-rule { width: 40px; height: 1px; background: var(--border-gold); margin: 5px auto; }
+
+  /* ── PORTRAIT MOBILE ── */
+  @media (orientation: portrait) and (max-width: 700px) {
+    .page { display: flex; flex-direction: column; gap: 10px; padding: 0 8px; }
+    .hero { grid-template-columns: 1fr; text-align: center; }
+    .hero-left img { width: 100px !important; }
+    .hero-subheadline { display: none; }
+    .hero-right { display: flex; flex-direction: row; justify-content: center; gap: 20px; }
+    .hero-stat { align-items: center; }
+    .hero-stat-value { font-size: 18px; text-align: center; }
+    .top-row { grid-template-columns: 1fr; }
+    .leader-card { flex-direction: row; justify-content: flex-start; gap: 12px; }
+    .leader-photo-wrap { width: 70px; height: 90px; }
+    .mid-row { grid-template-columns: 1fr; }
+    .page-footer { order: 99; }
+  }
+
+  /* ── NARROW VIEWPORT (standings / table widths) ── */
+  @media (max-width: 900px) {
+    .page { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" id="site-nav">
+  <div class="site-nav-links" id="site-nav-links">
+    <a href="index.html#hero">Home</a>
+    <a href="weekly_report.html">Weekly Report</a>
+    <a href="index.html#member-profiles">Member Profiles</a>
+    <a href="index.html#championship-history">Championship History</a>
+    <a href="index.html#record-books">Record Books</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="page-outer">
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <img src="https://www.dropbox.com/scl/fi/d4st1mpp5ry9pcv4svrnu/Honors-Logo-w-Text-transparent.png?rlkey=b6h6h6w4aifeohfb1e2p572oh&st=tbk0pfru&raw=1" alt="The Honors" style="width:180px;height:auto;">
+    </div>
+    <div class="hero-center">
+      <div class="hero-headline">Official Honors Golf Ranking</div>
+      <div class="hero-subheadline">Rolling 20-Event Performance Index &nbsp;|&nbsp; Through LE#202 — U.S. Open</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat">
+        <span class="hero-stat-label">Events Completed</span>
+        <span class="hero-stat-value">19</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Events Remaining</span>
+        <span class="hero-stat-value">10</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP ROW: Score chart + leader -->
+  <div class="top-row">
+    <div class="ohgr-section">
+      <div class="section-label">OHGR Score — Last 10 Events</div>
+      <div class="chart-wrap"><canvas id="scoreChart"></canvas></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:#D94040"></div>Carlos Flores</div><div class="legend-item"><div class="legend-swatch" style="background:#3A9B4B"></div>Greg Wigton</div><div class="legend-item"><div class="legend-swatch" style="background:#3B72C9"></div>Kevin McNamara</div><div class="legend-item"><div class="legend-swatch" style="background:#7B4BB5"></div>Robert Bresnahan</div><div class="legend-item"><div class="legend-swatch" style="background:#8B7010"></div>William Sullivan</div>
+      </div>
+    </div>
+    <div class="leader-card">
+      <div class="leader-label">Current Leader</div>
+      <div class="leader-photo-wrap"><img src="https://www.dropbox.com/scl/fi/e2dgtkri7u22j7gqsi6x9/Greg-02.PNG?rlkey=pheuh2gi09hcubx2f3zrozl87&st=a6tv32oy&raw=1" alt="Greg Wigton"></div>
+      <div class="leader-name">Greg<br>Wigton</div>
+    </div>
+  </div>
+
+  <!-- MID ROW: Rankings + Weeks at #1 -->
+  <div class="mid-row">
+    <div class="ohgr-section">
+      <div class="section-label">Current Rankings</div>
+      
+      <div class="ranking-row">
+        <div class="rank-num rank-num-leader">1</div>
+        <div class="rank-photo-wrap">
+          <img src="https://www.dropbox.com/scl/fi/e2dgtkri7u22j7gqsi6x9/Greg-02.PNG?rlkey=pheuh2gi09hcubx2f3zrozl87&st=a6tv32oy&raw=1" alt="Greg Wigton" class="rank-photo">
+        </div>
+        <div class="rank-details">
+          <span class="rank-name" style="color:#3A9B4B">Greg Wigton</span>
+          <span class="rank-meta">Peak: 451.5 &nbsp;|&nbsp; 95.0% of peak</span>
+        </div>
+        <div class="rank-score-col">
+          <span class="rank-score" style="color:#3A9B4B">429.0</span>
+          <span class="rank-delta"><span class="delta-up">▲ 30.0</span></span>
+        </div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num">2</div>
+        <div class="rank-photo-wrap">
+          <img src="https://www.dropbox.com/scl/fi/hu659w44510jk1d3afgjk/William-00.png?rlkey=7ntvnipnvi2iivraaxpiu5p21&st=0eo79tfa&raw=1" alt="William Sullivan" class="rank-photo">
+        </div>
+        <div class="rank-details">
+          <span class="rank-name" style="color:#8B7010">William Sullivan</span>
+          <span class="rank-meta">Peak: 462.5 &nbsp;|&nbsp; 90.5% of peak</span>
+        </div>
+        <div class="rank-score-col">
+          <span class="rank-score" style="color:#8B7010">418.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 19.0</span></span>
+        </div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num">3</div>
+        <div class="rank-photo-wrap">
+          <img src="https://www.dropbox.com/scl/fi/zruuex75i80b4acw3pgdg/Carlos-00.png?rlkey=4lzqq6t13fudzbhyng1e3nit4&st=svg8tu96&raw=1" alt="Carlos Flores" class="rank-photo">
+        </div>
+        <div class="rank-details">
+          <span class="rank-name" style="color:#D94040">Carlos Flores</span>
+          <span class="rank-meta">Peak: 438.0 &nbsp;|&nbsp; 95.2% of peak</span>
+        </div>
+        <div class="rank-score-col">
+          <span class="rank-score" style="color:#D94040">417.0</span>
+          <span class="rank-delta"><span class="delta-up">▲ 5.0</span></span>
+        </div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num">4</div>
+        <div class="rank-photo-wrap">
+          <img src="https://www.dropbox.com/scl/fi/x2z3nqa32rq0v82rpqm8h/Kevin-04.png?rlkey=w7tbcdthjio4v5mb8cxuceguu&st=krb0u1b8&raw=1" alt="Kevin McNamara" class="rank-photo">
+        </div>
+        <div class="rank-details">
+          <span class="rank-name" style="color:#3B72C9">Kevin McNamara</span>
+          <span class="rank-meta">Peak: 478.5 &nbsp;|&nbsp; 80.4% of peak</span>
+        </div>
+        <div class="rank-score-col">
+          <span class="rank-score" style="color:#3B72C9">384.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 4.5</span></span>
+        </div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num">5</div>
+        <div class="rank-photo-wrap">
+          <img src="https://www.dropbox.com/scl/fi/ehq9cb0nao4vtzfpwleio/Robert-01.png?rlkey=pltjht10e5y0yujx90euhmrfo&st=7kyjckl6&raw=1" alt="Robert Bresnahan" class="rank-photo">
+        </div>
+        <div class="rank-details">
+          <span class="rank-name" style="color:#7B4BB5">Robert Bresnahan</span>
+          <span class="rank-meta">Peak: 456.5 &nbsp;|&nbsp; 83.5% of peak</span>
+        </div>
+        <div class="rank-score-col">
+          <span class="rank-score" style="color:#7B4BB5">381.0</span>
+          <span class="rank-delta"><span class="delta-down">▼ 1.0</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="ohgr-section">
+      <div class="section-label">All-Time Weeks at #1</div>
+      
+      <div class="weeks-row">
+        <span class="weeks-name" style="color:#3B72C9">Kevin</span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:100.0%;background:#3B72C9"></div></div>
+        <span class="weeks-stat">56 <span class="weeks-pct">(30.6%)</span></span>
+      </div>
+      <div class="weeks-row">
+        <span class="weeks-name" style="color:#3A9B4B">Greg</span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:85.7%;background:#3A9B4B"></div></div>
+        <span class="weeks-stat">48 <span class="weeks-pct">(26.2%)</span></span>
+      </div>
+      <div class="weeks-row">
+        <span class="weeks-name" style="color:#8B7010">William</span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:82.1%;background:#8B7010"></div></div>
+        <span class="weeks-stat">46 <span class="weeks-pct">(25.1%)</span></span>
+      </div>
+      <div class="weeks-row">
+        <span class="weeks-name" style="color:#7B4BB5">Robert</span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:39.3%;background:#7B4BB5"></div></div>
+        <span class="weeks-stat">22 <span class="weeks-pct">(12.0%)</span></span>
+      </div>
+      <div class="weeks-row">
+        <span class="weeks-name" style="color:#D94040">Carlos</span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:23.2%;background:#D94040"></div></div>
+        <span class="weeks-stat">13 <span class="weeks-pct">(7.1%)</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANK CHART -->
+  <div class="ohgr-section">
+    <div class="section-label">OHGR Ranking — Last 20 Events</div>
+    <div class="rank-chart-wrap"><canvas id="rankChart"></canvas></div>
+    <div class="legend" style="margin-top:8px;">
+      <div class="legend-item"><div class="legend-swatch" style="background:#D94040"></div>Carlos Flores</div><div class="legend-item"><div class="legend-swatch" style="background:#3A9B4B"></div>Greg Wigton</div><div class="legend-item"><div class="legend-swatch" style="background:#3B72C9"></div>Kevin McNamara</div><div class="legend-item"><div class="legend-swatch" style="background:#7B4BB5"></div>Robert Bresnahan</div><div class="legend-item"><div class="legend-swatch" style="background:#8B7010"></div>William Sullivan</div>
+    </div>
+  </div>
+
+  <!-- NARRATIVE -->
+  <div class="narrative-section">
+    <div class="narrative-label">OHGR Notes</div>
+    <div class="narrative-text">Wigton jumps to #1 on the strength of a U.S. Open win — a Major scores big in the rolling window. Sullivan climbs to #2, up 19 points from last week, fueled by a strong recent stretch. Flores holds #3 but the gap to the top is tightening. The big story at the bottom: the BMW Championship just dropped out of the window for everyone — that was an Elevated Event, so losing it hurt. McNamara and Bresnahan feel that most.</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div class="footer-text">The Honors Fantasy Golf League</div>
+    <div class="footer-rule"></div>
+    <div class="footer-text">OHGR &nbsp;|&nbsp; Through LE#202 — U.S. Open</div>
+  </div>
+
+</div><!-- end .page -->
+</div><!-- end .page-outer -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const players  = ["Carlos Flores", "Greg Wigton", "Kevin McNamara", "Robert Bresnahan", "William Sullivan"];
+const colors   = {"Carlos Flores": "#D94040", "Greg Wigton": "#3A9B4B", "Kevin McNamara": "#3B72C9", "Robert Bresnahan": "#7B4BB5", "William Sullivan": "#8B7010"};
+const scores10 = {"Carlos Flores": [403.0,391.0,387.0,388.0,415.5,418.5,416.5,422.5,412.0,417.0], "Greg Wigton": [406.5,394.0,388.5,401.5,417.0,411.0,406.5,409.0,399.0,429.0], "Kevin McNamara": [376.0,370.5,378.0,382.0,379.5,374.5,369.5,378.5,380.0,384.5], "Robert Bresnahan": [397.0,388.0,376.5,380.5,389.5,378.5,380.5,390.0,382.0,381.0], "William Sullivan": [366.0,370.0,368.5,371.5,397.0,394.0,379.0,402.0,399.5,418.5]};
+const ranks20  = {"Carlos Flores": [5,5,5,4,4,2,4,4,4,3,2,2,2,2,2,1,1,1,1,3], "Greg Wigton": [3,3,3,5,3,1,3,2,1,1,1,1,1,1,1,2,2,2,3,1], "Kevin McNamara": [2,4,4,2,2,3,1,3,3,4,4,4,3,3,5,5,5,5,5,4], "Robert Bresnahan": [4,2,1,1,1,4,2,1,2,2,3,3,4,4,4,4,3,4,4,5], "William Sullivan": [1,1,2,3,5,5,5,5,5,5,5,5,5,5,3,3,4,3,2,2]};
+const xLabels  = ["Masters", "", "", "", "PGA Champ.", "", "", "", "", "U.S. Open"];
+const yMin     = 340;
+
+const gridColor = 'rgba(0,103,71,0.12)';
+const tickColor = '#4c6b48';
+
+const axisStyle = {
+  ticks:  { color: tickColor, font: { size: 9, family: 'Cinzel' } },
+  grid:   { color: gridColor },
+  border: { color: 'rgba(0,103,71,0.2)' }
+};
+
+const tooltipStyle = {
+  mode: 'index', intersect: false,
+  backgroundColor: 'rgba(242,228,196,0.97)',
+  borderColor: 'rgba(0,103,71,0.3)', borderWidth: 1,
+  titleColor: '#006747', bodyColor: '#4c6b48', padding: 7
+};
+
+// Score chart
+new Chart(document.getElementById('scoreChart'), {
+  type: 'line',
+  data: {
+    labels: xLabels,
+    datasets: players.map(p => ({
+      label: p, data: scores10[p],
+      borderColor: colors[p], backgroundColor: 'transparent',
+      borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, tension: 0
+    }))
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...tooltipStyle, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}` } }
+    },
+    scales: {
+      x: { ...axisStyle, ticks: { ...axisStyle.ticks, maxRotation: 30, autoSkip: false, callback: function(val, idx) { return xLabels[idx] || null; } } },
+      y: { ...axisStyle, min: yMin, title: { display: true, text: 'OHGR Score', color: tickColor, font: { size: 9, family: 'Cinzel' } } }
+    }
+  }
+});
+
+// Rank chart
+const rank20Labels = Array.from({length: 20}, (_, i) => i + 1);
+new Chart(document.getElementById('rankChart'), {
+  type: 'line',
+  data: {
+    labels: rank20Labels,
+    datasets: players.map(p => ({
+      label: p, data: ranks20[p],
+      borderColor: colors[p], backgroundColor: 'transparent',
+      borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, tension: 0
+    }))
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...tooltipStyle, callbacks: { label: ctx => ` ${ctx.dataset.label}: #${ctx.parsed.y}` } }
+    },
+    layout: { padding: { top: 10, bottom: 10 } },
+    scales: {
+      x: { ...axisStyle, ticks: { display: false }, grid: { display: false } },
+      y: {
+        ...axisStyle, reverse: true, min: 0.5, max: 5.5,
+        ticks: { ...axisStyle.ticks, stepSize: 1, callback: v => Number.isInteger(v) ? '#' + v : '' },
+        title: { display: true, text: 'Rank', color: tickColor, font: { size: 9, family: 'Cinzel' } }
+      }
+    }
+  }
+});
+
+// Nav scroll behavior
+const nav = document.getElementById('site-nav');
+const navToggle = document.getElementById('nav-toggle');
+const navLinks  = document.getElementById('site-nav-links');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), {passive: true});
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navLinks.classList.remove('open');
+  navToggle.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}));
+</script>
+</body>
+</html>
