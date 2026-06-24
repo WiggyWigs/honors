@@ -88,7 +88,6 @@
     display: grid; grid-template-columns: auto 1fr auto;
     align-items: center; gap: 12px;
     padding: 10px 16px;
-    border: 2px solid var(--border-gold);
     margin-bottom: 10px;
   }
   .hero-center { text-align: center; }
@@ -185,9 +184,10 @@
   .delta-down { color: #a03d2f; font-weight: 700; }
   .delta-neutral { color: var(--silver); }
 
+  .weeks-rows-wrap { display: flex; flex-direction: column; height: 100%; }
   .weeks-row {
     display: flex; align-items: center; gap: 8px; padding: 5px 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); flex: 1;
   }
   .weeks-row:last-child { border-bottom: none; }
   .weeks-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 12px; width: 52px; flex-shrink: 0; }
@@ -287,14 +287,14 @@
 
   <!-- TOP ROW: Score chart + leader -->
   <div class="top-row">
-    <div class="ohgr-section">
+    <div class="ohgr-section" style="border:none;padding:10px 0;">
       <div class="section-label">OHGR Score — Last 10 Events</div>
       <div class="chart-wrap"><canvas id="scoreChart"></canvas></div>
       <div class="legend">
         <div class="legend-item"><div class="legend-swatch" style="background:#D94040"></div>Carlos Flores</div><div class="legend-item"><div class="legend-swatch" style="background:#3A9B4B"></div>Greg Wigton</div><div class="legend-item"><div class="legend-swatch" style="background:#3B72C9"></div>Kevin McNamara</div><div class="legend-item"><div class="legend-swatch" style="background:#7B4BB5"></div>Robert Bresnahan</div><div class="legend-item"><div class="legend-swatch" style="background:#8B7010"></div>William Sullivan</div>
       </div>
     </div>
-    <div class="leader-card">
+    <div class="leader-card" style="border:none;">
       <div class="leader-label">Current Leader</div>
       <div class="leader-photo-wrap"><img src="https://www.dropbox.com/scl/fi/e2dgtkri7u22j7gqsi6x9/Greg-02.PNG?rlkey=pheuh2gi09hcubx2f3zrozl87&st=a6tv32oy&raw=1" alt="Greg Wigton"></div>
       <div class="leader-name">Greg<br>Wigton</div>
@@ -379,7 +379,7 @@
     </div>
     <div class="ohgr-section">
       <div class="section-label">All-Time Weeks at #1</div>
-      
+      <div class="weeks-rows-wrap">
       <div class="weeks-row">
         <span class="weeks-name" style="color:#3B72C9">Kevin</span>
         <div class="weeks-track"><div class="weeks-fill" style="width:100.0%;background:#3B72C9"></div></div>
@@ -404,7 +404,7 @@
         <span class="weeks-name" style="color:#D94040">Carlos</span>
         <div class="weeks-track"><div class="weeks-fill" style="width:23.2%;background:#D94040"></div></div>
         <span class="weeks-stat">13 <span class="weeks-pct">(7.1%)</span></span>
-      </div>
+      </div></div>
     </div>
   </div>
 
@@ -420,7 +420,17 @@
   <!-- NARRATIVE -->
   <div class="narrative-section">
     <div class="narrative-label">OHGR Notes</div>
-    <div class="narrative-text">Wigton jumps to #1 on the strength of a U.S. Open win — a Major scores big in the rolling window. Sullivan climbs to #2, up 19 points from last week, fueled by a strong recent stretch. Flores holds #3 but the gap to the top is tightening. The big story at the bottom: the BMW Championship just dropped out of the window for everyone — that was an Elevated Event, so losing it hurt. McNamara and Bresnahan feel that most.</div>
+    <div class="narrative-text">Greg Wigton sits at #1 with a 429.0, up 30 points after winning the U.S. Open — the biggest single-week jump in the current standings. His score is now 95% of his all-time peak of 451.5, which means he's playing close to the best golf of his Honors career.
+
+The more interesting story is William Sullivan, who has gained 68 points over the last 10 events — by far the biggest move in that window. He climbs to #2 at 418.5, just 10.5 points behind Wigton. Sullivan's surge is real: three of the last ten events were majors (The Masters, The PGA Championship, U.S. Open), and he's been consistent enough across all three to push his rolling score up sharply. He's now at 90.5% of his all-time peak.
+
+Carlos Flores holds #3 at 417.0 — only 12 points behind Wigton. Flores has gained 31.5 points over the last 10 events and 53.5 over the last 20, making him the most steadily improving player in the field over a longer horizon. His best single-event score in the window came at The PGA Championship. He sits at 95.2% of his peak, the highest percentage in the current standings.
+
+The gap from first to fifth is just 48 points — tight enough that a single strong event reshuffles the entire board.
+
+Kevin McNamara holds #4 at 384.5. His score is flat over the last 10 events, which sounds fine until you zoom out: over the last 20 events he's down 37 points, the steepest decline in the field. He leads the all-time weeks-at-#1 chart with 56 weeks — more than anyone else — but he hasn't occupied that spot recently. At 80.4% of his peak of 478.5, he's the furthest from his own ceiling.
+
+Robert Bresnahan rounds out the rankings at 381.0, down a point this week and down 11 over the last 10 events. He's the only player in negative territory over both timeframes, sitting at 83.5% of his peak. The BMW Championship dropped out of the rolling window this week — an Elevated Event that scored well for Bresnahan when it was played — and losing it hurt more than most.</div>
   </div>
 
   <!-- FOOTER -->
