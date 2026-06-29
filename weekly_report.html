@@ -1149,11 +1149,9 @@
 
   .site-nav a:hover { opacity: 1; }
 
-  /* Hamburger nav is the permanent choice on this page — no breakpoint,
-     applies at all screen widths so the inline links never cover the
-     report's own titles/headers. */
+  /* Hamburger nav disabled — restore by changing display:none to display:flex below */
   .site-nav { justify-content: flex-end; }
-  .nav-toggle { display: flex; }
+  .nav-toggle { display: none; /* restore: change to flex */ }
 
   .site-nav-links {
     position: fixed;
