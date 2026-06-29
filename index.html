@@ -1,429 +1,1897 @@
 <!DOCTYPE html>
+<!--
+=======================================================
+  THE HONORS WEEKLY — WEEKLY UPDATE WORKFLOW
+=======================================================
+  1. Upload updated Google Sheet to Claude
+  2. Paste your 3 narrative write-ups (see below)
+  3. Claude auto-calculates everything else
+
+  YOU ONLY NEED TO PROVIDE:
+  - Event Recap narrative       (max 500 chars)
+  - Season Summary narrative    (max 400 chars)
+  - Next Up narrative           (max 300 chars)
+  - New image links (if any)
+
+  CLAUDE AUTO-CALCULATES FROM DATA:
+  - Season standings & points
+  - Trailing the Leader chart data
+  - Wins by type
+  - Top 10 / Top 20 finishes
+  - Quality & shitty lineups
+  - Bonuses & penalties
+  - All callout box values & records
+  - Losing streaks
+  - Event number, name, events remaining
+  - Hero subtitle
+  - Page title
+
+=======================================================
+  CALLOUT BOX REFERENCE — search "ACTIVE_CALLOUTS" to change
+=======================================================
+  Bonuses and Penalties always sit in their own top row (2 boxes,
+  same on desktop and mobile) — see DATA.TOP_CALLOUTS.
+
+  Below that, a fixed 8-box grid (4x2 desktop, 2x4 mobile) in this
+  exact order: Cuts Made, Events Won, Quality Lineups, TBD,
+  2nd Place Finishes, Longest Losing Streak, Lowest Top 10
+  Selections, TBD — see DATA.ACTIVE_CALLOUTS.
+
+  To swap a box, edit the DATA.ACTIVE_CALLOUTS array directly —
+  any key from DATA.CALLOUT_LIBRARY can go in any slot.
+=======================================================
+-->
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Honors — Fantasy Golf League</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Honors Weekly — Season Event #203</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
+
+  :root {
+    --bg-primary: #f2e4c4;
+    --bg-panel: #ece0c2;
+    --bg-panel-alt: #e6d9b8;
+    --bg-green: #e0dcc0;
+    --gold: #006747;
+    --gold-light: #1a8a64;
+    --silver: #4c6b48;
+    --white: #1a2a18;
+    --border: rgba(0, 103, 71, 0.18);
+    --border-gold: rgba(0, 103, 71, 0.3);
+    --red:    #a03d2f;
+    --green:  #2f6b3a;
+    --blue:   #2f5a8a;
+    --purple: #6b4a8a;
+    --yellow: #9a7d1f;
+    --silver-win: #6b4c30;
+    --green-win:  #2f6b3a;
+    --gold-win:   #006747;
+    --green-sixer: #2f6b3a;
+    --blue-fiver:  #2f5a8a;
+    --auburn:   #7B2D2D;
+    --crimson:  #A03030;
+    --lightred: #C95050;
+    --page-w: 816px;
+    --page-h: 1056px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg-primary);
+    background-image: url('images/background.png');
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    background-position: top center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'IM Fell English', Georgia, serif;
+  }
+
+  .page-outer {
+    width: 100%;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    background: transparent;
+    position: relative;
+    overflow: visible;
+    flex-shrink: 0;
+  }
+
+  /* Subtle contour texture overlay */
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(0,0,0,0.012) 28px,
+        rgba(0,0,0,0.012) 29px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page > * { position: relative; z-index: 1; }
+
+  /* =================== SECTION 1: HERO =================== */
+  .hero {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    align-items: center;
+    padding: 6px 20px 6px;
+    background: transparent;
+    border-bottom: 1px solid var(--border-gold);
+    gap: 12px;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-logo-placeholder {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .hero-logo-placeholder svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--gold);
+  }
+
+  .hero-brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 22.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .hero-season {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .hero-center {
+    text-align: center;
+  }
+
+  .hero-headline {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .hero-headline span { color: var(--gold); }
+
+  .hero-subheadline {
+    font-size: 13.5px;
+    color: var(--silver);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 1px;
+    width: 160%;
+    margin-left: -30%;
+  }
+
+  .hero-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .hero-stat-label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .hero-stat-value {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 21px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .hero-stat-value.gold { color: var(--gold); }
+
+  /* =================== SECTION 2: FEATURE CHART =================== */
+  .section-chart {
+    padding: 12px 20px 8px;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 6px;
+  }
+
+  .chart-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .chart-main-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 22.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  .chart-meta {
+    display: none;
+  }
+
+  .trail-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 140px;
+  }
+
+  .trail-legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .trail-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13.5px;
+    color: var(--silver);
+    letter-spacing: 0.5px;
+  }
+
+  .trail-legend-swatch {
+    width: 18px;
+    height: 2.5px;
+  }
+
+  /* =================== SECTION 3: ANALYTICS ROW =================== */
+  .analytics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: transparent;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+
+  .analytics-card {
+    background: transparent;
+    padding: 10px 14px 10px;
+    border: 2px solid #4c6b48;
+  }
+
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
+  }
+
+  /* Donut chart */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .donut-svg-wrap {
+    flex-shrink: 0;
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+
+  .donut-center-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .donut-center-amount {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 19.5px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .donut-center-sub {
+    font-size: 10.5px;
+    color: var(--silver);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16.5px;
+    color: var(--silver);
+  }
+
+  .donut-swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .donut-legend-name { width: 80px; flex-shrink: 0; }
+  .donut-legend-val {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 16.5px;
+  }
+
+  /* Wins bars */
+  .wins-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wins-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .wins-row-name {
+    font-size: 13.5px;
+    color: var(--silver);
+    width: 68px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wins-bar-track {
+    flex: 1;
+    height: 14px;
+    display: flex;
+    gap: 1px;
+  }
+
+  .wins-bar-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.7);
+  }
+
+  .wins-total {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    width: 12px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* =================== SECTION 4: HORIZONTAL BARS =================== */
+  .hbar-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hbar-card {
+    background: transparent;
+    padding: 10px 14px 10px;
+    border: 2px solid #4c6b48;
+  }
+
+  .hbar-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hbar-row-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hbar-name {
+    font-size: 13px;
+    color: var(--silver);
+    width: 52px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hbar-track {
+    flex: 1;
+    height: 12px;
+    display: flex;
+    gap: 1px;
+  }
+
+  .hbar-seg {
+    height: 100%;
+  }
+
+  .hbar-total {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    color: var(--white);
+    width: 18px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .hbar-legend {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(0,103,71,0.15);
+    flex-wrap: wrap;
+  }
+
+  .hbar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #6b4c30;
+    letter-spacing: 0.5px;
+  }
+
+  .hbar-legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  /* =================== SECTION 5: STANDINGS TABLE =================== */
+  .standings-section {
+    padding: 10px 20px 10px;
+    background: transparent;
+    border: 2px solid #4c6b48;
+    margin: 10px 0;
+  }
+
+  .standings-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .standings-table th {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: right;
+    padding: 3px 5px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .standings-table th:nth-child(1),
+  .standings-table th:nth-child(2) { text-align: left; }
+
+  .standings-table td {
+    text-align: right;
+    padding: 1px 5px;
+    color: var(--white);
+    font-size: 13.5px;
+    border-bottom: 1px solid rgba(0,103,71,0.08);
+    white-space: nowrap;
+  }
+
+  .standings-table td:nth-child(1) {
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    color: var(--silver);
+  }
+
+  .standings-table td:nth-child(2) {
+    text-align: left;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .standings-table tr:last-child td { border-bottom: none; }
+
+  .circled {
+    position: relative;
+    display: inline-block;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .circled::after {
+    content: '';
+    position: absolute;
+    top: -3px; left: -5px;
+    right: -5px; bottom: -3px;
+    border: 1.5px solid #D94040;
+    border-radius: 50%;
+  }
+
+  .leader-badge {
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* =================== SECTION 6: BONUSES & PENALTIES =================== */
+  .bp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+
+  .bp-card {
+    background: transparent;
+    padding: 10px 14px;
+    border: 2px solid #4c6b48;
+  }
+
+  .bp-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    text-align: center;
+  }
+
+  .bp-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bp-row-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bp-icon {
+    font-size: 16.5px;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .bp-name {
+    font-size: 13.5px;
+    color: var(--silver);
+    width: 42px;
+    flex-shrink: 0;
+  }
+
+  .bp-bar-track {
+    width: 80px;
+    height: 10px;
+    background: rgba(0,103,71,0.08);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .bp-bar-fill {
+    height: 100%;
+    border-radius: 1px;
+  }
+
+  .bp-amount {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    color: var(--white);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* =================== SECTION 7: FEATURE CALLOUTS =================== */
+  /* Top row: Bonuses/Penalties, always 2 columns regardless of screen size */
+  .callouts-top-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    background: transparent;
+    margin-bottom: 14px;
+  }
+
+  /* Desktop default: 4 columns x 2 rows for 8 boxes */
+  .callouts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: transparent;
+    margin-bottom: 14px;
+  }
+
+  /* Mobile: 2 columns x 4 rows for the same 8 boxes */
+  @media (max-width: 700px) {
+    .callouts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .callout-box {
+    background: transparent;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 4px;
+    border: 2px solid #4c6b48;
+  }
+
+  .callout-box.alt { background: transparent; }
+
+  .callout-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+
+  .callout-icon {
+    font-size: 33px;
+    line-height: 1;
+  }
+
+  .callout-value {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .callout-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .callout-pace {
+    font-size: 11px;
+    color: var(--silver);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .callout-pace strong {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .callout-placeholder {
+    width: 24px;
+    height: 24px;
+    background: rgba(201,168,76,0.1);
+    border: 1.5px dashed rgba(201,168,76,0.4);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7.5px;
+    letter-spacing: 1px;
+    color: rgba(201,168,76,0.5);
+    text-transform: uppercase;
+  }
+
+  .callout-record {
+    font-size: 12px;
+    color: #6b4c30;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Narratives center block */
+  .narratives-center {
+    background: transparent;
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 700px) {
+    .narratives-center {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .narrative-box {
+    padding: 7px 9px;
+    background: transparent;
+    border-left: 2px solid var(--gold);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .narrative-event-label {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3px;
+  }
+
+  .narrative-event-title {
+    font-family: 'Cinzel', serif;
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .narrative-text {
+    font-size: 13px;
+    color: var(--silver);
+    line-height: 1.5;
+  }
+
+  .narrative-text .pname-red    { color: var(--red);    font-weight: 600; }
+  .narrative-text .pname-green  { color: var(--green);  font-weight: 600; }
+  .narrative-text .pname-blue   { color: var(--blue);   font-weight: 600; }
+  .narrative-text .pname-purple { color: var(--purple); font-weight: 600; }
+  .narrative-text .pname-yellow { color: var(--yellow); font-weight: 600; }
+
+  /* Losing streak callout */
+  .streak-box {
+    background: transparent;
+    padding: 10px 10px;
+    border: 2px solid #4c6b48;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+  }
+
+  .streak-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+  }
+
+  .streak-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .streak-name {
+    font-size: 11px;
+    color: var(--silver);
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .streak-dots {
+    display: flex;
+    gap: 2px;
+  }
+
+  .streak-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(0,103,71,0.1);
+    border: 1px solid rgba(0,103,71,0.2);
+  }
+
+  .streak-dot.active { background: #4a6fa8; border-color: #6b9fd4; }
+  .streak-dot.active.long { background: #2a4a7a; border-color: #3d6ba8; }
+
+  .streak-count {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+    width: 14px;
+    text-align: right;
+  }
+
+  .streak-count.cold { color: #6b9fd4; }
+
+  /* =================== PRINT / PDF =================== */
+  @media print {
+    @page {
+      size: 8.5in 11in;
+      margin: 0 !important;
+    }
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page-outer {
+      width: 100%;
+      min-height: unset;
+      box-shadow: none;
+      margin: 0 !important;
+      padding: 0 41px;
+    }
+    .page {
+      box-shadow: none;
+      margin: 0 !important;
+    }
+  }
+</style>
+  <style>
+  .page-footer {
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-gold);
+    background: transparent;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    color: #6b4c30;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .footer-rule {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+
+  /* ============================================
+     SITE NAV — ported from the main storybook page.
+     Uses literal colors (not shared CSS variables) so this
+     page stays fully self-contained and independent of styles.css.
+  ============================================ */
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: rgba(26, 42, 24, 0.0);
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+
+  .site-nav.scrolled {
+    padding: 0.65rem 1.5rem;
+  }
+
+  .site-nav-links {
+    display: flex;
+    justify-content: center;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 101;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #006747;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .site-nav a {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #006747;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-nav a:hover { opacity: 1; }
+
+  /* Hamburger nav is the permanent choice on this page — no breakpoint,
+     applies at all screen widths so the inline links never cover the
+     report's own titles/headers. */
+  .site-nav { justify-content: flex-end; }
+  .nav-toggle { display: flex; }
+
+  .site-nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 64px 1.5rem 1.5rem;
+    background: rgba(26, 42, 24, 0.92);
+    backdrop-filter: blur(4px);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+
+  .site-nav-links.open {
+    max-height: 400px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .site-nav-links.open a {
+    color: #f2e4c4;
+  }
+</style>
 </head>
 <body>
 
-  <nav class="site-nav" id="site-nav">
-    <div class="site-nav-links" id="site-nav-links">
-      <a href="weekly_report.html">Weekly Report</a>
-      <a href="#member-profiles">Member Profiles</a>
-      <a href="#championship-history">Championship History</a>
-      <a href="#record-books">Record Books</a>
+<nav class="site-nav" id="site-nav">
+  <div class="site-nav-links" id="site-nav-links">
+    <a href="index.html#hero">Home</a>
+    <a href="weekly-report.html">Weekly Report</a>
+    <a href="index.html#member-profiles">Member Profiles</a>
+    <a href="index.html#championship-history">Championship History</a>
+    <a href="index.html#record-books">Record Books</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<div class="page-outer">
+<div class="page">
+
+  <!-- ====== SECTION 1: HERO ====== -->
+  <div class="hero">
+    <div class="hero-left">
+      <img src="https://www.dropbox.com/scl/fi/d4st1mpp5ry9pcv4svrnu/Honors-Logo-w-Text-transparent.png?rlkey=b6h6h6w4aifeohfb1e2p572oh&st=tbk0pfru&raw=1" alt="The Honors" style="width:120px;height:auto;">
     </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+    <div class="hero-center">
+      <div class="hero-headline">Every Point Counts</div>
+      <div class="hero-subheadline" style="width:115%;margin-left:-7.5%;">Greg leads William by 91.9 points — 9 events remain</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat">
+        <span class="hero-stat-label">Events Completed</span>
+        <span class="hero-stat-value">20</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Events Remaining</span>
+        <span class="hero-stat-value">9</span>
+      </div>
+    </div>
+  </div>
 
-  <section class="hero" id="hero">
-    <div class="hero-bg"></div>
-    <img class="hero-logo-img" src="images/logo.png" alt="The Honors crest" />
-  </section>
+  <!-- ====== SECTION 2: FEATURE CHART ====== -->
+  <div class="section-chart">
+    <div class="chart-title-row">
+      <span class="chart-main-title">Trailing the Leader</span>
+      <span class="chart-meta"> 2026 Season &nbsp;|&nbsp; Through Event 20 — Travelers Championship &nbsp;|&nbsp; Cumulative Points Behind Leader</span>
+    </div>
+    <div class="trail-canvas-wrap">
+      <canvas id="trailChart"></canvas>
+    </div>
+    <div class="trail-legend">
+      <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--red)"></div>Carlos Flores</div>
+      <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--green)"></div>Greg Wigton</div>
+      <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--blue)"></div>Kevin McNamara</div>
+      <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--purple)"></div>Robert Bresnahan</div>
+      <div class="trail-legend-item"><div class="trail-legend-swatch" style="background:var(--yellow)"></div>William Sullivan</div>
+    </div>
+  </div>
 
-  <div class="hero-fade-spacer" id="hero-fade-spacer"></div>
+  <!-- ====== SECTION 3: ANALYTICS ROW ====== -->
+  <div class="analytics-row">
 
-  <section class="member-profiles-header" id="member-profiles">
-    <h2 class="section-header">Member Profiles</h2>
-  </section>
-
-
-  <section class="member-profiles-section">
-    <!-- ===== GREG WIGTON ===== -->
-    <div class="member-card">
-      <h3 class="member-name" style="color:#3A9B4B">Greg Wigton</h3>
-      <div class="member-card-row">
-        <div class="member-photo">
-          <img src="images/members/Greg 02.png" alt="Greg Wigton" />
+    <!-- CARD A: TOURNAMENT WINNINGS DONUT -->
+    <div class="analytics-card" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="card-title" style="width:100%;text-align:left;">Tournament Winnings</div>
+      <div class="donut-wrap">
+        <div class="donut-svg-wrap">
+          <svg viewBox="-20 -20 130 130" width="180" height="180" id="donutSvg"></svg>
+          <div class="donut-center-label">
+            <div class="donut-center-amount">$600</div>
+            <div class="donut-center-sub">Total Pot</div>
+          </div>
         </div>
-        <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="wins_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="career_mc_pct" data-format="pct">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Tournament Earnings</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="tournament_earnings_net" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="championships_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="majors_won">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value" data-career="Greg Wigton" data-field="net_earnings" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="grand-slam-row">
-            <span class="stat-label" data-career="Greg Wigton" data-field="grand_slam_label">Career Grand Slam</span>
-            <span class="stat-value" data-career="Greg Wigton" data-field="grand_slam_status">—</span>
-          </div>
-          <p class="member-narrative">Through seven seasons, Wigs sits at #3 in career events won with 37 wins (20.2%) — respectable, though Kevin McNamara and Robert Bresnahan have both edged him out. His tournament earnings tell a slightly different story: +$75.00 net on the felt, good for #3, but his full career earnings of +$149.50 rank #2 all-time, kept afloat by two season championships and a healthy bonus record. In a league that has financially destroyed other members, simply being in the black is an achievement.</p>
-          <p class="member-narrative">His best individual season came in 2021 with 8 wins — the most any player has won in a single year. He's a two-time champion (2022, 2023), and the two titles couldn't have looked more different. The 2022 championship was a white-knuckle grind — all five players finished within 303 points of each other, and Greg barely held on by 96.6 points over William Sullivan. He won 6 events but actually lost money on the season at the tournament level. The 2023 title was cleaner: 7 wins, a 128.5-point margin over McNamara, and a profitable year thanks to winning The Masters and The Open Championship — both paying $100 to the league winner instead of the standard $25.</p>
-          <p class="member-narrative">The one blemish on an otherwise solid résumé: no Career Grand Slam. The Wizard has 4 major wins through 2025 — tied for last — and the PGA Championship remains conspicuously absent from the collection. He can win The Open Championship in his sleep but apparently can't figure out the PGA Championship.</p>
-          <p class="member-narrative">At least Sweet Chuck keeps his pants on — just 9 career diarrhea withdraws through 2025, second-fewest in league history behind only Kevin McNamara's 7. In a category defined by catastrophic digestive failure, that's a ranking worth bragging about.</p>
+        <div class="donut-legend" id="donutLegend"></div>
+      </div>
     </div>
-  </section>
 
-  <section class="member-profiles-section">
-    <!-- ===== CARLOS FLORES ===== -->
-    <div class="member-card">
-      <h3 class="member-name" style="color:#D94040">Carlos Flores</h3>
-      <div class="member-card-row">
-        <div class="member-photo">
-          <img src="images/members/carlos.png" alt="Carlos Flores" />
+    <!-- CARD B: WINS BY TYPE -->
+    <div class="analytics-card">
+      <div class="card-title">Wins</div>
+      <div class="wins-rows" id="winsBars"></div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION 4: HORIZONTAL BARS ====== -->
+  <div class="hbar-row">
+
+    <!-- CARD A: GOLFER FINISHES -->
+    <div class="hbar-card">
+      <div class="card-title">Best Golfer Finishes</div>
+      <div class="hbar-rows" id="finishBars"></div>
+      <div class="hbar-legend">
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#5BA3D9"></div>Top 10</div>
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#1a3d6a"></div>Top 11-20</div>
+      </div>
+    </div>
+
+    <!-- CARD B: QUALITY LINEUPS -->
+    <div class="hbar-card">
+      <div class="card-title">Quality Lineups</div>
+      <div class="hbar-rows" id="qualityBars"></div>
+      <div class="hbar-legend">
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#3A9B4B"></div>Sixers</div>
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#3B72C9"></div>Fivers</div>
+      </div>
+    </div>
+
+    <!-- CARD C: SHITTY LINEUPS -->
+    <div class="hbar-card">
+      <div class="card-title">Shitty Lineups</div>
+      <div class="hbar-rows" id="shittyBars"></div>
+      <div class="hbar-legend">
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#C0392B"></div>Gophers</div>
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#E8563A"></div>Solos</div>
+        <div class="hbar-legend-item"><div class="hbar-legend-swatch" style="background:#8B4513"></div>Deuces</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION 5: STANDINGS TABLE ====== -->
+  <div class="standings-section">
+    <div class="standings-title">2026 Season Standings</div>
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Player</th>
+          <th>Points</th>
+          <th>Trailing</th>
+          <th>Catchup</th>
+          <th>Miss</th>
+          <th>Made</th>
+          <th>Cut%</th>
+          <th>Wins</th>
+          <th>Avg Fin</th>
+          <th>Top Ten</th>
+          <th>Avg Cont</th>
+          <th>2nds</th>
+        </tr>
+      </thead>
+      <tbody id="standingsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ====== SECTION 7: TOP CALLOUTS (Bonuses/Penalties, always first) ====== -->
+  <div class="callouts-top-row" id="calloutsTopRow"></div>
+
+  <!-- ====== SECTION 8: MAIN CALLOUTS GRID ====== -->
+  <!-- 8 fixed boxes: 4x2 on desktop, 2x4 on mobile (see .callouts-grid CSS) -->
+  <div class="callouts-grid" id="calloutsGrid"></div>
+
+  <!-- ====== SECTION 9: NARRATIVES ====== -->
+  <div class="narratives-center">
+    <div class="narrative-box">
+      <div class="narrative-event-label">Event Recap</div>
+      <div class="narrative-event-title">Travelers Championship — Sullivan Strikes</div>
+      <div class="narrative-text">
+          <span class="pname-yellow">William Sullivan</span> took the Travelers Championship with 656.1 points, and he did it with the goods to back it up — Sullivan picked the tournament winner and two top-10 finishers. <span class="pname-green">Greg Wigton</span> also picked the winner and two top 10s on his way to second at 601.4. <span class="pname-purple">Robert Bresnahan</span> was the only other member to land a top-10 golfer. <span class="pname-red">Carlos</span> and <span class="pname-blue">Kevin</span> both went zero-for-six in the top 10, which showed in the final margins.
         </div>
-        <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="wins_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="career_mc_pct" data-format="pct">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Tournament Earnings</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="tournament_earnings_net" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="championships_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="majors_won">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value" data-career="Carlos Flores" data-field="net_earnings" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="grand-slam-row">
-            <span class="stat-label" data-career="Carlos Flores" data-field="grand_slam_label">Career Grand Slam</span>
-            <span class="stat-value" data-career="Carlos Flores" data-field="grand_slam_status">—</span>
-          </div>
     </div>
-  </section>
-
-  <section class="member-profiles-section">
-    <!-- ===== KEVIN McNAMARA ===== -->
-    <div class="member-card">
-      <h3 class="member-name" style="color:#3B72C9">Kevin McNamara</h3>
-      <div class="member-card-row">
-        <div class="member-photo">
-          <img src="images/members/kevin.png" alt="Kevin McNamara" />
+    <div class="narrative-box" style="border-left-color: var(--silver)">
+      <div class="narrative-event-label" style="color:var(--silver)">Season Summary</div>
+      <div class="narrative-event-title">William's Surge, Carlos Slides</div>
+      <div class="narrative-text">
+          <span class="pname-yellow">William Sullivan</span>'s Travelers win vaults him into second place, now just 91.9 points behind <span class="pname-green">Greg Wigton</span> with nine events to play. The story at the top isn't just Greg holding on — it's William surging. <span class="pname-red">Carlos Flores</span>, who had been nipping at the lead, slips to third at 119.6 back as Sullivan's momentum builds. <span class="pname-blue">Kevin McNamara</span> sits 400 back with a 17-event winless streak, and <span class="pname-purple">Robert Bresnahan</span> is 620 behind.
         </div>
-        <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="wins_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="career_mc_pct" data-format="pct">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Tournament Earnings</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="tournament_earnings_net" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="championships_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="majors_won">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value" data-career="Kevin McNamara" data-field="net_earnings" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="grand-slam-row">
-            <span class="stat-label" data-career="Kevin McNamara" data-field="grand_slam_label">Career Grand Slam</span>
-            <span class="stat-value" data-career="Kevin McNamara" data-field="grand_slam_status">—</span>
-          </div>
     </div>
-  </section>
-
-  <section class="member-profiles-section">
-    <!-- ===== ROBERT BRESNAHAN ===== -->
-    <div class="member-card">
-      <h3 class="member-name" style="color:#7B4BB5">Robert Bresnahan</h3>
-      <div class="member-card-row">
-        <div class="member-photo">
-          <img src="images/members/robert.png" alt="Robert Bresnahan" />
+    <div class="narrative-box" style="border-left-color: var(--blue)">
+      <div class="narrative-event-label" style="color:var(--blue)">Next Up</div>
+      <div class="narrative-event-title">John Deere Classic — LE#204</div>
+      <div class="narrative-text">
+          The John Deere Classic has been a hunting ground for <span class="pname-purple">Robert Bresnahan</span> and <span class="pname-red">Carlos Flores</span>, each with two wins at this event — the only members with multiple victories here. <span class="pname-yellow">William Sullivan</span> won it in 2022, but the last two years have belonged entirely to <span class="pname-red">Carlos</span>, who has won back-to-back at this stop. With the standings tight and <span class="pname-red">Carlos</span> just 120 points off the lead, a three-peat couldn't come at a better time.
         </div>
-        <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="wins_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="career_mc_pct" data-format="pct">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Tournament Earnings</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="tournament_earnings_net" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="championships_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="majors_won">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value" data-career="Robert Bresnahan" data-field="net_earnings" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="grand-slam-row">
-            <span class="stat-label" data-career="Robert Bresnahan" data-field="grand_slam_label">Career Grand Slam</span>
-            <span class="stat-value" data-career="Robert Bresnahan" data-field="grand_slam_status">—</span>
-          </div>
     </div>
-  </section>
+  </div>
 
-  <section class="member-profiles-section">
-    <!-- ===== WILLIAM SULLIVAN ===== -->
-    <div class="member-card">
-      <h3 class="member-name" style="color:#8B7010">William Sullivan</h3>
-      <div class="member-card-row">
-        <div class="member-photo">
-          <img src="images/members/william.png" alt="William Sullivan" />
-        </div>
-        <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="wins_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="career_mc_pct" data-format="pct">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Tournament Earnings</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="tournament_earnings_net" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="championships_display">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="majors_won">—</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value" data-career="William Sullivan" data-field="net_earnings" data-format="money">—</span>
-            </div>
-          </div>
-          <div class="grand-slam-row">
-            <span class="stat-label" data-career="William Sullivan" data-field="grand_slam_label">Career Grand Slam</span>
-            <span class="stat-value" data-career="William Sullivan" data-field="grand_slam_status">—</span>
-          </div>
-    </div>
-  </section>
+  <!-- ====== FOOTER ====== -->
+  <div class="page-footer">
+    <div class="footer-text">The Honors Fantasy Golf League</div>
+    <div class="footer-rule"></div>
+    <div class="footer-text">2026 Season &nbsp;|&nbsp; Data through Event 20</div>
+  </div>
 
-  <section class="scroll-spacer" id="championship-history">
-    <h2 class="section-header">Championship History</h2>
-  </section>
+</div><!-- end .page -->
+</div><!-- end .page-outer -->
 
-  <section class="scroll-spacer" id="record-books">
-    <h2 class="section-header">Record Books</h2>
-  </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ============================================================
+// DATA — update this block each week
+// ============================================================
+const DATA = {
+  season: { event: 203, eventName: "Travelers Championship", total: 29, remaining: 9 },
 
-  <script>
-    // ============================================
-    // DIALS — change these numbers to adjust how the page behaves.
-    // ============================================
-    const LOGO_FADE_FRACTION       = 0.9;
-    const LOGO_DRIFT_SPEED         = 1.6;
-    const NAV_BACKGROUND_TRIGGER_PX = 40;
+  // Bonuses and Penalties always sit in their own top row (2 boxes,
+  // same on desktop and mobile) — never part of the main stat grid.
+  TOP_CALLOUTS: ['bonuses', 'penalties'],
 
-    // ============================================
-    // CAREER STATS FETCH
-    // Reads honors_data.json (committed to repo root each week).
-    // Populates any element with data-career / data-field attributes.
-    // Narratives and unique stats are hand-edited in the HTML above —
-    // only the data-field spans are touched here.
-    // ============================================
+  // Fixed 8-box grid below the top row, in this exact order.
+  // No rotation — edit this array directly to change which stats show.
+  ACTIVE_CALLOUTS: [
+    'made_cut_pct', 'winning_pct', 'quality_lineups', 'highest_top10_pct',
+    'losing_streak', 'lowest_top10_pct', 'second_place', 'last_place'
+  ],
 
-    function buildDerivedFields(data) {
-      const players = data.meta.players;
-      const career  = data.career;
-
-      players.forEach(p => {
-        const c = career[p];
-        if (!c) return;
-
-        // Events Won: "44 (21.8%)"
-        c.wins_display = `${c.career_wins} (${c.career_win_pct.toFixed(1)}%)`;
-
-        // Championships: number on top, years in small font injected by populateCareerStats
-        c.championships_display = c.championships > 0
-          ? `${c.championships}`
-          : '0';
-
-        // Grand Slam label: "Career Grand Slam #1" or "Career Grand Slam #2"
-        c.grand_slam_label = `Career Grand Slam #${c.current_slam_num}`;
-
-        // Grand Slam status
-        if (c.slams_completed >= c.current_slam_num) {
-          // Completed — list majors in order by year
-          const wins = c.slam_completions[c.current_slam_num - 1].first_wins;
-          const parts = Object.entries(wins)
-            .sort((a, b) => a[1] - b[1])
-            .map(([event, year]) => `${event} ${year}`);
-          c.grand_slam_status = 'Complete — ' + parts.join(', ');
-        } else {
-          // In progress
-          const missing = c.missing_current_slam;
-          c.grand_slam_status = missing.length > 0
-            ? 'Incomplete — missing: ' + missing.join(', ')
-            : 'Complete';
-        }
-      });
+  CALLOUT_LIBRARY: {
+    made_cut_pct: {
+      label:   'Cuts Made',
+      img:     'https://www.dropbox.com/scl/fi/an9o72inp1yc533jv171p/Hot_Streak.PNG?rlkey=9ispbf7e07az3s2cy3ez077sx&st=y7j617i9&raw=1',
+      value:   '82.2%',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "🔥 Record Pace! Previous: 78.3% — Kevin McNamara (2024)"
+    },
+    winning_pct: {
+      label:   'Events Won',
+      img:     'https://www.dropbox.com/scl/fi/bidht8mi68fxx7ycl8zaf/gold_trophy.png?rlkey=cp009xsq9v9cen9zdeetoyul6&st=mhumtmt8&raw=1',
+      value:   '35.0%',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "Record: 36.4% — Robert Bresnahan (2020)"
+    },
+    season_points: {
+      label:   'Average Score',
+      img:     'https://www.dropbox.com/scl/fi/r78wgkw5cyo6zjb2cuuh6/golf-cart.PNG?rlkey=y82devtq3k69s1wm9rzyqyzen&st=wgax5hzl&raw=1',
+      value:   '447.8',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "🔥 Record Pace! Previous: 443.3 — Kevin McNamara (2024)"
+    },
+    total_points: {
+      label:   'Average Score',
+      img:     'https://www.dropbox.com/scl/fi/r78wgkw5cyo6zjb2cuuh6/golf-cart.PNG?rlkey=y82devtq3k69s1wm9rzyqyzen&st=wgax5hzl&raw=1',
+      value:   '447.8',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "🔥 Record Pace! Previous: 443.3 — Kevin McNamara (2024)"
+    },
+    highest_top10_pct: {
+      label:   'Highest Top 10 Selection',
+      img:     'https://www.dropbox.com/scl/fi/2vao158kvoqt13tr9mypb/Top-10.PNG?rlkey=bz0rq14kvigk8s8wuxd1n7exc&st=ix75yt50&raw=1',
+      value:   '23.3%',
+      member:  'William Sullivan',
+      color:   '#8B7010',
+      pace:    null,
+      record:  "Record: 31.8% — Robert Bresnahan (2020)"
+    },
+    lowest_top10_pct: {
+      label:   'Lowest Top 10 Selection',
+      img:     'https://www.dropbox.com/scl/fi/tcl8stkaonfb764rpp0yi/Cringe.PNG?rlkey=fh059dcvwffsgm9uowe8hfx1e&st=3s893tzr&raw=1',
+      value:   '16.7%',
+      member:  'Robert Bresnahan',
+      color:   '#7B4BB5',
+      pace:    null,
+      record:  "Record: 16.1% — Robert Bresnahan (2024)"
+    },
+    tournament_earnings: {
+      label:   'Tournament Earnings',
+      img:     'https://www.dropbox.com/scl/fi/oucrr85f0o2k2bnfca37p/ChatGPT-Image-May-28-2026-09_53_55-PM.png?rlkey=3fkf5dxd6j39yn3zc9xqz0rru&st=izs727yn&raw=1',
+      value:   '35.3% ($300)',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "Record: 46.2% ($450) — Robert Bresnahan (2020)"
+    },
+    quality_lineups: {
+      label:   'Quality Lineups',
+      img:     'https://www.dropbox.com/scl/fi/uluu7o0ijvzv2gsfrj58q/quality-lineups.PNG?rlkey=74xfwvlsmgund4irj5bv5reke&st=241ktwp2&raw=1',
+      value:   '80.0% (12)',
+      member:  'Greg Wigton',
+      color:   '#3A9B4B',
+      pace:    null,
+      record:  "🔥 Record: 54.5% — Robert Bresnahan (2023)"
+    },
+    losing_streak: {
+      label:   'Longest Losing Streak',
+      img:     'https://www.dropbox.com/scl/fi/d7q9f7l2d9i7b8s12xbg8/Loser.png?rlkey=65fjft6qvfmkeq8ovprvnr5kv&raw=1',
+      value:   '17',
+      member:  'Kevin McNamara',
+      color:   '#3B72C9',
+      pace:    null,
+      record:  "All-time record: 47 — William Sullivan"
+    },
+    last_place: {
+      label:   'Last Place Finishes',
+      img:     'https://www.dropbox.com/scl/fi/ag6porvdysxhhq06ozerb/Last-Place.PNG?rlkey=n0zayg0pzmjhtpve5exmd5cph&st=c7xs85k7&raw=1',
+      value:   '35.0% (7)',
+      member:  'Robert Bresnahan',
+      color:   '#7B4BB5',
+      pace:    null,
+      record:  "Record: 40.9% (9) — Kevin McNamara (2020)"
+    },
+    diarrhea_withdraws: {
+      label:   'Diarrhea Withdraws',
+      img:     'https://www.dropbox.com/scl/fi/tcl8stkaonfb764rpp0yi/Cringe.PNG?rlkey=fh059dcvwffsgm9uowe8hfx1e&st=3s893tzr&raw=1',
+      value:   '2 (1.7%)',
+      member:  'Kevin McNamara',
+      color:   '#3B72C9',
+      pace:    "On pace for: 2.9 (1.7%)",
+      record:  "Record: 5 (2.5%) — William Sullivan (2021)"
+    },
+    second_place: {
+      label:   '2nd Place Finishes',
+      img:     'https://www.dropbox.com/scl/fi/ur47ak6w15nwyy325ot0j/second-place.PNG?rlkey=877akarpgit8x0kai4ssrrthf&st=hq309ldt&raw=1',
+      value:   '35.0% (7)',
+      member:  'Kevin McNamara',
+      color:   '#3B72C9',
+      pace:    null,
+      record:  "Record: 38.5% — Kevin McNamara (2019)"
+    },
+    bonuses: {
+      label:   'Bonuses',
+      img:     'https://www.dropbox.com/scl/fi/oucrr85f0o2k2bnfca37p/ChatGPT-Image-May-28-2026-09_53_55-PM.png?rlkey=3fkf5dxd6j39yn3zc9xqz0rru&st=izs727yn&raw=1',
+      value:   null, member: null, color: null, pace: null, record: null
+    },
+    penalties: {
+      label:   'Penalties',
+      img:     'https://www.dropbox.com/scl/fi/m17zbynwbf3alpgkasjti/exploding_golf_ball.png?rlkey=2uu70fpj4xxjxg4uno92d8gvv&st=rtewafw4&raw=1',
+      value:   null, member: null, color: null, pace: null, record: null
+    },
+    tbd_1: {
+      label:   'TBD',
+      img:     null,
+      value:   '—',
+      member:  null,
+      color:   '#6b4c30',
+      pace:    null,
+      record:  null
+    },
+    tbd_2: {
+      label:   'TBD',
+      img:     null,
+      value:   '—',
+      member:  null,
+      color:   '#6b4c30',
+      pace:    null,
+      record:  null
     }
+  },
 
-    function formatValue(raw, fmt) {
-      if (raw === null || raw === undefined) return '—';
-      if (fmt === 'pct')   return parseFloat(raw).toFixed(1) + '%';
-      if (fmt === 'money') {
-        const sign = raw >= 0 ? '+' : '−';
-        return sign + '$' + Math.abs(raw).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  trailing: {
+    labels: ["American Expr\u2026", "", "", "", "Cognizant", "", "", "", "", "The Masters", "", "", "", "", "The CJ Cup", "", "", "", "", "Travelers"],
+    players: [
+      { name: "Greg Wigton", color: "#3A9B4B", values: [87.3, 74.1, 69.0, 81.5, 0.0, 0.0, 0.0, 0.0, 12.8, 110.5, 78.4, 14.0, 0.0, 4.5, 49.9, 3.9, 0.0, 0.0, 0.0, 0.0] },
+      { name: "William Sullivan", color: "#8B7010", values: [94.9, 154.8, 93.4, 241.0, 258.9, 173.7, 263.1, 373.3, 445.2, 440.2, 359.6, 369.6, 360.8, 344.4, 288.2, 310.4, 183.9, 117.2, 146.6, 91.9] },
+      { name: "Carlos Flores", color: "#D94040", values: [54.1, 55.1, 2.5, 0.0, 13.5, 7.4, 65.5, 107.8, 0.0, 0.0, 0.0, 0.0, 35.5, 0.0, 0.0, 0.0, 4.2, 8.9, 41.3, 119.6] },
+      { name: "Kevin McNamara", color: "#3B72C9", values: [100.1, 204.6, 122.2, 175.7, 133.3, 99.7, 183.4, 244.4, 314.6, 392.2, 328.9, 317.4, 328.0, 457.2, 443.4, 386.9, 383.9, 336.8, 378.7, 400.1] },
+      { name: "Robert Bresnahan", color: "#7B4BB5", values: [0.0, 0.0, 0.0, 145.7, 141.4, 133.1, 167.9, 237.0, 319.4, 284.3, 241.1, 367.7, 421.4, 448.3, 532.3, 462.6, 433.0, 400.5, 471.7, 619.8] }
+    ]
+  },
+
+  winnings: [
+    { name: "Greg Wigton", color: "#3A9B4B", amount: 300, pct: "35.3%" },
+    { name: "William Sullivan", color: "#8B7010", amount: 200, pct: "23.5%" },
+    { name: "Carlos Flores", color: "#D94040", amount: 175, pct: "20.6%" },
+    { name: "Robert Bresnahan", color: "#7B4BB5", amount: 150, pct: "17.6%" },
+    { name: "Kevin McNamara", color: "#3B72C9", amount: 25, pct: "2.9%" }
+  ],
+
+  wins: [
+    { name: "Greg Wigton", color: "#3A9B4B", tour: 4, elevated: 2, major: 1 },
+    { name: "William Sullivan", color: "#8B7010", tour: 4, elevated: 2, major: 0 },
+    { name: "Carlos Flores", color: "#D94040", tour: 1, elevated: 1, major: 1 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", tour: 2, elevated: 0, major: 1 },
+    { name: "Kevin McNamara", color: "#3B72C9", tour: 1, elevated: 0, major: 0 }
+  ],
+
+  maxTotalWins: 7,
+
+  finishes: [
+    { name: "Greg Wigton", color: "#3A9B4B", top10: 24, top1120: 19 },
+    { name: "William Sullivan", color: "#8B7010", top10: 28, top1120: 15 },
+    { name: "Carlos Flores", color: "#D94040", top10: 27, top1120: 18 },
+    { name: "Kevin McNamara", color: "#3B72C9", top10: 25, top1120: 25 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", top10: 20, top1120: 19 }
+  ],
+
+  quality: [
+    { name: "Greg Wigton", color: "#3A9B4B", sixer: 2, fiver: 10 },
+    { name: "William Sullivan", color: "#8B7010", sixer: 3, fiver: 3 },
+    { name: "Carlos Flores", color: "#D94040", sixer: 1, fiver: 9 },
+    { name: "Kevin McNamara", color: "#3B72C9", sixer: 2, fiver: 4 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", sixer: 1, fiver: 5 }
+  ],
+
+  shitty: [
+    { name: "Carlos Flores", color: "#D94040", gopher: 0, solo: 0, deuce: 0 },
+    { name: "Greg Wigton", color: "#3A9B4B", gopher: 0, solo: 0, deuce: 0 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", gopher: 0, solo: 0, deuce: 0 },
+    { name: "William Sullivan", color: "#8B7010", gopher: 0, solo: 0, deuce: 0 },
+    { name: "Kevin McNamara", color: "#3B72C9", gopher: 0, solo: 0, deuce: 1 }
+  ],
+
+  standings: [
+    { rank:1, name:"Greg Wigton", color:"#3A9B4B", pts:8956.3, trail:"LEADER", catchup:"-", miss:16, made:74, cutpct:"82.2%", wins:7, avgFin:27.9, top10s:24, avgCont:2.6, seconds:3, boldMade:true, boldWins:true, boldTop10:false },
+    { rank:2, name:"William Sullivan", color:"#8B7010", pts:8864.4, trail:"91.9", catchup:"10.2", miss:24, made:66, cutpct:"73.3%", wins:6, avgFin:24.9, top10s:28, avgCont:2.8, seconds:5, boldMade:false, boldWins:false, boldTop10:true },
+    { rank:3, name:"Carlos Flores", color:"#D94040", pts:8836.7, trail:"119.6", catchup:"13.3", miss:19, made:71, cutpct:"78.9%", wins:3, avgFin:26.4, top10s:27, avgCont:3.2, seconds:2, boldMade:false, boldWins:false, boldTop10:false },
+    { rank:4, name:"Kevin McNamara", color:"#3B72C9", pts:8556.2, trail:"400.1", catchup:"44.5", miss:26, made:64, cutpct:"71.1%", wins:1, avgFin:24.6, top10s:25, avgCont:3.0, seconds:7, boldMade:false, boldWins:false, boldTop10:false },
+    { rank:5, name:"Robert Bresnahan", color:"#7B4BB5", pts:8336.5, trail:"619.8", catchup:"68.9", miss:23, made:67, cutpct:"74.4%", wins:3, avgFin:28.3, top10s:20, avgCont:3.4, seconds:3, boldMade:false, boldWins:false, boldTop10:false }
+  ],
+
+  bonuses: [
+    { name: "Greg Wigton", color: "#3A9B4B", amount: 45 },
+    { name: "William Sullivan", color: "#8B7010", amount: 45 },
+    { name: "Kevin McNamara", color: "#3B72C9", amount: 15 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", amount: 15 },
+    { name: "Carlos Flores", color: "#D94040", amount: 5 }
+  ],
+
+  penalties: [
+    { name: "Kevin McNamara", color: "#3B72C9", amount: 10 },
+    { name: "Carlos Flores", color: "#D94040", amount: 0 },
+    { name: "Greg Wigton", color: "#3A9B4B", amount: 0 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", amount: 0 },
+    { name: "William Sullivan", color: "#8B7010", amount: 0 }
+  ],
+
+  streaks: [
+    { name: "Kevin McNamara", color: "#3B72C9", streak: 17 },
+    { name: "Carlos Flores", color: "#D94040", streak: 6 },
+    { name: "Robert Bresnahan", color: "#7B4BB5", streak: 4 },
+    { name: "Greg Wigton", color: "#3A9B4B", streak: 1 },
+    { name: "William Sullivan", color: "#8B7010", streak: 0 }
+  ]
+};
+
+// ============================================================
+// TRAILING LINE CHART
+// ============================================================
+const endLabelPlugin = {
+  id: 'endLabels',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((ds, i) => {
+      const meta = chart.getDatasetMeta(i);
+      const lastPoint = meta.data[meta.data.length - 1];
+      const val = ds.data[ds.data.length - 1];
+      const label = val === 0 ? 'Leader' : '-' + val.toFixed(1);
+      ctx.save();
+      ctx.font = '600 13px Cinzel, serif';
+      ctx.fillStyle = DATA.trailing.players[i].color;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, lastPoint.x + 5, lastPoint.y);
+      ctx.restore();
+    });
+  }
+};
+
+new Chart(document.getElementById('trailChart'), {
+  type: 'line',
+  plugins: [endLabelPlugin],
+  data: {
+    labels: DATA.trailing.labels,
+    datasets: DATA.trailing.players.map(p => ({
+      data: p.values,
+      borderColor: p.color,
+      borderWidth: 2.5,
+      pointRadius: 0,
+      tension: 0,
+      fill: false,
+      borderCapStyle: 'square',
+      borderJoinStyle: 'miter'
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { top: 4, right: 58, bottom: 2, left: 2 } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(242,228,196,0.97)',
+        borderColor: 'rgba(0,103,71,0.4)',
+        borderWidth: 1,
+        titleColor: '#006747',
+        bodyColor: '#4c6b48',
+        padding: 7,
+        callbacks: {
+          label: ctx => ` ${DATA.trailing.players[ctx.datasetIndex].name}: ${ctx.parsed.y === 0 ? 'Leader' : '-' + ctx.parsed.y.toFixed(1) + ' pts'}`
+        }
       }
-      return String(raw);
+    },
+    scales: {
+      x: {
+        ticks: { color: '#4c6b48', font: { size: 8, family: 'Cinzel' }, autoSkip: false, maxRotation: 0 },
+        grid: { color: 'rgba(0,103,71,0.08)' },
+        border: { color: 'rgba(0,103,71,0.15)' }
+      },
+      y: {
+        reverse: true, min: 0, max: 700,
+        ticks: {
+          color: '#4c6b48',
+          font: { size: 8, family: 'Cinzel' },
+          maxTicksLimit: 5,
+          callback: v => v === 0 ? 'Leader' : '-' + v
+        },
+        grid: { color: 'rgba(0,103,71,0.08)' },
+        border: { color: 'rgba(0,103,71,0.15)' },
+        title: { display: true, text: 'Points Behind Leader', color: '#6b4c30', font: { size: 8, family: 'Cinzel' } }
+      }
+    }
+  }
+});
+
+// ============================================================
+// DONUT CHART
+// ============================================================
+(function buildDonut() {
+  const total = 850;
+  const r = 38, cx = 45, cy = 45, stroke = 10;
+  const circum = 2 * Math.PI * r;
+  const svg = document.getElementById('donutSvg');
+
+  // Background ring
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bg.setAttribute('cx', cx); bg.setAttribute('cy', cy); bg.setAttribute('r', r);
+  bg.setAttribute('fill', 'none'); bg.setAttribute('stroke', 'rgba(0,103,71,0.1)');
+  bg.setAttribute('stroke-width', stroke);
+  svg.appendChild(bg);
+
+  let angleStart = -Math.PI / 2; // start at 12 o'clock
+  DATA.winnings.forEach(w => {
+    const frac = w.amount / total;
+    const angleEnd = angleStart + frac * 2 * Math.PI;
+
+    // Draw arc slice as a path
+    const x1 = cx + r * Math.cos(angleStart);
+    const y1 = cy + r * Math.sin(angleStart);
+    const x2 = cx + r * Math.cos(angleEnd);
+    const y2 = cy + r * Math.sin(angleEnd);
+    const largeArc = frac > 0.5 ? 1 : 0;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', w.color);
+    path.setAttribute('stroke-width', stroke - 1);
+    path.setAttribute('d', `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`);
+    svg.appendChild(path);
+
+    // % label outside slice midpoint — angle is exactly the midpoint
+    const pct = Math.round(frac * 100);
+    if (pct >= 3) {
+      const midA = (angleStart + angleEnd) / 2;
+      const labelR = r + 18;
+      const lx = cx + labelR * Math.cos(midA);
+      const ly = cy + labelR * Math.sin(midA);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', lx); t.setAttribute('y', ly);
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('dominant-baseline', 'middle');
+      t.setAttribute('font-size', '10');
+      t.setAttribute('font-weight', '700');
+      t.setAttribute('fill', w.color);
+      t.textContent = `${pct}%`;
+      svg.appendChild(t);
     }
 
-    function populateCareerStats(data) {
-      buildDerivedFields(data);
-      const career = data.career;
+    angleStart = angleEnd;
+  });
 
-      document.querySelectorAll('[data-career][data-field]').forEach(el => {
-        const player = el.dataset.career;
-        const field  = el.dataset.field;
-        const fmt    = el.dataset.format || null;
-        const c      = career[player];
-        if (!c) return;
+  const legend = document.getElementById('donutLegend');
+  DATA.winnings.forEach(w => {
+    legend.innerHTML += `
+      <div class="donut-legend-item">
+        <div class="donut-swatch" style="background:${w.color}"></div>
+        <span class="donut-legend-name">${w.name.split(' ')[0]}</span>
+        <span class="donut-legend-val">$${w.amount}</span>
+      </div>`;
+  });
+})();
 
-        // Grand slam label goes into the <span class="stat-label"> sibling
-        if (field === 'grand_slam_label') {
-          el.textContent = c.grand_slam_label;
-          return;
-        }
+// ============================================================
+// WINS BARS
+// ============================================================
+(function buildWins() {
+  const container = document.getElementById('winsBars');
+  const maxTotal = DATA.maxTotalWins;
+  const trackWidth = 160; // approximate px for scale
 
-        el.textContent = formatValue(c[field], fmt);
-
-        // Championships: inject years in small font below the number
-        if (field === 'championships_display' && c.championship_years.length > 0) {
-          el.innerHTML = `${c.championships}<br><small style="font-size:0.55rem;font-weight:400;letter-spacing:0.05em;opacity:0.8">${c.championship_years.join(', ')}</small>`;
-        }
-      });
+  DATA.wins.forEach(p => {
+    const total = p.tour + p.elevated + p.major;
+    let segs = '';
+    if (p.tour > 0) {
+      segs += `<div class="wins-bar-seg" style="background:#8A9098;width:${(p.tour/maxTotal)*100}%" title="Tour: ${p.tour}">${p.tour}</div>`;
+    }
+    if (p.elevated > 0) {
+      segs += `<div class="wins-bar-seg" style="background:#3A9B4B;width:${(p.elevated/maxTotal)*100}%" title="Elevated: ${p.elevated}">${p.elevated}</div>`;
+    }
+    if (p.major > 0) {
+      segs += `<div class="wins-bar-seg" style="background:#C9A84C;width:${(p.major/maxTotal)*100}%" title="Major: ${p.major}">${p.major}</div>`;
     }
 
-    fetch('./honors_data.json')
-      .then(r => r.json())
-      .then(data => populateCareerStats(data))
-      .catch(err => console.warn('honors_data.json not found or invalid:', err));
+    container.innerHTML += `
+      <div class="wins-row">
+        <span class="wins-row-name" style="color:${p.color}">${p.name.split(' ')[0]}</span>
+        <div class="wins-bar-track">${segs}</div>
+        <span class="wins-total">${total}</span>
+      </div>`;
+  });
 
-    // ============================================
-    // SCROLL / NAV MECHANICS — unchanged
-    // ============================================
+  // Legend
+  container.innerHTML += `
+    <div style="display:flex;gap:10px;margin-top:6px;padding-top:5px;border-top:1px solid rgba(0,103,71,0.15)">
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:#6b4c30"><div style="width:10px;height:10px;background:#8A9098;border-radius:1px"></div>Tour</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:#6b4c30"><div style="width:10px;height:10px;background:#3A9B4B;border-radius:1px"></div>Elevated</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:#6b4c30"><div style="width:10px;height:10px;background:#C9A84C;border-radius:1px"></div>Major</div>
+    </div>`;
+})();
 
-    const hero       = document.getElementById('hero');
-    const heroBg     = document.querySelector('.hero-bg');
-    const heroLogo   = document.querySelector('.hero-logo-img') || document.querySelector('.hero-logo-placeholder');
-    const nav        = document.getElementById('site-nav');
-    const navToggle  = document.getElementById('nav-toggle');
-    const navLinks   = document.getElementById('site-nav-links');
-    const fadeSpacer = document.getElementById('hero-fade-spacer');
-    const sectionHeaders = document.querySelectorAll('.section-header');
-
-    function sizeFadeSpacer() {
-      const heroH = hero.offsetHeight;
-      fadeSpacer.style.height = `${heroH * LOGO_FADE_FRACTION}px`;
+// ============================================================
+// HORIZONTAL BARS — FINISHES, QUALITY, SHITTY
+// ============================================================
+function buildHBars(containerId, rows, segments, maxVal) {
+  const container = document.getElementById(containerId);
+  rows.forEach(r => {
+    const total = segments.reduce((s, seg) => s + (r[seg.key] || 0), 0);
+    if (total === 0) {
+      container.innerHTML += `
+        <div class="hbar-row-item">
+          <span class="hbar-name" style="color:${r.color||'#A0A8B0'}">${r.name.split(' ')[0]}</span>
+          <div class="hbar-track"><div class="hbar-seg" style="background:rgba(0,103,71,0.08);width:100%"></div></div>
+          <span class="hbar-total" style="color:#6b4c30">0</span>
+        </div>`;
+      return;
     }
-
-    function updateHero() {
-      const scrollY  = window.scrollY;
-      const heroH    = hero.offsetHeight;
-      const progress = Math.min(scrollY / (heroH * LOGO_FADE_FRACTION), 1);
-      const opacity  = 1 - progress;
-      heroBg.style.opacity = opacity;
-      const logoDrift   = scrollY * LOGO_DRIFT_SPEED;
-      const logoOpacity = Math.max(1 - progress, 0);
-      heroLogo.style.transform = `translateX(-50%) translateY(${logoDrift}px)`;
-      heroLogo.style.opacity   = logoOpacity;
-      nav.classList.toggle('scrolled', scrollY > NAV_BACKGROUND_TRIGGER_PX);
-    }
-
-    function updateSectionHeaders() {
-      const viewportH = window.innerHeight;
-      const halfway   = viewportH / 2;
-      sectionHeaders.forEach(header => {
-        const rect = header.getBoundingClientRect();
-        const traveled = viewportH - rect.top;
-        const fadeProgress = Math.min(Math.max(traveled / (viewportH - halfway), 0), 1);
-        header.style.opacity = fadeProgress;
-      });
-    }
-
-    function onScroll() { updateHero(); updateSectionHeaders(); }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => { sizeFadeSpacer(); onScroll(); });
-
-    navToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    let segs = '';
+    segments.forEach(seg => {
+      if (r[seg.key] > 0) {
+        const w = (r[seg.key] / maxVal) * 100;
+        segs += `<div class="hbar-seg" style="background:${seg.color};width:${w}%"></div>`;
+      }
     });
+    const nameColor = r.color || '#A0A8B0';
+    container.innerHTML += `
+      <div class="hbar-row-item">
+        <span class="hbar-name" style="color:${nameColor}">${r.name.split(' ')[0]}</span>
+        <div class="hbar-track">${segs}</div>
+        <span class="hbar-total">${total}</span>
+      </div>`;
+  });
+}
 
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      });
-    });
+const maxFinish = Math.max(...DATA.finishes.map(f => f.top10 + f.top1120));
+buildHBars('finishBars', DATA.finishes, [
+  { key: 'top10',   color: '#5BA3D9' },
+  { key: 'top1120', color: '#1a3d6a' }
+], maxFinish);
 
-    sizeFadeSpacer();
-    onScroll();
-  </script>
+const maxQuality = Math.max(...DATA.quality.map(q => q.sixer + q.fiver));
+buildHBars('qualityBars', DATA.quality, [
+  { key: 'sixer', color: '#3A9B4B' },
+  { key: 'fiver', color: '#3B72C9' }
+], maxQuality || 1);
 
+// Shitty lineups — uses hbar classes for equal column width, labeled segments
+(function buildShitty() {
+  const container = document.getElementById('shittyBars');
+  const maxVal = Math.max(...DATA.shitty.map(s => s.gopher + s.solo + s.deuce), 1);
+  DATA.shitty.forEach(p => {
+    const total = p.gopher + p.solo + p.deuce;
+    let segs = '';
+    if (p.gopher > 0) segs += `<div class="hbar-seg" style="background:#C0392B;width:${(p.gopher/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Gophers">${p.gopher}</div>`;
+    if (p.solo   > 0) segs += `<div class="hbar-seg" style="background:#E8563A;width:${(p.solo/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Solos">${p.solo}</div>`;
+    if (p.deuce  > 0) segs += `<div class="hbar-seg" style="background:#8B4513;width:${(p.deuce/maxVal)*100}%;font-size:10.5px;font-weight:700;color:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;" title="Deuces">${p.deuce}</div>`;
+    container.innerHTML += `
+      <div class="hbar-row-item">
+        <span class="hbar-name" style="color:${p.color}">${p.name.split(' ')[0]}</span>
+        <div class="hbar-track">${total > 0 ? segs : '<div style="width:100%;height:100%;background:rgba(255,255,255,0.04)"></div>'}</div>
+        <span class="hbar-total" style="color:${total > 0 ? '#D94040' : '#555'}">${total > 0 ? total : '—'}</span>
+      </div>`;
+  });
+})();
+
+// ============================================================
+// CALLOUT BOXES
+// ============================================================
+(function buildCallouts() {
+
+  function renderListCallout(key) {
+    const isBonus = key === 'bonuses';
+    const c = DATA.CALLOUT_LIBRARY[key];
+    const rows = isBonus ? DATA.bonuses : DATA.penalties;
+    const listHTML = rows.map(r => {
+      const amt = r.amount > 0
+        ? `<span style="font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:${isBonus ? 'var(--gold)' : '#D94040'};text-align:right;display:inline-block;">${'$'}${r.amount}</span>`
+        : `<span style="font-size:27px;color:#8a7050;text-align:right;display:inline-block;">—</span>`;
+      return `<div style="display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:4px 0;">
+        <span style="font-size:26px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;width:90px;">${r.name.split(' ')[0]}</span>
+        ${amt}
+      </div>`;
+    }).join('');
+
+    const imgSize = isBonus ? '144px' : '122px';
+    const textBlock = `
+      <div style="display:flex;flex-direction:column;flex:1;gap:0;">
+        ${listHTML}
+      </div>`;
+    const imgBlock = `<img src="${c.img}" alt="${c.label}" style="width:${imgSize};height:${imgSize};object-fit:contain;flex-shrink:0;">`;
+
+    // Bonuses: text left, image right. Penalties: image left, text right.
+    // Both blocks are centered together as a group within the box,
+    // rather than the image being pushed hard to one edge.
+    return `
+      <div class="callout-box alt" style="flex-direction:column;align-items:stretch;gap:6px;padding:10px 16px;justify-content:flex-start;flex:none;">
+        <div class="callout-label" style="text-align:center;width:100%;">${c.label}</div>
+        <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:20px;width:100%;">
+          ${isBonus ? textBlock + imgBlock : imgBlock + textBlock}
+        </div>
+      </div>`;
+  }
+
+  function renderCallout(key) {
+    if (key === 'bonuses' || key === 'penalties') return renderListCallout(key);
+    const c = DATA.CALLOUT_LIBRARY[key];
+    if (!c) return '';
+    return `
+      <div class="callout-box alt">
+        <div class="callout-label">${c.label}</div>
+        ${c.img ? `<img src="${c.img}" alt="${c.label}" style="width:64px;height:64px;object-fit:contain;">` : ''}
+        <div class="callout-value">${c.value}</div>
+        ${c.member ? `<div class="callout-name" style="color:${c.color}">${c.member}</div>` : ''}
+        ${c.pace ? `<div class="callout-pace"><strong>${c.pace}</strong></div>` : ''}
+        ${c.record ? `<div class="callout-record">${c.record}</div>` : ''}
+      </div>`;
+  }
+
+  // Top row: Bonuses/Penalties, always shown first, same on mobile and desktop
+  document.getElementById('calloutsTopRow').innerHTML =
+    DATA.TOP_CALLOUTS.map(renderCallout).join('');
+
+  // Main grid: fixed 8-box list, no rotation — see DATA.ACTIVE_CALLOUTS above
+  document.getElementById('calloutsGrid').innerHTML =
+    DATA.ACTIVE_CALLOUTS.map(renderCallout).join('');
+})();
+
+// ============================================================
+// STANDINGS TABLE
+// ============================================================
+(function buildStandings() {
+  const tbody = document.getElementById('standingsBody');
+  DATA.standings.forEach(s => {
+    const madeVal  = s.boldMade  ? `<span class="circled">${s.made}</span>`  : s.made;
+    const winsVal  = s.boldWins  ? `<span class="circled">${s.wins}</span>`  : s.wins;
+    const top10Val = s.boldTop10 ? `<span class="circled">${s.top10s}</span>` : s.top10s;
+    const trailVal = s.trail === 'LEADER' ? `<span class="leader-badge">LEADER</span>` : s.trail;
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${s.rank}</td>
+        <td style="color:${s.color};font-weight:600">${s.name}</td>
+        <td>${s.pts.toLocaleString()}</td>
+        <td>${trailVal}</td>
+        <td>${s.catchup}</td>
+        <td>${s.miss}</td>
+        <td>${madeVal}</td>
+        <td>${s.cutpct}</td>
+        <td>${winsVal}</td>
+        <td>${s.avgFin}</td>
+        <td>${top10Val}</td>
+        <td>${s.avgCont}</td>
+        <td>${s.seconds}</td>
+      </tr>`;
+  });
+})();
+
+// ============================================================
+// LOSING STREAKS
+// ============================================================
+(function buildStreaks() {
+  const container = document.getElementById('streakRows');
+  if (!container) return;
+  DATA.streaks.forEach(s => {
+    let dots = '';
+    for (let i = 0; i < Math.min(s.streak, maxDots); i++) {
+      const cls = s.streak >= 10 ? 'streak-dot active long' : 'streak-dot active';
+      dots += `<div class="${cls}"></div>`;
+    }
+    const countClass = s.streak >= 10 ? 'streak-count cold' : 'streak-count';
+    container.innerHTML += `
+      <div class="streak-row">
+        <span class="streak-name" style="color:${s.color}">${s.name.split(' ')[0]}</span>
+        <div class="streak-dots">${dots || '<span style="font-size:10.5px;color:#8a7050">—</span>'}</div>
+        <span class="${countClass}">${s.streak}</span>
+      </div>`;
+  });
+})();
+</script>
+
+<script>
+// Hamburger menu toggle — same behavior as the main storybook page
+const navToggle = document.getElementById('nav-toggle');
+const navLinks  = document.getElementById('site-nav-links');
+
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+</script>
 </body>
 </html>
