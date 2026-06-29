@@ -1773,7 +1773,7 @@ buildHBars('qualityBars', DATA.quality, [
         ? `<span style="font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:${isBonus ? 'var(--gold)' : '#D94040'};text-align:right;display:inline-block;">${'$'}${r.amount}</span>`
         : `<span style="font-size:27px;color:#8a7050;text-align:right;display:inline-block;">—</span>`;
       return `<div style="display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:4px 0;">
-        <span style="font-size:26px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;width:90px;display:inline-block;flex-shrink:0;">${r.name.split(' ')[0]}</span>
+        <span style="font-size:26px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;min-width:110px;display:inline-block;flex-shrink:0;">${r.name.split(' ')[0]}</span>
         ${amt}
       </div>`;
     }).join('');
