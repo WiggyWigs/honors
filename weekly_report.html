@@ -601,6 +601,98 @@
 
   .standings-table tr:last-child td { border-bottom: none; }
 
+  @media (orientation: portrait) and (max-width: 700px) {
+
+    .page { display: flex; flex-direction: column; gap: 10px; padding: 0 8px; }
+
+    .hero             { order: 1; }
+    .section-chart    { order: 2; }
+    .analytics-row    { order: 3; }
+    .hbar-row         { order: 4; }
+    .callouts-top-row { order: 5; }
+    .standings-section{ order: 6; }
+    .callouts-grid    { order: 7; }
+    .narratives-center{ order: 8; }
+    .page-footer      { order: 99; }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px 12px;
+      gap: 6px;
+    }
+    .hero-left img { width: 100px !important; }
+    .hero-center { width: 100%; }
+    .hero-headline { font-size: 14px; }
+    .hero-subheadline { display: none; }
+    .hero-right {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+    .hero-stat-label { font-size: 9px; }
+    .hero-stat-value { font-size: 18px; text-align: center; }
+    .hero-stat { align-items: center; }
+
+    .analytics-row {
+      grid-template-columns: 1fr;
+      border-top: none;
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .hbar-row { grid-template-columns: 1fr; }
+
+    .callouts-top-row { grid-template-columns: 1fr; align-items: start; }
+
+    .callouts-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .narratives-center { grid-template-columns: 1fr; }
+
+    .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
+    .standings-table td { white-space: normal; font-size: 10px; }
+    .standings-section { overflow-x: hidden; padding: 8px 6px; }
+    .standings-table { table-layout: fixed; width: 100%; }
+    .standings-table th:nth-child(1), .standings-table td:nth-child(1) { width: 18px; }
+    .standings-table th:nth-child(2), .standings-table td:nth-child(2) { width: 28%; }
+
+    .standings-table th:nth-child(5),
+    .standings-table td:nth-child(5),
+    .standings-table th:nth-child(6),
+    .standings-table td:nth-child(6),
+    .standings-table th:nth-child(8),
+    .standings-table td:nth-child(8),
+    .standings-table th:nth-child(10),
+    .standings-table td:nth-child(10),
+    .standings-table th:nth-child(12),
+    .standings-table td:nth-child(12),
+    .standings-table th:nth-child(13),
+    .standings-table td:nth-child(13) { display: none; }
+
+    .standings-table th,
+    .standings-table td { font-size: 10px; padding: 5px 4px; letter-spacing: 0; }
+    .standings-title { font-size: 13px; }
+  }
+
+  @media (max-width: 900px) {
+    .page { max-width: 100%; }
+    .standings-section { overflow-x: hidden; padding: 8px 6px; }
+    .standings-table { table-layout: fixed; width: 100%; }
+    .standings-table th { white-space: normal; font-size: 9px; letter-spacing: 0; line-height: 1.2; }
+    .standings-table td { font-size: 10px; padding: 4px 4px; }
+    .standings-table th:nth-child(5), .standings-table td:nth-child(5),
+    .standings-table th:nth-child(6), .standings-table td:nth-child(6),
+    .standings-table th:nth-child(8), .standings-table td:nth-child(8),
+    .standings-table th:nth-child(10), .standings-table td:nth-child(10),
+    .standings-table th:nth-child(12), .standings-table td:nth-child(12),
+    .standings-table th:nth-child(13), .standings-table td:nth-child(13) { display: none; }
+    .standings-table th:nth-child(2), .standings-table td:nth-child(2) { width: 28%; }
+  }
+
   .circled {
     position: relative;
     display: inline-block;
@@ -703,13 +795,24 @@
   }
 
   /* =================== SECTION 7: FEATURE CALLOUTS =================== */
-  /* Top row: Bonuses/Penalties, always 2 columns regardless of screen size */
+  /* Top row: Bonuses/Penalties — 2 columns desktop, 1 column mobile */
   .callouts-top-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     background: transparent;
     margin-bottom: 14px;
+    align-items: start;
+  }
+
+  @media (max-width: 700px) {
+    .callouts-top-row {
+      grid-template-columns: 1fr;
+    }
+    .bp-inner-row {
+      flex-direction: column !important;
+      align-items: center !important;
+    }
   }
 
   /* Desktop default: 4 columns x 2 rows for 8 boxes */
@@ -1212,7 +1315,7 @@
           <th>Trailing</th>
           <th>Catchup</th>
           <th>Miss</th>
-          <th>Made</th>
+          <th>Cuts Made</th>
           <th>Cut%</th>
           <th>Wins</th>
           <th>Avg Fin</th>
@@ -1772,13 +1875,13 @@ buildHBars('qualityBars', DATA.quality, [
       const amt = r.amount > 0
         ? `<span style="font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:${isBonus ? 'var(--gold)' : '#D94040'};text-align:right;display:inline-block;">${'$'}${r.amount}</span>`
         : `<span style="font-size:27px;color:#8a7050;text-align:right;display:inline-block;">—</span>`;
-      return `<div style="display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:4px 0;">
-        <span style="font-size:26px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;min-width:110px;display:inline-block;flex-shrink:0;">${r.name.split(' ')[0]}</span>
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid rgba(0,103,71,0.12);">
+        <span style="font-size:22px;color:${r.color};font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.5px;white-space:nowrap;min-width:70px;">${r.name.split(' ')[0]}</span>
         ${amt}
       </div>`;
     }).join('');
 
-    const imgSize = '90px';
+    const imgSize = isBonus ? '144px' : '122px';
     const textBlock = `
       <div style="display:flex;flex-direction:column;flex:1;gap:0;justify-content:center;">
         ${listHTML}
@@ -1791,7 +1894,7 @@ buildHBars('qualityBars', DATA.quality, [
     return `
       <div class="callout-box alt" style="flex-direction:column;align-items:stretch;gap:6px;padding:10px 16px;justify-content:flex-start;flex:none;">
         <div class="callout-label" style="text-align:center;width:100%;">${c.label}</div>
-        <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:20px;width:100%;">
+        <div class="bp-inner-row" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:20px;width:100%;">
           ${isBonus ? textBlock + imgBlock : imgBlock + textBlock}
         </div>
       </div>`;
