@@ -126,7 +126,7 @@
     font-weight: 900;
     font-size: 42px;
     letter-spacing: 1px;
-    color: var(--white);
+    color: var(--gold);
   }
 
   .champ-title span { color: var(--gold); }
@@ -158,22 +158,19 @@
   }
 
   .portrait-frame {
-    border: 3px solid var(--gold);
-    border-radius: 6px;
-    background: var(--bg-panel);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    aspect-ratio: 1085 / 1450;
+    overflow: visible;
   }
 
   .reigning .portrait-frame {
-    width: 320px;
-    height: 320px;
+    width: 300px;
   }
 
   .portrait-frame img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
   }
 
@@ -205,16 +202,23 @@
     min-width: 380px;
   }
 
-  .grid-cell .stat-line {
+  .stat-line {
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
     font-size: 15px;
-    padding: 4px 0;
+    padding: 8px 0;
     border-bottom: 1px dashed var(--border);
   }
 
   .stat-panel .stat-line:nth-last-child(-n+1) { border-bottom: none; }
+
+  /* 2-column stat panels lay out 5 items as 2 / 2 / 1 -- center the odd one out */
+  .stat-panel .stat-line:last-child {
+    grid-column: 1 / -1;
+  }
 
   .stat-label {
     color: var(--silver);
@@ -222,14 +226,12 @@
     font-size: 11px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    align-self: center;
   }
 
   .stat-value {
     font-family: 'Cinzel', serif;
     font-weight: 700;
     color: var(--white);
-    text-align: right;
   }
 
   .stat-value.gold { color: var(--gold); }
@@ -263,10 +265,7 @@
   }
 
   .past-card .portrait-frame {
-    width: 224px;
-    height: 224px;
-    border-width: 2px;
-    border-color: var(--silver);
+    width: 210px;
   }
 
   .past-card .champ-name { font-size: 19px; }
@@ -289,23 +288,13 @@
   .pname-purple { color: var(--purple); }
   .pname-amber  { color: var(--yellow); }
 
-  .reigning .pname-red    { border-color: var(--red); }
-  .reigning .pname-green  { border-color: var(--green); }
-
-  /* champion border tint keyed off data attribute */
-  .portrait-frame[data-color="red"]    { border-color: var(--red); }
-  .portrait-frame[data-color="green"]  { border-color: var(--green); }
-  .portrait-frame[data-color="blue"]   { border-color: var(--blue); }
-  .portrait-frame[data-color="purple"] { border-color: var(--purple); }
-  .portrait-frame[data-color="amber"]  { border-color: var(--yellow); }
-
   /* =================== MOBILE =================== */
   @media (max-width: 640px) {
     .champ-title { font-size: 30px; }
-    .reigning .portrait-frame { width: 220px; height: 220px; }
+    .reigning .portrait-frame { width: 210px; }
     .stat-panel { min-width: 0; width: 100%; grid-template-columns: 1fr; }
     .past-grid { grid-template-columns: 1fr; max-width: 320px; }
-    .past-card .portrait-frame { width: 160px; height: 160px; }
+    .past-card .portrait-frame { width: 150px; }
   }
 </style>
 </head>
@@ -322,7 +311,7 @@
   <!-- ============= REIGNING CHAMPION (2025) ============= -->
   <div class="reigning">
     <div class="reigning-badge">Reigning Champion</div>
-    <div class="portrait-frame" data-color="blue">
+    <div class="portrait-frame">
       <img src="images/2025.png" alt="Kevin McNamara, 2025 Champion">
     </div>
     <div class="champ-name pname-blue">Kevin McNamara</div>
@@ -341,7 +330,7 @@
   <div class="past-grid">
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="blue">
+      <div class="portrait-frame">
         <img src="images/2024.png" alt="Kevin McNamara, 2024 Champion">
       </div>
       <div class="champ-name pname-blue">Kevin McNamara</div>
@@ -356,7 +345,7 @@
     </div>
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="green">
+      <div class="portrait-frame">
         <img src="images/2023.png" alt="Greg Wigton, 2023 Champion">
       </div>
       <div class="champ-name pname-green">Greg Wigton</div>
@@ -371,7 +360,7 @@
     </div>
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="green">
+      <div class="portrait-frame">
         <img src="images/2022.png" alt="Greg Wigton, 2022 Champion">
       </div>
       <div class="champ-name pname-green">Greg Wigton</div>
@@ -386,7 +375,7 @@
     </div>
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="blue">
+      <div class="portrait-frame">
         <img src="images/2021.png" alt="Kevin McNamara, 2021 Champion">
       </div>
       <div class="champ-name pname-blue">Kevin McNamara</div>
@@ -401,7 +390,7 @@
     </div>
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="purple">
+      <div class="portrait-frame">
         <img src="images/2020.png" alt="Robert Bresnahan, 2020 Champion">
       </div>
       <div class="champ-name pname-purple">Robert Bresnahan</div>
@@ -416,7 +405,7 @@
     </div>
 
     <div class="past-card">
-      <div class="portrait-frame" data-color="blue">
+      <div class="portrait-frame">
         <img src="images/2019.png" alt="Kevin McNamara, 2019 Champion">
       </div>
       <div class="champ-name pname-blue">Kevin McNamara</div>
