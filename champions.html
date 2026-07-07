@@ -164,7 +164,7 @@
   }
 
   .reigning .portrait-frame {
-    width: 300px;
+    width: min(450px, 100%);
   }
 
   .portrait-frame img {
@@ -172,22 +172,6 @@
     height: 100%;
     object-fit: contain;
     display: block;
-  }
-
-  .champ-name {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    margin-top: 18px;
-  }
-
-  .reigning .champ-name { font-size: 28px; }
-
-  .champ-year {
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    letter-spacing: 2px;
-    color: var(--silver);
-    margin-top: 4px;
   }
 
   .stat-panel {
@@ -265,10 +249,8 @@
   }
 
   .past-card .portrait-frame {
-    width: 210px;
+    width: min(294px, 100%);
   }
-
-  .past-card .champ-name { font-size: 19px; }
 
   .past-card .stat-panel {
     grid-template-columns: 1fr;
@@ -281,20 +263,11 @@
   .past-card .stat-label { font-size: 10px; }
   .past-card .stat-value { font-size: 13px; }
 
-  /* =================== PLAYER COLORS =================== */
-  .pname-red    { color: var(--red); }
-  .pname-green  { color: var(--green); }
-  .pname-blue   { color: var(--blue); }
-  .pname-purple { color: var(--purple); }
-  .pname-amber  { color: var(--yellow); }
-
   /* =================== MOBILE =================== */
   @media (max-width: 640px) {
     .champ-title { font-size: 30px; }
-    .reigning .portrait-frame { width: 210px; }
     .stat-panel { min-width: 0; width: 100%; grid-template-columns: 1fr; }
-    .past-grid { grid-template-columns: 1fr; max-width: 320px; }
-    .past-card .portrait-frame { width: 150px; }
+    .past-grid { grid-template-columns: 1fr; max-width: 340px; }
   }
 </style>
 </head>
@@ -314,8 +287,6 @@
     <div class="portrait-frame">
       <img src="images/2025.png" alt="Kevin McNamara, 2025 Champion">
     </div>
-    <div class="champ-name pname-blue">Kevin McNamara</div>
-    <div class="champ-year">2025 SEASON CHAMPION</div>
     <div class="stat-panel">
       <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">414.65</span></div>
       <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">73.2 pts</span></div>
@@ -333,8 +304,6 @@
       <div class="portrait-frame">
         <img src="images/2024.png" alt="Kevin McNamara, 2024 Champion">
       </div>
-      <div class="champ-name pname-blue">Kevin McNamara</div>
-      <div class="champ-year">2024</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">443.27</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">571.4 pts</span></div>
@@ -348,8 +317,6 @@
       <div class="portrait-frame">
         <img src="images/2023.png" alt="Greg Wigton, 2023 Champion">
       </div>
-      <div class="champ-name pname-green">Greg Wigton</div>
-      <div class="champ-year">2023</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">428.07</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">128.5 pts</span></div>
@@ -363,8 +330,6 @@
       <div class="portrait-frame">
         <img src="images/2022.png" alt="Greg Wigton, 2022 Champion">
       </div>
-      <div class="champ-name pname-green">Greg Wigton</div>
-      <div class="champ-year">2022</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">403.30</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">96.6 pts</span></div>
@@ -378,8 +343,6 @@
       <div class="portrait-frame">
         <img src="images/2021.png" alt="Kevin McNamara, 2021 Champion">
       </div>
-      <div class="champ-name pname-blue">Kevin McNamara</div>
-      <div class="champ-year">2021</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">412.15</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">218.1 pts</span></div>
@@ -393,8 +356,6 @@
       <div class="portrait-frame">
         <img src="images/2020.png" alt="Robert Bresnahan, 2020 Champion">
       </div>
-      <div class="champ-name pname-purple">Robert Bresnahan</div>
-      <div class="champ-year">2020</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">422.26</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">301.3 pts</span></div>
@@ -408,8 +369,6 @@
       <div class="portrait-frame">
         <img src="images/2019.png" alt="Kevin McNamara, 2019 Champion">
       </div>
-      <div class="champ-name pname-blue">Kevin McNamara</div>
-      <div class="champ-year">2019</div>
       <div class="stat-panel">
         <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">426.17</span></div>
         <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">314.5 pts</span></div>
