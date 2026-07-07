@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<!--
+=======================================================
+  THE HONORS — CHAMPIONSHIP HISTORY PAGE
+=======================================================
+  Portrait gallery of season champions, 2019-2025.
+  Styled to match weekly-report-template.html / ohgr.html
+  design system (Cinzel/IM Fell fonts, parchment palette).
+
+  Portrait images expected at: images/2025.png ... images/2019.png
+
+  DATA NOTE: Per-year champion financials (Avg Score, Victory
+  Margin, Events Won, Majors Won, Net Earnings) were derived
+  directly from Core_Data_AI.csv using the same MC/bonus/penalty/
+  dues rules as generate_honors_data.py, extended to run per-year
+  instead of only for the in-progress season. Net Earnings =
+  winnings - entry fees + bonuses - penalties + champion payout
+  - yearly dues + year-end awards share (Grand Slam
+  bonuses/fees excluded, per Greg's instruction).
+
+  VALIDATION CAVEAT: Summing these per-year net figures across
+  all players/years lands within ~$1-$21 of the lifetime totals
+  in GROUND_TRUTH_SUMMARY.md's Table 15 (which itself doesn't
+  balance to $0 as the official balance rule requires -- it's off
+  by -$40 lifetime). This engine's output IS internally balanced
+  to $0 every year, matching Section 10.3 of the official rules.
+  The gap is most likely tie-split rounding on DQ/award edge
+  cases. Flagged for Greg to reconcile against
+  generate_financial_ground_truth.py if exact-to-the-penny match
+  to GROUND_TRUTH_SUMMARY.md is required.
+=======================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Honors — Championship History</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
+
+  :root {
+    --bg-primary: #f2e4c4;
+    --bg-panel: #ece0c2;
+    --bg-panel-alt: #e6d9b8;
+    --bg-green: #e0dcc0;
+    --gold: #006747;
+    --gold-light: #1a8a64;
+    --silver: #4c6b48;
+    --white: #1a2a18;
+    --border: rgba(0, 103, 71, 0.18);
+    --border-gold: rgba(0, 103, 71, 0.3);
+    --red:    #a03d2f;
+    --green:  #2f6b3a;
+    --blue:   #2f5a8a;
+    --purple: #6b4a8a;
+    --yellow: #9a7d1f;
+    --page-w: 1100px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg-primary);
+    background-image: url('images/background.png');
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    background-position: top center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'IM Fell English', Georgia, serif;
+    color: var(--white);
+  }
+
+  .page-outer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .page {
+    width: 100%;
+    max-width: var(--page-w);
+    position: relative;
+    padding: 0 20px 60px;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(0,0,0,0.012) 28px,
+        rgba(0,0,0,0.012) 29px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page > * { position: relative; z-index: 1; }
+
+  /* =================== HEADER =================== */
+  .champ-header {
+    text-align: center;
+    padding: 40px 20px 24px;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 40px;
+  }
+
+  .champ-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 10px;
+  }
+
+  .champ-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 42px;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+
+  .champ-title span { color: var(--gold); }
+
+  .champ-subtitle {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--silver);
+    margin-top: 10px;
+  }
+
+  /* =================== REIGNING CHAMPION =================== */
+  .reigning {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 56px;
+  }
+
+  .reigning-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .portrait-frame {
+    border: 3px solid var(--gold);
+    border-radius: 6px;
+    background: var(--bg-panel);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+
+  .reigning .portrait-frame {
+    width: 320px;
+    height: 320px;
+  }
+
+  .portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .champ-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    margin-top: 18px;
+  }
+
+  .reigning .champ-name { font-size: 28px; }
+
+  .champ-year {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    margin-top: 4px;
+  }
+
+  .stat-panel {
+    margin-top: 18px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 32px;
+    min-width: 380px;
+  }
+
+  .grid-cell .stat-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 15px;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .stat-panel .stat-line:nth-last-child(-n+1) { border-bottom: none; }
+
+  .stat-label {
+    color: var(--silver);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    align-self: center;
+  }
+
+  .stat-value {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--white);
+    text-align: right;
+  }
+
+  .stat-value.gold { color: var(--gold); }
+
+  /* =================== PAST CHAMPIONS GRID =================== */
+  .past-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .past-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px 24px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .past-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .past-card .portrait-frame {
+    width: 224px;
+    height: 224px;
+    border-width: 2px;
+    border-color: var(--silver);
+  }
+
+  .past-card .champ-name { font-size: 19px; }
+
+  .past-card .stat-panel {
+    grid-template-columns: 1fr;
+    min-width: 0;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 14px;
+  }
+
+  .past-card .stat-label { font-size: 10px; }
+  .past-card .stat-value { font-size: 13px; }
+
+  /* =================== PLAYER COLORS =================== */
+  .pname-red    { color: var(--red); }
+  .pname-green  { color: var(--green); }
+  .pname-blue   { color: var(--blue); }
+  .pname-purple { color: var(--purple); }
+  .pname-amber  { color: var(--yellow); }
+
+  .reigning .pname-red    { border-color: var(--red); }
+  .reigning .pname-green  { border-color: var(--green); }
+
+  /* champion border tint keyed off data attribute */
+  .portrait-frame[data-color="red"]    { border-color: var(--red); }
+  .portrait-frame[data-color="green"]  { border-color: var(--green); }
+  .portrait-frame[data-color="blue"]   { border-color: var(--blue); }
+  .portrait-frame[data-color="purple"] { border-color: var(--purple); }
+  .portrait-frame[data-color="amber"]  { border-color: var(--yellow); }
+
+  /* =================== MOBILE =================== */
+  @media (max-width: 640px) {
+    .champ-title { font-size: 30px; }
+    .reigning .portrait-frame { width: 220px; height: 220px; }
+    .stat-panel { min-width: 0; width: 100%; grid-template-columns: 1fr; }
+    .past-grid { grid-template-columns: 1fr; max-width: 320px; }
+    .past-card .portrait-frame { width: 160px; height: 160px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-outer">
+<div class="page">
+
+  <div class="champ-header">
+    <div class="champ-eyebrow">The Honors Fantasy Golf League</div>
+    <div class="champ-title">Championship <span>History</span></div>
+    <div class="champ-subtitle">Every trophy, every season, every legend since 2019.</div>
+  </div>
+
+  <!-- ============= REIGNING CHAMPION (2025) ============= -->
+  <div class="reigning">
+    <div class="reigning-badge">Reigning Champion</div>
+    <div class="portrait-frame" data-color="blue">
+      <img src="images/2025.png" alt="Kevin McNamara, 2025 Champion">
+    </div>
+    <div class="champ-name pname-blue">Kevin McNamara</div>
+    <div class="champ-year">2025 SEASON CHAMPION</div>
+    <div class="stat-panel">
+      <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">414.65</span></div>
+      <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">73.2 pts</span></div>
+      <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">5</span></div>
+      <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">U.S. Open</span></div>
+      <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$358.00</span></div>
+    </div>
+  </div>
+
+  <!-- ============= PAST CHAMPIONS ============= -->
+  <div class="past-heading">Past Champions</div>
+  <div class="past-grid">
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="blue">
+        <img src="images/2024.png" alt="Kevin McNamara, 2024 Champion">
+      </div>
+      <div class="champ-name pname-blue">Kevin McNamara</div>
+      <div class="champ-year">2024</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">443.27</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">571.4 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">10</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">The Open Championship</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$532.00</span></div>
+      </div>
+    </div>
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="green">
+        <img src="images/2023.png" alt="Greg Wigton, 2023 Champion">
+      </div>
+      <div class="champ-name pname-green">Greg Wigton</div>
+      <div class="champ-year">2023</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">428.07</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">128.5 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">7</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">The Masters, The Open Championship</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$516.50</span></div>
+      </div>
+    </div>
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="green">
+        <img src="images/2022.png" alt="Greg Wigton, 2022 Champion">
+      </div>
+      <div class="champ-name pname-green">Greg Wigton</div>
+      <div class="champ-year">2022</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">403.30</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">96.6 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">6</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">None</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$216.00</span></div>
+      </div>
+    </div>
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="blue">
+        <img src="images/2021.png" alt="Kevin McNamara, 2021 Champion">
+      </div>
+      <div class="champ-name pname-blue">Kevin McNamara</div>
+      <div class="champ-year">2021</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">412.15</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">218.1 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">9</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">The Masters</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$445.00</span></div>
+      </div>
+    </div>
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="purple">
+        <img src="images/2020.png" alt="Robert Bresnahan, 2020 Champion">
+      </div>
+      <div class="champ-name pname-purple">Robert Bresnahan</div>
+      <div class="champ-year">2020</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">422.26</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">301.3 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">8</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">The PGA Championship, U.S. Open</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$683.00</span></div>
+      </div>
+    </div>
+
+    <div class="past-card">
+      <div class="portrait-frame" data-color="blue">
+        <img src="images/2019.png" alt="Kevin McNamara, 2019 Champion">
+      </div>
+      <div class="champ-name pname-blue">Kevin McNamara</div>
+      <div class="champ-year">2019</div>
+      <div class="stat-panel">
+        <div class="stat-line"><span class="stat-label">Average Score</span><span class="stat-value">426.17</span></div>
+        <div class="stat-line"><span class="stat-label">Victory Margin</span><span class="stat-value">314.5 pts</span></div>
+        <div class="stat-line"><span class="stat-label">Events Won</span><span class="stat-value">4</span></div>
+        <div class="stat-line"><span class="stat-label">Majors Won</span><span class="stat-value">The Open Championship, The PGA Championship</span></div>
+        <div class="stat-line"><span class="stat-label">Earnings</span><span class="stat-value gold">+$270.00</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</body>
+</html>
