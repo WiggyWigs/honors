@@ -164,7 +164,7 @@
   }
 
   .reigning .portrait-frame {
-    width: min(450px, 100%);
+    width: min(563px, 100%);
   }
 
   .portrait-frame img {
@@ -192,8 +192,8 @@
     align-items: center;
     text-align: center;
     gap: 4px;
-    font-size: 15px;
-    padding: 8px 0;
+    font-size: 14px;
+    padding: 8px 4px;
     border-bottom: 1px dashed var(--border);
   }
 
@@ -216,6 +216,11 @@
     font-family: 'Cinzel', serif;
     font-weight: 700;
     color: var(--white);
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .stat-value.gold { color: var(--gold); }
@@ -236,8 +241,8 @@
   .past-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 36px 24px;
-    max-width: 720px;
+    gap: 44px 52px;
+    max-width: 780px;
     margin: 0 auto;
   }
 
@@ -249,19 +254,18 @@
   }
 
   .past-card .portrait-frame {
-    width: min(294px, 100%);
+    width: min(323px, 100%);
   }
 
   .past-card .stat-panel {
-    grid-template-columns: 1fr;
     min-width: 0;
     width: 100%;
     padding: 12px 16px;
     margin-top: 14px;
   }
 
-  .past-card .stat-label { font-size: 10px; }
-  .past-card .stat-value { font-size: 13px; }
+  .past-card .stat-label { font-size: 9.5px; }
+  .past-card .stat-value { font-size: 11.5px; }
 
   /* =================== MOBILE =================== */
   @media (max-width: 640px) {
