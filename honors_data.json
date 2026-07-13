@@ -1447,10 +1447,14 @@
       "last_place_gainer": null
     },
     "narrative_hooks": {
-      "biggest_riser": "William Sullivan",
-      "biggest_riser_delta": 34.0,
-      "biggest_faller": "Robert Bresnahan",
-      "biggest_faller_delta": -33.0,
+      "biggest_riser_vs10": "William Sullivan",
+      "biggest_riser_vs10_delta": 34.0,
+      "biggest_faller_vs10": "Robert Bresnahan",
+      "biggest_faller_vs10_delta": -33.0,
+      "biggest_riser_wow": "Kevin McNamara",
+      "biggest_riser_wow_delta": 4.5,
+      "biggest_faller_wow": "Greg Wigton",
+      "biggest_faller_wow_delta": -18.5,
       "most_consistent": "Kevin McNamara",
       "consistent_range": [
         369.5,
