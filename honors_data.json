@@ -1,11 +1,11 @@
 {
   "meta": {
-    "last_le": 203,
-    "last_event_name": "Travelers Championship",
+    "last_le": 205,
+    "last_event_name": "Scottish Open",
     "last_event_type": "Tour Event",
-    "total_events": 20,
+    "total_events": 22,
     "season_length": 29,
-    "events_remaining": 9,
+    "events_remaining": 7,
     "players": [
       "Carlos Flores",
       "Greg Wigton",
@@ -37,18 +37,18 @@
   },
   "standings": {
     "order": [
+      "Carlos Flores",
       "Greg Wigton",
       "William Sullivan",
-      "Carlos Flores",
       "Kevin McNamara",
       "Robert Bresnahan"
     ],
     "totals": {
-      "Carlos Flores": 8836.7,
-      "Greg Wigton": 8956.3,
-      "Kevin McNamara": 8556.2,
-      "Robert Bresnahan": 8336.5,
-      "William Sullivan": 8864.4
+      "Carlos Flores": 9827.0,
+      "Greg Wigton": 9823.1,
+      "Kevin McNamara": 9520.2,
+      "Robert Bresnahan": 9242.2,
+      "William Sullivan": 9711.8
     },
     "trailing": {
       "Carlos Flores": [
@@ -71,7 +71,9 @@
         4.2,
         8.9,
         41.3,
-        119.6
+        119.6,
+        126.3,
+        0.0
       ],
       "Greg Wigton": [
         87.3,
@@ -93,7 +95,9 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        0.0,
+        0.0,
+        3.9
       ],
       "Kevin McNamara": [
         100.1,
@@ -115,7 +119,9 @@
         383.9,
         336.8,
         378.7,
-        400.1
+        400.1,
+        435.6,
+        306.8
       ],
       "Robert Bresnahan": [
         0.0,
@@ -137,7 +143,9 @@
         433.0,
         400.5,
         471.7,
-        619.8
+        619.8,
+        613.1,
+        584.8
       ],
       "William Sullivan": [
         94.9,
@@ -159,7 +167,9 @@
         183.9,
         117.2,
         146.6,
-        91.9
+        91.9,
+        197.9,
+        115.2
       ]
     },
     "cumulative": {
@@ -183,7 +193,9 @@
         7644.1,
         8043.2,
         8313.6,
-        8836.7
+        8836.7,
+        9350.2,
+        9827.0
       ],
       "Greg Wigton": [
         612.7,
@@ -205,7 +217,9 @@
         7648.3,
         8052.1,
         8354.9,
-        8956.3
+        8956.3,
+        9476.5,
+        9823.1
       ],
       "Kevin McNamara": [
         599.9,
@@ -227,7 +241,9 @@
         7264.4,
         7715.3,
         7976.2,
-        8556.2
+        8556.2,
+        9040.9,
+        9520.2
       ],
       "Robert Bresnahan": [
         700.0,
@@ -249,7 +265,9 @@
         7215.3,
         7651.6,
         7883.2,
-        8336.5
+        8336.5,
+        8863.4,
+        9242.2
       ],
       "William Sullivan": [
         605.1,
@@ -271,7 +289,9 @@
         7464.4,
         7934.9,
         8208.3,
-        8864.4
+        8864.4,
+        9278.6,
+        9711.8
       ]
     }
   },
@@ -295,14 +315,14 @@
       "Major": 0,
       "Players": 0,
       "WGC": 0,
-      "Total": 1
+      "Total": 2
     },
     "Robert Bresnahan": {
       "Regular": 0,
       "Major": 1,
       "Players": 0,
       "WGC": 0,
-      "Total": 3
+      "Total": 4
     },
     "William Sullivan": {
       "Regular": 0,
@@ -316,70 +336,70 @@
     "by_player": {
       "Carlos Flores": 175,
       "Greg Wigton": 300,
-      "Kevin McNamara": 25,
-      "Robert Bresnahan": 150,
+      "Kevin McNamara": 50,
+      "Robert Bresnahan": 175,
       "William Sullivan": 200
     },
-    "total_pot": 850
+    "total_pot": 900
   },
   "top10s": {
-    "Carlos Flores": 27,
-    "Greg Wigton": 24,
-    "Kevin McNamara": 25,
-    "Robert Bresnahan": 20,
-    "William Sullivan": 28
+    "Carlos Flores": 29,
+    "Greg Wigton": 26,
+    "Kevin McNamara": 29,
+    "Robert Bresnahan": 22,
+    "William Sullivan": 29
   },
   "top20s": {
-    "Carlos Flores": 45,
-    "Greg Wigton": 43,
-    "Kevin McNamara": 50,
-    "Robert Bresnahan": 39,
-    "William Sullivan": 43
+    "Carlos Flores": 49,
+    "Greg Wigton": 47,
+    "Kevin McNamara": 55,
+    "Robert Bresnahan": 42,
+    "William Sullivan": 47
   },
   "avg_golfer_fin": {
-    "Carlos Flores": 26.4,
-    "Greg Wigton": 27.9,
-    "Kevin McNamara": 24.6,
-    "Robert Bresnahan": 28.3,
-    "William Sullivan": 24.9
+    "Carlos Flores": 26.8,
+    "Greg Wigton": 28.1,
+    "Kevin McNamara": 24.3,
+    "Robert Bresnahan": 28.8,
+    "William Sullivan": 25.4
   },
   "avg_contest_fin": {
-    "Carlos Flores": 3.2,
+    "Carlos Flores": 3.1,
     "Greg Wigton": 2.6,
     "Kevin McNamara": 3.0,
-    "Robert Bresnahan": 3.4,
-    "William Sullivan": 2.8
+    "Robert Bresnahan": 3.3,
+    "William Sullivan": 3.0
   },
   "quality": {
     "Carlos Flores": {
-      "Sixers": 1,
-      "Fivers": 9,
-      "Total": 10,
-      "Pct": 66.7
-    },
-    "Greg Wigton": {
       "Sixers": 2,
       "Fivers": 10,
       "Total": 12,
-      "Pct": 80.0
+      "Pct": 70.6
+    },
+    "Greg Wigton": {
+      "Sixers": 2,
+      "Fivers": 11,
+      "Total": 13,
+      "Pct": 76.5
     },
     "Kevin McNamara": {
       "Sixers": 2,
-      "Fivers": 4,
-      "Total": 6,
-      "Pct": 40.0
+      "Fivers": 5,
+      "Total": 7,
+      "Pct": 41.2
     },
     "Robert Bresnahan": {
       "Sixers": 1,
-      "Fivers": 5,
-      "Total": 6,
-      "Pct": 40.0
+      "Fivers": 7,
+      "Total": 8,
+      "Pct": 47.1
     },
     "William Sullivan": {
       "Sixers": 3,
-      "Fivers": 3,
-      "Total": 6,
-      "Pct": 40.0
+      "Fivers": 4,
+      "Total": 7,
+      "Pct": 41.2
     }
   },
   "shitty": {
@@ -415,9 +435,9 @@
     }
   },
   "bonuses": {
-    "Carlos Flores": 5,
+    "Carlos Flores": 15,
     "Greg Wigton": 45,
-    "Kevin McNamara": 15,
+    "Kevin McNamara": 20,
     "Robert Bresnahan": 15,
     "William Sullivan": 45
   },
@@ -430,56 +450,56 @@
   },
   "pace": {
     "Carlos Flores": {
-      "Avg": 441.8,
-      "Projected_Pts": 12812.2,
-      "Projected_Wins": 4.3
+      "Avg": 446.7,
+      "Projected_Pts": 12954.3,
+      "Projected_Wins": 4.0
     },
     "Greg Wigton": {
-      "Avg": 447.8,
-      "Projected_Pts": 12986.2,
-      "Projected_Wins": 10.1
+      "Avg": 446.5,
+      "Projected_Pts": 12948.5,
+      "Projected_Wins": 9.2
     },
     "Kevin McNamara": {
-      "Avg": 427.8,
-      "Projected_Pts": 12406.2,
-      "Projected_Wins": 1.5
+      "Avg": 432.7,
+      "Projected_Pts": 12548.3,
+      "Projected_Wins": 2.6
     },
     "Robert Bresnahan": {
-      "Avg": 416.8,
-      "Projected_Pts": 12087.2,
-      "Projected_Wins": 4.3
+      "Avg": 420.1,
+      "Projected_Pts": 12182.9,
+      "Projected_Wins": 5.3
     },
     "William Sullivan": {
-      "Avg": 443.2,
-      "Projected_Pts": 12852.8,
-      "Projected_Wins": 8.7
+      "Avg": 441.4,
+      "Projected_Pts": 12800.6,
+      "Projected_Wins": 7.9
     }
   },
   "streaks": {
     "Carlos Flores": {
-      "Current_Losing": 6,
-      "Max_Losing": 6,
+      "Current_Losing": 8,
+      "Max_Losing": 8,
       "Current_Winning": 0
     },
     "Greg Wigton": {
-      "Current_Losing": 1,
+      "Current_Losing": 3,
       "Max_Losing": 5,
       "Current_Winning": 0
     },
     "Kevin McNamara": {
-      "Current_Losing": 17,
-      "Max_Losing": 17,
-      "Current_Winning": 0
+      "Current_Losing": 0,
+      "Max_Losing": 18,
+      "Current_Winning": 1
     },
     "Robert Bresnahan": {
-      "Current_Losing": 4,
+      "Current_Losing": 1,
       "Max_Losing": 8,
       "Current_Winning": 0
     },
     "William Sullivan": {
-      "Current_Losing": 0,
+      "Current_Losing": 2,
       "Max_Losing": 5,
-      "Current_Winning": 1
+      "Current_Winning": 0
     }
   },
   "leader_history": [
@@ -516,55 +536,60 @@
     {
       "Player": "Greg Wigton",
       "From": 17,
-      "To": 20
+      "To": 21
+    },
+    {
+      "Player": "Carlos Flores",
+      "From": 22,
+      "To": 22
     }
   ],
-  "num_cut_events": 15,
+  "num_cut_events": 17,
   "mc_pct": {
     "Carlos Flores": {
-      "MC_Count": 71,
-      "Cut_Events": 15,
-      "Total_Slots": 90,
-      "Pct": 78.9
+      "MC_Count": 82,
+      "Cut_Events": 17,
+      "Total_Slots": 102,
+      "Pct": 80.4
     },
     "Greg Wigton": {
-      "MC_Count": 74,
-      "Cut_Events": 15,
-      "Total_Slots": 90,
-      "Pct": 82.2
+      "MC_Count": 83,
+      "Cut_Events": 17,
+      "Total_Slots": 102,
+      "Pct": 81.4
     },
     "Kevin McNamara": {
-      "MC_Count": 64,
-      "Cut_Events": 15,
-      "Total_Slots": 90,
-      "Pct": 71.1
+      "MC_Count": 73,
+      "Cut_Events": 17,
+      "Total_Slots": 102,
+      "Pct": 71.6
     },
     "Robert Bresnahan": {
-      "MC_Count": 67,
-      "Cut_Events": 15,
-      "Total_Slots": 90,
-      "Pct": 74.4
+      "MC_Count": 77,
+      "Cut_Events": 17,
+      "Total_Slots": 102,
+      "Pct": 75.5
     },
     "William Sullivan": {
-      "MC_Count": 66,
-      "Cut_Events": 15,
-      "Total_Slots": 90,
-      "Pct": 73.3
+      "MC_Count": 75,
+      "Cut_Events": 17,
+      "Total_Slots": 102,
+      "Pct": 73.5
     }
   },
   "second_place": {
-    "Carlos Flores": 2,
-    "Greg Wigton": 3,
+    "Carlos Flores": 3,
+    "Greg Wigton": 4,
     "Kevin McNamara": 7,
     "Robert Bresnahan": 3,
     "William Sullivan": 5
   },
   "last_place": {
     "Carlos Flores": 3,
-    "Greg Wigton": 2,
+    "Greg Wigton": 3,
     "Kevin McNamara": 3,
     "Robert Bresnahan": 7,
-    "William Sullivan": 5
+    "William Sullivan": 6
   },
   "diarrhea": {
     "Carlos Flores": 1,
@@ -600,9 +625,10 @@
       "Pct": 78.3
     },
     "flags": [
-      "\ud83d\udd25 Carlos Flores quality lineup 66.7% \u2014 RECORD (prev: 54.5% by Robert Bresnahan in 2023)",
-      "\ud83d\udd25 Greg Wigton avg 447.8 pts/event \u2014 RECORD (prev: 443.3 by Kevin McNamara in 2024)",
-      "\ud83d\udd25 Greg Wigton quality lineup 80.0% \u2014 RECORD (prev: 54.5% by Robert Bresnahan in 2023)"
+      "\ud83d\udd25 Carlos Flores avg 446.7 pts/event \u2014 RECORD (prev: 443.3 by Kevin McNamara in 2024)",
+      "\ud83d\udd25 Carlos Flores quality lineup 70.6% \u2014 RECORD (prev: 54.5% by Robert Bresnahan in 2023)",
+      "\ud83d\udd25 Greg Wigton avg 446.5 pts/event \u2014 RECORD (prev: 443.3 by Kevin McNamara in 2024)",
+      "\ud83d\udd25 Greg Wigton quality lineup 76.5% \u2014 RECORD (prev: 54.5% by Robert Bresnahan in 2023)"
     ]
   },
   "milestones": {
@@ -627,7 +653,7 @@
       }
     },
     "Kevin McNamara": {
-      "total_wins": 45,
+      "total_wins": 46,
       "milestones": {
         "25": {
           "LE": 111,
@@ -637,7 +663,7 @@
       }
     },
     "Robert Bresnahan": {
-      "total_wins": 42,
+      "total_wins": 43,
       "milestones": {
         "25": {
           "LE": 99,
@@ -659,10 +685,10 @@
   },
   "career": {
     "Carlos Flores": {
-      "total_played": 203,
+      "total_played": 205,
       "career_wins": 37,
-      "career_win_pct": 18.2,
-      "career_mc_pct": 68.8,
+      "career_win_pct": 18.0,
+      "career_mc_pct": 69.1,
       "majors_won": 6,
       "majors_ever_won": {
         "The Masters": 2022,
@@ -682,17 +708,19 @@
         "The Open Championship"
       ],
       "career_wp": 14,
-      "championships": 0,
-      "championship_years": [],
-      "tournament_earnings_net": -157.5,
+      "championships": 1,
+      "championship_years": [
+        2026
+      ],
+      "tournament_earnings_net": -167.5,
       "net_earnings": -725.5,
       "net_earnings_note": "2019-2025 settled (excl. current-season dues/penalties) + GS payments + 2026 tournament winnings"
     },
     "Greg Wigton": {
-      "total_played": 203,
+      "total_played": 205,
       "career_wins": 44,
-      "career_win_pct": 21.7,
-      "career_mc_pct": 71.1,
+      "career_win_pct": 21.5,
+      "career_mc_pct": 71.2,
       "majors_won": 5,
       "majors_ever_won": {
         "U.S. Open": 2021,
@@ -712,20 +740,19 @@
         "The PGA Championship"
       ],
       "career_wp": 9,
-      "championships": 3,
+      "championships": 2,
       "championship_years": [
         2022,
-        2023,
-        2026
+        2023
       ],
-      "tournament_earnings_net": 70.0,
+      "tournament_earnings_net": 60.0,
       "net_earnings": 449.5,
       "net_earnings_note": "2019-2025 settled (excl. current-season dues/penalties) + GS payments + 2026 tournament winnings"
     },
     "Kevin McNamara": {
-      "total_played": 203,
-      "career_wins": 45,
-      "career_win_pct": 22.2,
+      "total_played": 205,
+      "career_wins": 46,
+      "career_win_pct": 22.4,
       "career_mc_pct": 72.1,
       "majors_won": 6,
       "majors_ever_won": {
@@ -767,15 +794,15 @@
         2024,
         2025
       ],
-      "tournament_earnings_net": 85.0,
-      "net_earnings": 1407.0,
+      "tournament_earnings_net": 100.0,
+      "net_earnings": 1432.0,
       "net_earnings_note": "2019-2025 settled (excl. current-season dues/penalties) + GS payments + 2026 tournament winnings"
     },
     "Robert Bresnahan": {
-      "total_played": 203,
-      "career_wins": 42,
-      "career_win_pct": 20.7,
-      "career_mc_pct": 71.1,
+      "total_played": 205,
+      "career_wins": 43,
+      "career_win_pct": 21.0,
+      "career_mc_pct": 71.2,
       "majors_won": 5,
       "majors_ever_won": {
         "The PGA Championship": 2020,
@@ -799,15 +826,15 @@
       "championship_years": [
         2020
       ],
-      "tournament_earnings_net": 42.5,
-      "net_earnings": 162.0,
+      "tournament_earnings_net": 57.5,
+      "net_earnings": 187.0,
       "net_earnings_note": "2019-2025 settled (excl. current-season dues/penalties) + GS payments + 2026 tournament winnings"
     },
     "William Sullivan": {
-      "total_played": 203,
+      "total_played": 205,
       "career_wins": 35,
-      "career_win_pct": 17.2,
-      "career_mc_pct": 70.3,
+      "career_win_pct": 17.1,
+      "career_mc_pct": 70.4,
       "majors_won": 7,
       "majors_ever_won": {
         "U.S. Open": 2019,
@@ -843,7 +870,7 @@
       "career_wp": 16,
       "championships": 0,
       "championship_years": [],
-      "tournament_earnings_net": -130.0,
+      "tournament_earnings_net": -140.0,
       "net_earnings": -483.0,
       "net_earnings_note": "2019-2025 settled (excl. current-season dues/penalties) + GS payments + 2026 tournament winnings"
     }
@@ -907,36 +934,71 @@
   },
   "last_event_results": [
     {
-      "Player": "William Sullivan",
-      "Points": 656.1,
+      "Player": "Kevin McNamara",
+      "Points": 479.3,
       "Finish": 1,
       "Wins": 1
     },
     {
-      "Player": "Greg Wigton",
-      "Points": 601.4,
+      "Player": "Carlos Flores",
+      "Points": 476.8,
       "Finish": 2,
       "Wins": 0
     },
     {
-      "Player": "Kevin McNamara",
-      "Points": 580.0,
+      "Player": "William Sullivan",
+      "Points": 433.2,
       "Finish": 3,
       "Wins": 0
     },
     {
-      "Player": "Carlos Flores",
-      "Points": 523.1,
+      "Player": "Robert Bresnahan",
+      "Points": 378.8,
       "Finish": 4,
       "Wins": 0
     },
     {
-      "Player": "Robert Bresnahan",
-      "Points": 453.3,
+      "Player": "Greg Wigton",
+      "Points": 346.6,
       "Finish": 5,
       "Wins": 0
     }
   ],
+  "prev_standings_order": [
+    "Greg Wigton",
+    "Carlos Flores",
+    "William Sullivan",
+    "Kevin McNamara",
+    "Robert Bresnahan"
+  ],
+  "last_event_shitty": {
+    "Carlos Flores": null,
+    "Greg Wigton": null,
+    "Kevin McNamara": null,
+    "Robert Bresnahan": null,
+    "William Sullivan": null
+  },
+  "last_event_diarrhea": {
+    "Carlos Flores": false,
+    "Greg Wigton": false,
+    "Kevin McNamara": false,
+    "Robert Bresnahan": false,
+    "William Sullivan": false
+  },
+  "last_event_place": {
+    "Kevin McNamara": 1,
+    "Carlos Flores": 2,
+    "William Sullivan": 3,
+    "Robert Bresnahan": 4,
+    "Greg Wigton": 5
+  },
+  "prev_event_place": {
+    "Robert Bresnahan": 1,
+    "Greg Wigton": 2,
+    "Carlos Flores": 3,
+    "Kevin McNamara": 4,
+    "William Sullivan": 5
+  },
   "trailing_chart": {
     "labels": [
       "E1",
@@ -958,11 +1020,42 @@
       "E17",
       "E18",
       "E19",
-      "E20"
+      "E20",
+      "E21",
+      "E22"
     ],
-    "through_event": 20,
-    "last_event": "Travelers Championship",
+    "through_event": 22,
+    "last_event": "Scottish Open",
     "players": [
+      {
+        "name": "Carlos Flores",
+        "color": "#E24B4A",
+        "trailing": [
+          54.1,
+          55.1,
+          2.5,
+          0.0,
+          13.5,
+          7.4,
+          65.5,
+          107.8,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          35.5,
+          0.0,
+          0.0,
+          0.0,
+          4.2,
+          8.9,
+          41.3,
+          119.6,
+          126.3,
+          0.0
+        ],
+        "current_total": 9827.0
+      },
       {
         "name": "Greg Wigton",
         "color": "#1D9E75",
@@ -986,9 +1079,11 @@
           0.0,
           0.0,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          3.9
         ],
-        "current_total": 8956.3
+        "current_total": 9823.1
       },
       {
         "name": "William Sullivan",
@@ -1013,36 +1108,11 @@
           183.9,
           117.2,
           146.6,
-          91.9
+          91.9,
+          197.9,
+          115.2
         ],
-        "current_total": 8864.4
-      },
-      {
-        "name": "Carlos Flores",
-        "color": "#E24B4A",
-        "trailing": [
-          54.1,
-          55.1,
-          2.5,
-          0.0,
-          13.5,
-          7.4,
-          65.5,
-          107.8,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          35.5,
-          0.0,
-          0.0,
-          0.0,
-          4.2,
-          8.9,
-          41.3,
-          119.6
-        ],
-        "current_total": 8836.7
+        "current_total": 9711.8
       },
       {
         "name": "Kevin McNamara",
@@ -1067,9 +1137,11 @@
           383.9,
           336.8,
           378.7,
-          400.1
+          400.1,
+          435.6,
+          306.8
         ],
-        "current_total": 8556.2
+        "current_total": 9520.2
       },
       {
         "name": "Robert Bresnahan",
@@ -1094,56 +1166,58 @@
           433.0,
           400.5,
           471.7,
-          619.8
+          619.8,
+          613.1,
+          584.8
         ],
-        "current_total": 8336.5
+        "current_total": 9242.2
       }
     ]
   },
   "ohgr": {
     "curr": {
-      "Carlos Flores": 390.5,
-      "Greg Wigton": 415.0,
-      "Kevin McNamara": 376.0,
-      "Robert Bresnahan": 350.0,
-      "William Sullivan": 408.0
+      "Carlos Flores": 391.5,
+      "Greg Wigton": 401.5,
+      "Kevin McNamara": 377.5,
+      "Robert Bresnahan": 343.5,
+      "William Sullivan": 402.5
     },
     "prev1": {
-      "Carlos Flores": 417.0,
-      "Greg Wigton": 429.0,
-      "Kevin McNamara": 384.5,
-      "Robert Bresnahan": 381.0,
-      "William Sullivan": 418.5
+      "Carlos Flores": 392.5,
+      "Greg Wigton": 420.0,
+      "Kevin McNamara": 373.0,
+      "Robert Bresnahan": 350.0,
+      "William Sullivan": 398.0
     },
     "prev5": {
-      "Carlos Flores": 418.5,
-      "Greg Wigton": 411.0,
-      "Kevin McNamara": 374.5,
-      "Robert Bresnahan": 378.5,
-      "William Sullivan": 394.0
+      "Carlos Flores": 422.5,
+      "Greg Wigton": 409.0,
+      "Kevin McNamara": 378.5,
+      "Robert Bresnahan": 390.0,
+      "William Sullivan": 402.0
     },
     "prev10": {
-      "Carlos Flores": 403.0,
-      "Greg Wigton": 406.5,
-      "Kevin McNamara": 376.0,
-      "Robert Bresnahan": 397.0,
-      "William Sullivan": 366.0
+      "Carlos Flores": 387.0,
+      "Greg Wigton": 388.5,
+      "Kevin McNamara": 378.0,
+      "Robert Bresnahan": 376.5,
+      "William Sullivan": 368.5
     },
     "prev20": {
-      "Carlos Flores": 390.5,
-      "Greg Wigton": 413.5,
-      "Kevin McNamara": 414.5,
-      "Robert Bresnahan": 411.5,
-      "William Sullivan": 423.5
+      "Carlos Flores": 396.5,
+      "Greg Wigton": 399.0,
+      "Kevin McNamara": 397.0,
+      "Robert Bresnahan": 425.5,
+      "William Sullivan": 405.5
     },
     "curr_ranked": [
-      "Greg Wigton",
       "William Sullivan",
+      "Greg Wigton",
       "Carlos Flores",
       "Kevin McNamara",
       "Robert Bresnahan"
     ],
-    "leader": "Greg Wigton",
+    "leader": "William Sullivan",
     "at_highs": {
       "Carlos Flores": 438.0,
       "Greg Wigton": 451.5,
@@ -1161,12 +1235,12 @@
     "weeks_at_1": {
       "counts": {
         "Carlos Flores": 13,
-        "Greg Wigton": 49,
+        "Greg Wigton": 50,
         "Kevin McNamara": 56,
         "Robert Bresnahan": 22,
-        "William Sullivan": 46
+        "William Sullivan": 47
       },
-      "total_weeks": 184,
+      "total_weeks": 186,
       "ranked": [
         "Kevin McNamara",
         "Greg Wigton",
@@ -1177,8 +1251,6 @@
     },
     "scores_10": {
       "Carlos Flores": [
-        391.0,
-        387.0,
         388.0,
         415.5,
         418.5,
@@ -1186,11 +1258,11 @@
         422.5,
         412.0,
         417.0,
-        390.5
+        390.5,
+        392.5,
+        391.5
       ],
       "Greg Wigton": [
-        394.0,
-        388.5,
         401.5,
         417.0,
         411.0,
@@ -1198,11 +1270,11 @@
         409.0,
         399.0,
         429.0,
-        415.0
+        415.0,
+        420.0,
+        401.5
       ],
       "Kevin McNamara": [
-        370.5,
-        378.0,
         382.0,
         379.5,
         374.5,
@@ -1210,11 +1282,11 @@
         378.5,
         380.0,
         384.5,
-        376.0
+        376.0,
+        373.0,
+        377.5
       ],
       "Robert Bresnahan": [
-        388.0,
-        376.5,
         380.5,
         389.5,
         378.5,
@@ -1222,11 +1294,11 @@
         390.0,
         382.0,
         381.0,
-        350.0
+        350.0,
+        350.0,
+        343.5
       ],
       "William Sullivan": [
-        370.0,
-        368.5,
         371.5,
         397.0,
         394.0,
@@ -1234,13 +1306,13 @@
         402.0,
         399.5,
         418.5,
-        408.0
+        408.0,
+        398.0,
+        402.5
       ]
     },
     "ranks_20": {
       "Carlos Flores": [
-        5,
-        5,
         4,
         4,
         2,
@@ -1257,12 +1329,12 @@
         1,
         1,
         1,
+        3,
+        3,
         3,
         3
       ],
       "Greg Wigton": [
-        3,
-        3,
         5,
         3,
         1,
@@ -1280,11 +1352,11 @@
         2,
         3,
         1,
-        1
+        1,
+        1,
+        2
       ],
       "Kevin McNamara": [
-        4,
-        4,
         2,
         2,
         3,
@@ -1301,12 +1373,12 @@
         5,
         5,
         5,
+        4,
+        4,
         4,
         4
       ],
       "Robert Bresnahan": [
-        2,
-        1,
         1,
         1,
         4,
@@ -1323,12 +1395,12 @@
         3,
         4,
         4,
+        5,
+        5,
         5,
         5
       ],
       "William Sullivan": [
-        1,
-        2,
         3,
         5,
         5,
@@ -1346,37 +1418,39 @@
         3,
         2,
         2,
-        2
+        2,
+        2,
+        1
       ]
     },
     "x_labels": [
-      "RBC Heritage",
-      "",
-      "",
+      "Triust Chmapionsh\u2026",
       "PGA Champ.",
       "",
       "",
       "",
       "",
       "U.S. Open",
-      "Travelers Champ."
+      "",
+      "",
+      "Scottish Open"
     ],
-    "y_min": 330,
+    "y_min": 320,
     "window": {
-      "entered_le": 203,
-      "entered_name": "Travelers Championship",
+      "entered_le": 205,
+      "entered_name": "Scottish Open",
       "entered_type": "Tour Event",
-      "dropped_le": 183,
-      "dropped_name": "Tour Championship",
+      "dropped_le": 185,
+      "dropped_name": "Waste Management Phoenix Open",
       "dropped_type": "Elevated Event",
       "all_gained": false,
       "last_place_gainer": null
     },
     "narrative_hooks": {
       "biggest_riser": "William Sullivan",
-      "biggest_riser_delta": 42.0,
+      "biggest_riser_delta": 34.0,
       "biggest_faller": "Robert Bresnahan",
-      "biggest_faller_delta": -47.0,
+      "biggest_faller_delta": -33.0,
       "most_consistent": "Kevin McNamara",
       "consistent_range": [
         369.5,
@@ -1389,35 +1463,9 @@
         "The PGA Championship",
         "U.S. Open"
       ],
-      "gap_1st_to_5th": 65.0
+      "gap_1st_to_5th": 59.0
     },
     "event_scores_last10": [
-      {
-        "le": 194,
-        "name": "RBC Heritage",
-        "type": "Tour Event",
-        "mult": 1.0,
-        "scores": {
-          "Carlos Flores": 7.0,
-          "Greg Wigton": 9.0,
-          "Kevin McNamara": 12.0,
-          "Robert Bresnahan": 11.0,
-          "William Sullivan": 12.0
-        }
-      },
-      {
-        "le": 195,
-        "name": "Cadillac Championship",
-        "type": "Tour Event",
-        "mult": 1.0,
-        "scores": {
-          "Carlos Flores": 10.0,
-          "Greg Wigton": 13.0,
-          "Kevin McNamara": 11.0,
-          "Robert Bresnahan": 6.0,
-          "William Sullivan": 9.0
-        }
-      },
       {
         "le": 196,
         "name": "Triust Chmapionship",
@@ -1521,35 +1569,61 @@
           "Robert Bresnahan": 8.0,
           "William Sullivan": 15.0
         }
+      },
+      {
+        "le": 204,
+        "name": "John Deere Classic",
+        "type": "Tour Event",
+        "mult": 1.0,
+        "scores": {
+          "Carlos Flores": 10.0,
+          "Greg Wigton": 11.0,
+          "Kevin McNamara": 8.0,
+          "Robert Bresnahan": 12.0,
+          "William Sullivan": 5.0
+        }
+      },
+      {
+        "le": 205,
+        "name": "Scottish Open",
+        "type": "Tour Event",
+        "mult": 1.0,
+        "scores": {
+          "Carlos Flores": 12.0,
+          "Greg Wigton": 7.0,
+          "Kevin McNamara": 13.0,
+          "Robert Bresnahan": 8.0,
+          "William Sullivan": 12.0
+        }
       }
     ],
     "ranked_prev10": [
       "Greg Wigton",
       "Carlos Flores",
-      "Robert Bresnahan",
       "Kevin McNamara",
+      "Robert Bresnahan",
       "William Sullivan"
     ],
     "ranked_prev20": [
-      "William Sullivan",
-      "Kevin McNamara",
-      "Greg Wigton",
       "Robert Bresnahan",
+      "William Sullivan",
+      "Greg Wigton",
+      "Kevin McNamara",
       "Carlos Flores"
     ],
     "scores_prev10": {
-      "Carlos Flores": 403.0,
-      "Greg Wigton": 406.5,
-      "Kevin McNamara": 376.0,
-      "Robert Bresnahan": 397.0,
-      "William Sullivan": 366.0
+      "Carlos Flores": 387.0,
+      "Greg Wigton": 388.5,
+      "Kevin McNamara": 378.0,
+      "Robert Bresnahan": 376.5,
+      "William Sullivan": 368.5
     },
     "scores_prev20": {
-      "Carlos Flores": 390.5,
-      "Greg Wigton": 413.5,
-      "Kevin McNamara": 414.5,
-      "Robert Bresnahan": 411.5,
-      "William Sullivan": 423.5
+      "Carlos Flores": 396.5,
+      "Greg Wigton": 399.0,
+      "Kevin McNamara": 397.0,
+      "Robert Bresnahan": 425.5,
+      "William Sullivan": 405.5
     }
   }
 }
