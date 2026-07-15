@@ -31,6 +31,223 @@
       padding-top: 3.5rem;
       border-top: 1px solid rgba(0, 103, 71, 0.2);
     }
+
+    /* Clickable photo, opens the stats modal */
+    .member-photo-btn {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .member-photo-btn img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .member-photo-btn:hover,
+    .member-photo-btn:focus-visible {
+      transform: translateY(-4px);
+    }
+
+    .member-photo-btn:hover img,
+    .member-photo-btn:focus-visible img {
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    }
+
+    .member-photo-btn:focus-visible {
+      outline: 2px solid var(--masters-green);
+      outline-offset: 4px;
+    }
+
+    .member-photo-hint {
+      display: block;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      opacity: 0.75;
+      margin-top: 0.6rem;
+    }
+
+    @media (min-width: 650px) {
+      .member-photo-btn { max-width: none; }
+    }
+
+    /* Championships / Earnings summary rows above the Grand Slam box */
+    .summary-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      align-items: baseline;
+      padding: 0.85rem 1rem;
+      background: rgba(0, 103, 71, 0.06);
+      margin-bottom: 0.6rem;
+    }
+
+    .summary-row .stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+
+    .summary-row .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--masters-green);
+    }
+
+    .summary-row .stat-value .rank {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--ink-light);
+    }
+
+    /* ============= MODAL ============= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 22, 14, 0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      max-height: 88vh;
+      overflow-y: auto;
+      background: #fbf6e9;
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 2px 0 var(--masters-green) inset;
+      padding: 32px 28px 28px;
+      text-align: center;
+      transform: translateY(16px) scale(0.96);
+      opacity: 0;
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.22s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink-light);
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 103, 71, 0.1);
+      color: var(--masters-green);
+    }
+
+    .modal-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--masters-green);
+      margin-bottom: 4px;
+    }
+
+    .modal-name {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--ink);
+      margin-bottom: 22px;
+    }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 28px;
+      border-top: 1px solid rgba(0, 103, 71, 0.18);
+      padding-top: 20px;
+    }
+
+    .modal-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .modal-stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .modal-stat-value {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--ink);
+    }
+
+    .modal-stat-value .rank {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--ink-light);
+    }
+
+    @media (max-width: 480px) {
+      .modal-card { padding: 26px 20px 22px; }
+      .modal-name { font-size: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -59,42 +276,20 @@
 
       <div class="member-card-row">
         <div class="member-photo">
-          <img src="images/members/carlos.png" alt="Carlos Flores" />
+          <button class="member-photo-btn" data-member="carlos" aria-label="View Carlos Flores full career stats">
+            <img src="images/current/Carlos-00.png" alt="Carlos Flores" />
+          </button>
+          <span class="member-photo-hint">Click photo for full stats</span>
         </div>
 
         <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Career Winning %</span>
-              <span class="stat-value">17.5%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value">66.9%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Quality Lineup %</span>
-              <span class="stat-value">35.7%</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Championships</span>
+            <span class="stat-value">0</span>
           </div>
-
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">0</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value">37</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value">6</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">-$725.50</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Career Earnings</span>
+            <span class="stat-value">-$725.50 <span class="rank">(5th)</span></span>
           </div>
 
           <div class="grand-slam-row">
@@ -102,11 +297,7 @@
             <span class="stat-value">N/A — missing: The Open Championship</span>
           </div>
 
-          <div class="unique-stats">
-            <div class="unique-stat">One major away from the career Grand Slam — has won The Masters (2022), The PGA Championship (2022), and the U.S. Open (2024).</div>
-          </div>
-
-          <p class="member-narrative">One of two members without a championship banner, Carlos has still won 37 events over the league's history — third-most in the league — and sits a single major short of completing the career Grand Slam.</p>
+          <p class="member-narrative">Carlos has been a fixture of The Honors since its founding in 2019, and his career numbers tell the story of a player who's dangerous but inconsistent — 37 event wins is respectable, but his career winning percentage and made-cut rate both sit at the bottom of the five-man field. What keeps him relevant is his major championship pedigree: six career major titles, including The Masters and The PGA Championship in the same 2022 season, put him one Open Championship away from completing the career Grand Slam. He's never finished atop the season standings, but he's rarely far from the majors conversation, and at this point the missing Open Championship is as much a running storyline as it is a stat.</p>
         </div>
       </div>
     </div>
@@ -117,42 +308,20 @@
 
       <div class="member-card-row">
         <div class="member-photo">
-          <img src="images/members/greg.png" alt="Greg Wigton" />
+          <button class="member-photo-btn" data-member="greg" aria-label="View Greg Wigton full career stats">
+            <img src="images/current/Greg-02.png" alt="Greg Wigton" />
+          </button>
+          <span class="member-photo-hint">Click photo for full stats</span>
         </div>
 
         <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Career Winning %</span>
-              <span class="stat-value">20.8%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value">69.1%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Quality Lineup %</span>
-              <span class="stat-value">42.9%</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Championships</span>
+            <span class="stat-value">2 (2022, 2023)</span>
           </div>
-
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">2</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value">44</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value">5</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$449.50</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Career Earnings</span>
+            <span class="stat-value">$449.50 <span class="rank">(2nd)</span></span>
           </div>
 
           <div class="grand-slam-row">
@@ -160,11 +329,7 @@
             <span class="stat-value">N/A — missing: The PGA Championship</span>
           </div>
 
-          <div class="unique-stats">
-            <div class="unique-stat">The Honors' commissioner and a back-to-back champion (2022–2023) — the only member to win consecutive titles.</div>
-          </div>
-
-          <p class="member-narrative">Greg runs the league and has the trophy case to match: back-to-back championships in 2022 and 2023, 44 career event wins, and 69.1% career made-cut rate, second-best in league history.</p>
+          <p class="member-narrative">As the league's founder and commissioner, Greg has spent as much time running The Honors as playing in it — and he's still managed to win it twice, taking back-to-back titles in 2022 and 2023, the only member to go back-to-back. His career quality lineup rate is the best in the league, and his made-cut rate trails only Kevin McNamara. Five career majors and 44 event wins round out a resume that's more complete than flashy: Greg tends to win by avoiding disaster weeks more consistently than anyone else in the field, even if he's never quite caught William or Kevin in the major-count column. The missing PGA Championship is the one gap standing between him and a career Grand Slam.</p>
         </div>
       </div>
     </div>
@@ -175,42 +340,20 @@
 
       <div class="member-card-row">
         <div class="member-photo">
-          <img src="images/members/kevin.png" alt="Kevin McNamara" />
+          <button class="member-photo-btn" data-member="kevin" aria-label="View Kevin McNamara full career stats">
+            <img src="images/current/Kevin-04.png" alt="Kevin McNamara" />
+          </button>
+          <span class="member-photo-hint">Click photo for full stats</span>
         </div>
 
         <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Career Winning %</span>
-              <span class="stat-value">21.2%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value">69.9%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Quality Lineup %</span>
-              <span class="stat-value">40.5%</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Championships</span>
+            <span class="stat-value">4 (2019, 2021, 2024, 2025)</span>
           </div>
-
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">4</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value">45</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value">6</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$1,407.00</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Career Earnings</span>
+            <span class="stat-value">$1,407.00 <span class="rank">(1st)</span></span>
           </div>
 
           <div class="grand-slam-row">
@@ -218,12 +361,7 @@
             <span class="stat-value">2023</span>
           </div>
 
-          <div class="unique-stats">
-            <div class="unique-stat">The league's most decorated member: 4 championships (2019, 2021, 2024, 2025), the most of anyone, and the first to complete the career Grand Slam (2023).</div>
-            <div class="unique-stat">Also owns the single-season last-place record — 40.9%, 9 finishes in 2020 — proof no one is immune to a bad year.</div>
-          </div>
-
-          <p class="member-narrative">Kevin is the league's all-time leader in championships (4), events won (45), and career made-cut rate (69.9%), and the first member to complete the career Grand Slam, finishing it off in 2023.</p>
+          <p class="member-narrative">Kevin is the standard the other four measure themselves against. His four championships are the most in league history, and he enters every season with the best career winning percentage and made-cut rate in the field. He was also the first member to complete the career Grand Slam, closing it out in 2023, and has since started chasing a second cycle, already picking up The Open Championship and U.S. Open again. The one blemish on the resume: his otherwise strong 2020 season also produced the league's all-time worst single-season last-place record, a reminder that even the league's most consistent player has had a genuinely bad stretch.</p>
         </div>
       </div>
     </div>
@@ -234,42 +372,20 @@
 
       <div class="member-card-row">
         <div class="member-photo">
-          <img src="images/members/robert.png" alt="Robert Bresnahan" />
+          <button class="member-photo-btn" data-member="robert" aria-label="View Robert Bresnahan full career stats">
+            <img src="images/current/Robert-01.png" alt="Robert Bresnahan" />
+          </button>
+          <span class="member-photo-hint">Click photo for full stats</span>
         </div>
 
         <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Career Winning %</span>
-              <span class="stat-value">20.3%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value">69.0%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Quality Lineup %</span>
-              <span class="stat-value">41.7%</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Championships</span>
+            <span class="stat-value">1 (2020)</span>
           </div>
-
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">1</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value">43</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value">5</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$187.00</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Career Earnings</span>
+            <span class="stat-value">$187.00 <span class="rank">(3rd)</span></span>
           </div>
 
           <div class="grand-slam-row">
@@ -277,11 +393,7 @@
             <span class="stat-value">N/A — missing: The Open Championship</span>
           </div>
 
-          <div class="unique-stats">
-            <div class="unique-stat">Holds the all-time single-season tournament earnings record — 46.2% of the pot in his 2020 championship year.</div>
-          </div>
-
-          <p class="member-narrative">Robert's 2020 championship season remains the high-water mark for single-season earnings in league history, taking home 46.2% of that year's pot. He's added 43 event wins and 5 majors since.</p>
+          <p class="member-narrative">Robert's lone championship came in 2020, but it was one for the record books — his share of that season's pot is still the highest single-season earnings percentage anyone in league history has posted. He hasn't been back to the top of the season standings since, but he's stayed competitive: a career quality lineup rate that trails only Greg for best in the league, and 43 event wins, keep him firmly in the middle of the pack rather than the back of it. Five career majors leave him one Open Championship shy of the career Grand Slam, a title he's chased almost as long as Carlos has.</p>
         </div>
       </div>
     </div>
@@ -292,42 +404,20 @@
 
       <div class="member-card-row">
         <div class="member-photo">
-          <img src="images/members/william.png" alt="William Sullivan" />
+          <button class="member-photo-btn" data-member="william" aria-label="View William Sullivan full career stats">
+            <img src="images/current/William-00.png" alt="William Sullivan" />
+          </button>
+          <span class="member-photo-hint">Click photo for full stats</span>
         </div>
 
         <div class="member-content">
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Career Winning %</span>
-              <span class="stat-value">16.5%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Made Cut %</span>
-              <span class="stat-value">68.2%</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Quality Lineup %</span>
-              <span class="stat-value">36.3%</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Championships</span>
+            <span class="stat-value">0</span>
           </div>
-
-          <div class="stat-table">
-            <div class="stat-cell">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">0</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Events Won</span>
-              <span class="stat-value">35</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Majors Won</span>
-              <span class="stat-value">7</span>
-            </div>
-            <div class="stat-cell">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">-$483.00</span>
-            </div>
+          <div class="summary-row">
+            <span class="stat-label">Career Earnings</span>
+            <span class="stat-value">-$483.00 <span class="rank">(4th)</span></span>
           </div>
 
           <div class="grand-slam-row">
@@ -335,16 +425,47 @@
             <span class="stat-value">2023</span>
           </div>
 
-          <div class="unique-stats">
-            <div class="unique-stat">Has won more majors (7) than any other member and completed the career Grand Slam in 2023 — despite never claiming a season championship.</div>
-          </div>
-
-          <p class="member-narrative">William is the league's biggest paradox: the most major championships of anyone (7) and a completed career Grand Slam (2023), but zero season titles to show for it.</p>
+          <p class="member-narrative">William is the league's biggest statistical outlier. He's won more majors than anyone else in the field and was the second member, after Kevin, to complete the career Grand Slam, finishing his in 2023 — yet he's never once won a season championship. His career winning percentage and made-cut rate both sit toward the bottom of the standings, and he leads the league in career diarrhea withdraws. The gap between his peak-week ceiling — seven major titles and a completed slam — and his week-to-week consistency is the defining story of his time in the league.</p>
         </div>
       </div>
     </div>
 
   </section>
+
+  <!-- ============= STAT MODAL ============= -->
+  <div class="modal-overlay" id="statModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      <div class="modal-badge">Career Stats</div>
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-stats">
+        <div class="modal-stat">
+          <span class="modal-stat-label">Career Winning %</span>
+          <span class="modal-stat-value" id="statWin"></span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-label">Career Made Cut %</span>
+          <span class="modal-stat-value" id="statMC"></span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-label">Career Quality Lineup %</span>
+          <span class="modal-stat-value" id="statQuality"></span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-label">Diarrhea Withdraws</span>
+          <span class="modal-stat-value" id="statWP"></span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-label">Events Won</span>
+          <span class="modal-stat-value" id="statEvents"></span>
+        </div>
+        <div class="modal-stat">
+          <span class="modal-stat-label">Majors Won</span>
+          <span class="modal-stat-value" id="statMajors"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const navToggle = document.getElementById('nav-toggle');
@@ -362,6 +483,103 @@
         navToggle.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    // All rankings are out of 5 members, highest raw value = 1st,
+    // computed from Core_Data_AI.csv career totals (2019 through the
+    // current in-progress season).
+    const MEMBERS = {
+      carlos: {
+        name: "Carlos Flores",
+        win:     "17.5% (4th)",
+        mc:      "66.9% (5th)",
+        quality: "35.7% (5th)",
+        wp:      "14 (2nd)",
+        events:  "37 (4th)",
+        majors:  "6 (T-2nd)"
+      },
+      greg: {
+        name: "Greg Wigton",
+        win:     "20.8% (2nd)",
+        mc:      "69.1% (2nd)",
+        quality: "42.9% (1st)",
+        wp:      "9 (T-4th)",
+        events:  "44 (2nd)",
+        majors:  "5 (T-4th)"
+      },
+      kevin: {
+        name: "Kevin McNamara",
+        win:     "21.2% (1st)",
+        mc:      "69.9% (1st)",
+        quality: "40.5% (3rd)",
+        wp:      "9 (T-4th)",
+        events:  "45 (1st)",
+        majors:  "6 (T-2nd)"
+      },
+      robert: {
+        name: "Robert Bresnahan",
+        win:     "20.3% (3rd)",
+        mc:      "69.0% (3rd)",
+        quality: "41.7% (2nd)",
+        wp:      "13 (3rd)",
+        events:  "43 (3rd)",
+        majors:  "5 (T-4th)"
+      },
+      william: {
+        name: "William Sullivan",
+        win:     "16.5% (5th)",
+        mc:      "68.2% (4th)",
+        quality: "36.3% (4th)",
+        wp:      "16 (1st)",
+        events:  "35 (5th)",
+        majors:  "7 (1st)"
+      }
+    };
+
+    function wrapRank(str) {
+      // splits "17.5% (4th)" into value + styled rank span
+      const m = str.match(/^(.+?)\s*\((.+)\)$/);
+      if (!m) return str;
+      return `${m[1]} <span class="rank">(${m[2]})</span>`;
+    }
+
+    const overlay  = document.getElementById('statModal');
+    const closeBtn = document.getElementById('modalClose');
+    let lastFocused = null;
+
+    function openModal(key) {
+      const m = MEMBERS[key];
+      if (!m) return;
+      document.getElementById('modalName').textContent = m.name;
+      document.getElementById('statWin').innerHTML     = wrapRank(m.win);
+      document.getElementById('statMC').innerHTML      = wrapRank(m.mc);
+      document.getElementById('statQuality').innerHTML = wrapRank(m.quality);
+      document.getElementById('statWP').innerHTML      = wrapRank(m.wp);
+      document.getElementById('statEvents').innerHTML  = wrapRank(m.events);
+      document.getElementById('statMajors').innerHTML  = wrapRank(m.majors);
+
+      lastFocused = document.activeElement;
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      closeBtn.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    document.querySelectorAll('.member-photo-btn').forEach(btn => {
+      btn.addEventListener('click', () => openModal(btn.getAttribute('data-member')));
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
     });
   </script>
 
