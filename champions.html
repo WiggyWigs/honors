@@ -110,7 +110,7 @@
   /* =================== HEADER =================== */
   .champ-header {
     text-align: center;
-    padding: 40px 20px 24px;
+    padding: 100px 20px 24px;
     border-bottom: 1px solid var(--border-gold);
     margin-bottom: 40px;
   }
@@ -234,6 +234,119 @@
 
   .past-card .portrait-frame {
     width: min(323px, 100%);
+  }
+
+  /* =================== TOP NAV =================== */
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: rgba(26, 42, 24, 0.0);
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+
+  .site-nav.scrolled {
+    padding: 0.65rem 1.5rem;
+    background: rgba(242, 228, 196, 0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-home {
+    display: flex;
+    align-items: center;
+    color: var(--gold);
+    flex-shrink: 0;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-home:hover { opacity: 1; }
+
+  .nav-home svg { width: 20px; height: 20px; display: block; }
+
+  .site-nav-links {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 201;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .site-nav a {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-nav a:hover { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .nav-toggle { display: flex; }
+
+    .site-nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+      background: rgba(26, 42, 24, 0.92);
+      backdrop-filter: blur(4px);
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: max-height 0.3s ease, opacity 0.25s ease;
+    }
+
+    .site-nav-links.open {
+      max-height: 400px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-nav-links.open a {
+      color: var(--bg-primary);
+    }
   }
 
   /* =================== MOBILE =================== */
@@ -378,6 +491,26 @@
 </style>
 </head>
 <body>
+<nav class="site-nav" id="site-nav">
+  <a class="nav-home" href="index.html" aria-label="The Honors home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.5 12 4l9 7.5" />
+      <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
+    </svg>
+  </a>
+  <div class="site-nav-links" id="site-nav-links">
+    <a href="ohgr.html">OHGR</a>
+    <a href="weekly_report.html">Weekly Report</a>
+    <a href="member-profiles.html">Member Profiles</a>
+    <a href="champions.html">Championship History</a>
+    <a href="record-books.html">Record Books</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
 <div class="page-outer">
 <div class="page">
 
@@ -474,6 +607,28 @@
 </div>
 
 <script>
+  var nav = document.getElementById('site-nav');
+  var navToggle = document.getElementById('nav-toggle');
+  var navLinks = document.getElementById('site-nav-links');
+
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  navToggle.addEventListener('click', function () {
+    var isOpen = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  navLinks.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
   var CHAMPIONS = {
     2025: { name: "Kevin McNamara",    avg: "414.65", margin: "73.2 pts",  events: "5",  earnings: "$358.00", majors: "U.S. Open" },
     2024: { name: "Kevin McNamara",    avg: "443.27", margin: "571.4 pts", events: "10", earnings: "$532.00", majors: "The Open Championship" },
