@@ -82,6 +82,13 @@ body.landing-page {
 
 .site-nav.scrolled {
   padding: 0.65rem 1.5rem;
+  background: rgba(26, 42, 24, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.site-nav.scrolled a,
+.site-nav.scrolled .nav-home {
+  color: var(--parchment);
 }
 
 .site-nav-links {
