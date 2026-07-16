@@ -56,11 +56,28 @@ body.landing-page {
   width: 100%;
   z-index: 100;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   background: rgba(26, 42, 24, 0.0);
   transition: background 0.3s ease, padding 0.3s ease;
+}
+
+.nav-home {
+  display: flex;
+  align-items: center;
+  color: var(--masters-green);
+  flex-shrink: 0;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.nav-home:hover { opacity: 1; }
+
+.nav-home svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .site-nav.scrolled {
@@ -69,6 +86,7 @@ body.landing-page {
 
 .site-nav-links {
   display: flex;
+  flex: 1;
   justify-content: center;
   gap: clamp(1rem, 4vw, 3rem);
 }
@@ -399,7 +417,7 @@ body.landing-page {
 
   /* Hide the inline links, show the hamburger button instead */
   .site-nav {
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .nav-toggle {
