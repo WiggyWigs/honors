@@ -1,59 +1,487 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Honors — Fantasy Golf League</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body class="landing-page">
+/* ============================================
+   THE HONORS — Fantasy Golf League
+   Starting point: hero + fixed nav + scroll mechanics
+   (Placeholder visuals — swap images when assets exist)
+============================================ */
 
-  <nav class="site-nav" id="site-nav">
-    <a class="nav-home" href="index.html" aria-label="The Honors home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 11.5 12 4l9 7.5" />
-        <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
-      </svg>
-    </a>
-    <div class="site-nav-links" id="site-nav-links">
-      <a href="ohgr.html">OHGR</a>
-      <a href="weekly_report.html">Weekly Report</a>
-      <a href="member-profiles.html">Member Profiles</a>
-      <a href="champions.html">Championship History</a>
-      <span class="nav-disabled">Record Book (coming soon)</span>
-    </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
 
-  <section class="hero" id="hero">
-    <div class="hero-bg"></div>
-    <img class="hero-logo-img" src="images/logo.png" alt="The Honors crest" />
-  </section>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  <script>
-    // Landing page is static and non-scrolling — the only interactive
-    // piece left is the mobile hamburger menu.
-    const navToggle = document.getElementById('nav-toggle');
-    const navLinks  = document.getElementById('site-nav-links');
+:root {
+  --parchment: #f2e4c4;
+  --ink: #1a2a18;
+  --ink-mid: #2f4a2c;
+  --ink-light: #4c6b48;
+  --deco-green: #1a6b3a;
+  --masters-green: #006747;
+  --deco-gold: #b8860b;
+}
 
-    navToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
+html { scroll-behavior: smooth; }
 
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  </script>
+body {
+  background-color: var(--parchment);
+  background-image: url('images/background.png');
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  background-position: top center;
+  color: var(--ink);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
 
-</body>
-</html>
+/* Landing page (index.html) only — hero fills the viewport and nothing
+   scrolls. Other pages that share this stylesheet (member profiles,
+   record books, etc.) do NOT get this class and scroll normally. */
+body.landing-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================
+   FIXED TOP NAV
+   Stays pinned above everything, including hero.
+============================================ */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(26, 42, 24, 0.0);
+  transition: background 0.3s ease, padding 0.3s ease;
+}
+
+.nav-home {
+  display: flex;
+  align-items: center;
+  color: var(--masters-green);
+  flex-shrink: 0;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.nav-home:hover { opacity: 1; }
+
+.nav-home svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.site-nav.scrolled {
+  padding: 0.65rem 1.5rem;
+  background: rgba(26, 42, 24, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.site-nav.scrolled a,
+.site-nav.scrolled .nav-home {
+  color: var(--parchment);
+}
+
+.site-nav-links {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+}
+
+/* Hamburger button — hidden on desktop, shown only on mobile (see breakpoint below) */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--masters-green);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Turns the three bars into an X when the menu is open */
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.site-nav a {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--masters-green);
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav .nav-disabled {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--masters-green);
+  white-space: nowrap;
+  opacity: 0.45;
+  cursor: default;
+}
+
+.site-nav a:hover { opacity: 1; }
+
+/* ============================================
+   HERO SECTION
+   Fixed background fades out on scroll, logo drifts/fades.
+   Mechanics copied from football site, swap images later.
+============================================ */
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1536 / 1024;
+  max-height: 100vh;
+}
+
+.hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1536 / 1024;
+  max-height: 100vh;
+  background-image: url('images/hero.png');
+  background-color: var(--ink-mid); /* visible placeholder until image exists */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 5;
+  will-change: opacity;
+}
+
+/* logo.png — acts exactly like the football site's logo.png:
+   fades AND drifts downward independently as you scroll. */
+.hero-logo-img {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(100px, 20vw, 380px);
+  height: auto;
+  z-index: 11;
+  will-change: transform, opacity;
+}
+
+.hero-logo-placeholder {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(100px, 20vw, 380px);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 228, 196, 0.15);
+  border: 2px dashed var(--deco-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  text-align: center;
+  z-index: 11;
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   HERO FADE SPACER
+   Invisible block sized in JS to match the logo's
+   fade-out scroll distance, so the next section can't
+   appear on screen until the logo has fully faded.
+============================================ */
+.hero-fade-spacer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* ============================================
+   SECTION HEADERS
+   Fade in from 0 to full opacity as they travel
+   from the bottom of the viewport to its vertical center.
+============================================ */
+.section-header {
+  opacity: 0;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-header { opacity: 1; transition: none; }
+}
+
+/* ============================================
+   MEMBER PROFILE CARD
+============================================ */
+.member-profiles-section {
+  text-align: left;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.member-profiles-section .section-header {
+  text-align: center;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.member-card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.member-photo {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.member-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.member-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.5rem;
+}
+
+/* Stat tables — grid instead of football's single flex-row,
+   since 10 stats total won't fit one row cleanly */
+.stat-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: rgba(0, 103, 71, 0.25);
+  border: 1px solid rgba(0, 103, 71, 0.3);
+  margin-bottom: 1rem;
+}
+
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: rgba(0, 103, 71, 0.08);
+  padding: 0.85rem 1rem;
+}
+
+.stat-cell .stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.stat-cell .stat-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--masters-green);
+}
+
+/* Grand Slam — own row, since "N/A — missing: X, Y" runs longer than a stat cell */
+.grand-slam-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: rgba(184, 134, 11, 0.1);
+  border-left: 3px solid var(--deco-gold);
+  margin-bottom: 1.25rem;
+}
+
+.grand-slam-row .stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+
+.grand-slam-row .stat-value {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-mid);
+}
+
+/* Unique stat slot — flexible container, no fixed shape.
+   Grows to fit whatever content (short stat or longer fun fact) goes inside. */
+.unique-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.unique-stat {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-mid);
+  padding: 0.7rem 1rem;
+  background: rgba(0, 103, 71, 0.06);
+  border-left: 3px solid var(--masters-green);
+}
+
+.member-narrative {
+  font-family: 'IM Fell English', serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--ink-mid);
+}
+
+@media (min-width: 950px) {
+  .member-card-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .member-photo {
+    flex: 0 0 460px;
+    max-width: 460px;
+    margin: 0;
+  }
+
+  .member-content {
+    flex: 1;
+  }
+}
+
+/* ============================================
+   SPACER — placeholder content below hero so
+   scroll mechanics are testable
+============================================ */
+.scroll-spacer {
+  position: relative;
+  z-index: 10;
+  min-height: 150vh;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.scroll-spacer h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  .hero,
+  .hero-bg {
+    /* hero_m.png is portrait-shaped, unlike desktop's landscape hero.png,
+       so the box shape has to match or "cover" will crop it wrong */
+    aspect-ratio: 1024 / 1179;
+  }
+
+  .hero-bg {
+    background-image: url('images/hero_m.png');
+  }
+
+  .hero-logo-img,
+  .hero-logo-placeholder {
+    /* shifted down slightly from the desktop 45% so the logo clears the title
+       text in hero_m.png, which sits higher up than in the desktop hero */
+    top: 50%;
+  }
+
+  /* Hide the inline links, show the hamburger button instead */
+  .site-nav {
+    justify-content: space-between;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: rgba(26, 42, 24, 0.92);
+    backdrop-filter: blur(4px);
+
+    /* Closed by default — slides/fades in when .open is added by JS */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+
+  .site-nav-links.open {
+    max-height: 400px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Masters Green is unreadable against the dark dropdown background,
+     so links go parchment-colored only while the mobile menu is open */
+  .site-nav-links.open a,
+  .site-nav-links.open .nav-disabled {
+    color: var(--parchment);
+  }
+
+  .site-nav-links.open .nav-disabled {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-img,
+  .hero-logo-placeholder { transition: none; }
+}
