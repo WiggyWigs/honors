@@ -368,7 +368,7 @@ body.landing-page {
   color: var(--ink-mid);
 }
 
-@media (min-width: 650px) {
+@media (min-width: 950px) {
   .member-card-row {
     flex-direction: row;
     align-items: stretch;
