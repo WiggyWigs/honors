@@ -1,642 +1,688 @@
 <!DOCTYPE html>
+<!--
+=======================================================
+  THE HONORS — CHAMPIONSHIP HISTORY PAGE
+=======================================================
+  Portrait gallery of season champions, 2019-2025.
+  Styled to match weekly-report-template.html / ohgr.html
+  design system (Cinzel/IM Fell fonts, parchment palette).
+
+  Portrait images expected at: images/2025.png ... images/2019.png
+
+  Click any portrait to open a modal with that champion's
+  season stats. All champion data lives in the CHAMPIONS
+  object near the bottom of this file — edit it there, not
+  in the markup, to update a year's numbers.
+
+  DATA NOTE: Per-year champion financials (Average Score,
+  Margin of Victory, Events Won, Majors Won, Net Earnings)
+  were derived directly from Core_Data_AI.csv using the same
+  MC/bonus/penalty/dues rules as generate_honors_data.py,
+  extended to run per-year instead of only for the in-progress
+  season. Net Earnings = winnings - entry fees + bonuses -
+  penalties + champion payout - yearly dues + year-end awards
+  share (Grand Slam bonuses/fees excluded, per Greg's instruction).
+
+  VALIDATION CAVEAT: Summing these per-year net figures across
+  all players/years lands within ~$1-$21 of the lifetime totals
+  in GROUND_TRUTH_SUMMARY.md's Table 15 (which itself doesn't
+  balance to $0 as the official balance rule requires -- it's off
+  by -$40 lifetime). This engine's output IS internally balanced
+  to $0 every year, matching Section 10.3 of the official rules.
+  Flagged for Greg to reconcile against generate_financial_ground_truth.py
+  if exact-to-the-penny match to GROUND_TRUTH_SUMMARY.md is required.
+=======================================================
+-->
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Honors — Member Profiles</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    /* Page-specific: player name colors (not in shared styles.css —
-       only weekly-report-template.html had these before now) */
-    :root {
-      --red:    #a03d2f;
-      --green:  #2f6b3a;
-      --blue:   #2f5a8a;
-      --purple: #6b4a8a;
-      --yellow: #9a7d1f;
-    }
-    .pname-red    { color: var(--red); }
-    .pname-green  { color: var(--green); }
-    .pname-blue   { color: var(--blue); }
-    .pname-purple { color: var(--purple); }
-    .pname-yellow { color: var(--yellow); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Honors — Championship History</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&display=swap');
 
-    /* All member names use the standard site green — no per-player color on this page */
-    .member-name { color: var(--masters-green); }
+  :root {
+    --bg-primary: #f2e4c4;
+    --bg-panel: #ece0c2;
+    --bg-panel-alt: #e6d9b8;
+    --bg-green: #e0dcc0;
+    --gold: #006747;
+    --gold-light: #1a8a64;
+    --silver: #4c6b48;
+    --white: #1a2a18;
+    --border: rgba(0, 103, 71, 0.18);
+    --border-gold: rgba(0, 103, 71, 0.3);
+    --red:    #a03d2f;
+    --green:  #2f6b3a;
+    --blue:   #2f5a8a;
+    --purple: #6b4a8a;
+    --yellow: #9a7d1f;
+    --page-w: 1100px;
+  }
 
-    /* Page-specific: clearance under the fixed nav (no hero on this page
-       to push content down, so the top section needs its own offset) */
-    .member-profiles-section { padding-top: 7rem; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Page-specific: divider between member cards */
-    .member-card + .member-card {
-      margin-top: 3.5rem;
-      padding-top: 3.5rem;
-      border-top: 1px solid rgba(0, 103, 71, 0.2);
-    }
+  body {
+    background-color: var(--bg-primary);
+    background-image: url('images/background.png');
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    background-position: top center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'IM Fell English', Georgia, serif;
+    color: var(--white);
+  }
 
-    /* Clickable photo, opens the stats modal */
-    .member-photo-btn {
-      display: block;
-      width: 100%;
-      max-width: 280px;
-      margin: 0 auto;
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+  .page-outer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
 
-    .member-photo-btn img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 4px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-      transition: box-shadow 0.2s ease;
-    }
+  .page {
+    width: 100%;
+    max-width: var(--page-w);
+    position: relative;
+    padding: 0 20px 60px;
+  }
 
-    @media (min-width: 650px) {
-      .member-photo {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(0,0,0,0.012) 28px,
+        rgba(0,0,0,0.012) 29px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
 
-      .member-photo-btn {
-        max-width: none;
-        flex: 1;
-        min-height: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+  .page > * { position: relative; z-index: 1; }
 
-      .member-photo-btn img {
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-      }
-    }
+  /* =================== HEADER =================== */
+  .champ-header {
+    text-align: center;
+    padding: 100px 20px 24px;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 40px;
+  }
 
-    .member-photo-btn:hover,
-    .member-photo-btn:focus-visible {
-      transform: translateY(-4px);
-    }
+  .champ-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 10px;
+  }
 
-    .member-photo-btn:hover img,
-    .member-photo-btn:focus-visible img {
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
-    }
+  .champ-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 42px;
+    letter-spacing: 1px;
+    color: var(--gold);
+  }
 
-    .member-photo-btn:focus-visible {
-      outline: 2px solid var(--masters-green);
-      outline-offset: 4px;
-    }
+  .champ-subtitle {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--silver);
+    margin-top: 10px;
+  }
 
-    .member-photo-hint {
-      display: block;
-      text-align: center;
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      opacity: 0.75;
-      margin-top: 0.6rem;
-    }
+  .champ-hint {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--silver);
+    opacity: 0.75;
+    margin-top: 14px;
+  }
 
-    /* Championships + Career Earnings share one lightly-tinted box */
-    .summary-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.6rem 3rem;
-      align-items: baseline;
-      padding: 0.95rem 1rem;
-      background: rgba(0, 103, 71, 0.24);
-      margin-bottom: 0.6rem;
-    }
+  /* =================== REIGNING CHAMPION =================== */
+  .reigning {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 56px;
+  }
 
-    .summary-row .summary-item {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: baseline;
-      gap: 0.5rem 0.8rem;
-    }
+  .reigning-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
 
-    .summary-row .stat-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      white-space: nowrap;
-    }
+  /* =================== PORTRAITS (clickable) =================== */
+  .portrait-frame {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    aspect-ratio: 1085 / 1450;
+    overflow: visible;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    display: block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
 
-    .summary-row .stat-value {
-      font-family: 'Cinzel', serif;
-      font-size: 1.15rem;
-      letter-spacing: 0.03em;
-      font-weight: 700;
-      color: var(--masters-green);
-    }
+  .portrait-frame:hover,
+  .portrait-frame:focus-visible {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+  }
 
-    .summary-row .stat-value .rank {
-      font-family: 'IM Fell English', serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 0.85rem;
-      color: var(--ink-light);
-    }
+  .portrait-frame:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+  }
 
-    /* Page-specific: lighter Grand Slam box than the shared styles.css default */
-    .grand-slam-row {
-      background: rgba(184, 134, 11, 0.28);
-      justify-content: center;
-      text-align: center;
-    }
+  .reigning .portrait-frame {
+    width: min(563px, 100%);
+  }
 
-    /* ============= MODAL ============= */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(12, 22, 14, 0.6);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: flex;
+  .portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* =================== PAST CHAMPIONS GRID =================== */
+  .past-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .past-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 44px 30px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  .past-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .past-card .portrait-frame {
+    width: min(323px, 100%);
+  }
+
+  /* =================== TOP NAV =================== */
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: rgba(26, 42, 24, 0.0);
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+
+  .site-nav.scrolled {
+    padding: 0.65rem 1.5rem;
+    background: rgba(242, 228, 196, 0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-home {
+    display: flex;
+    align-items: center;
+    color: var(--gold);
+    flex-shrink: 0;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-home:hover { opacity: 1; }
+
+  .nav-home svg { width: 20px; height: 20px; display: block; }
+
+  .site-nav-links {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 201;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .site-nav a {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-nav a:hover { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .nav-toggle { display: flex; }
+
+    .site-nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex: none;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
+      gap: 1.1rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+      background: rgba(26, 42, 24, 0.92);
+      backdrop-filter: blur(4px);
+      max-height: 0;
       opacity: 0;
+      overflow: hidden;
       pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 1000;
+      transition: max-height 0.3s ease, opacity 0.25s ease;
     }
 
-    .modal-overlay.active {
+    .site-nav-links.open {
+      max-height: 400px;
       opacity: 1;
       pointer-events: auto;
     }
 
-    .modal-card {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      max-height: 88vh;
-      overflow-y: auto;
-      background: #fbf6e9;
-      border-radius: 16px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 2px 0 var(--masters-green) inset;
-      padding: 32px 28px 28px;
-      text-align: center;
-      transform: translateY(16px) scale(0.96);
-      opacity: 0;
-      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.22s ease;
+    .site-nav-links.open a {
+      color: var(--bg-primary);
     }
+  }
 
-    .modal-overlay.active .modal-card {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
+  /* =================== MOBILE =================== */
+  @media (max-width: 640px) {
+    .champ-title { font-size: 30px; }
+    .past-grid { grid-template-columns: 1fr; max-width: 340px; }
+  }
 
-    .modal-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      color: var(--ink-light);
-      font-family: 'Cinzel', serif;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s ease, color 0.15s ease;
-    }
+  /* =================== MODAL =================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 22, 14, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1000;
+  }
 
-    .modal-close:hover {
-      background: rgba(0, 103, 71, 0.1);
-      color: var(--masters-green);
-    }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-    .modal-badge {
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--masters-green);
-      margin-bottom: 4px;
-    }
+  .modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: #fbf6e9;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 2px 0 var(--gold) inset;
+    padding: 32px 28px 28px;
+    text-align: center;
+    transform: translateY(16px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.22s ease;
+  }
 
-    .modal-name {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 24px;
-      color: var(--ink);
-      margin-bottom: 22px;
-    }
+  .modal-overlay.active .modal-card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 
-    .modal-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px 28px;
-      border-top: 1px solid rgba(0, 103, 71, 0.18);
-      padding-top: 20px;
-    }
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--silver);
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
 
-    .modal-stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
+  .modal-close:hover {
+    background: rgba(0, 103, 71, 0.1);
+    color: var(--gold);
+  }
 
-    .modal-stat-label {
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--ink-light);
-    }
+  .modal-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
 
-    .modal-stat-value {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 17px;
-      color: var(--ink);
-    }
+  .modal-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--white);
+  }
 
-    .modal-stat-value .rank {
-      font-family: 'IM Fell English', serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 15px;
-      color: var(--ink-light);
-    }
+  .modal-year {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--silver);
+    margin-top: 4px;
+    margin-bottom: 22px;
+  }
 
-    @media (max-width: 480px) {
-      .modal-card { padding: 26px 20px 22px; }
-      .modal-name { font-size: 20px; }
-    }
-  </style>
+  .modal-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 28px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .modal-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .modal-stat:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .modal-stat-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+
+  .modal-stat-value {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--white);
+    line-height: 1.35;
+  }
+
+  @media (max-width: 480px) {
+    .modal-card { padding: 26px 20px 22px; }
+    .modal-name { font-size: 20px; }
+  }
+</style>
 </head>
 <body>
+<nav class="site-nav" id="site-nav">
+  <a class="nav-home" href="index.html" aria-label="The Honors home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.5 12 4l9 7.5" />
+      <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
+    </svg>
+  </a>
+  <div class="site-nav-links" id="site-nav-links">
+    <a href="ohgr.html">OHGR</a>
+    <a href="weekly_report.html">Weekly Report</a>
+    <a href="member-profiles.html">Member Profiles</a>
+    <a href="champions.html">Championship History</a>
+    <a href="record-books.html">Record Books</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+<div class="page-outer">
+<div class="page">
 
-  <nav class="site-nav" id="site-nav">
-    <a class="nav-home" href="index.html" aria-label="The Honors home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 11.5 12 4l9 7.5" />
-        <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
-      </svg>
-    </a>
-    <div class="site-nav-links" id="site-nav-links">
-      <a href="ohgr.html">OHGR</a>
-      <a href="weekly_report.html">Weekly Report</a>
-      <a href="member-profiles.html">Member Profiles</a>
-      <a href="champions.html">Championship History</a>
-      <a href="record-books.html">Record Books</a>
-    </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
+  <div class="champ-header">
+    <div class="champ-eyebrow">The Honors Fantasy Golf League</div>
+    <div class="champ-title">Championship History</div>
+    <div class="champ-subtitle">Every trophy, every season, every legend.</div>
+    <div class="champ-hint">Click a portrait for season stats</div>
+  </div>
+
+  <!-- ============= REIGNING CHAMPION (2025) ============= -->
+  <div class="reigning">
+    <div class="reigning-badge">Reigning Champion</div>
+    <button class="portrait-frame" data-year="2025" aria-label="View 2025 champion stats">
+      <img src="images/2025.png" alt="Kevin McNamara, 2025 Champion">
     </button>
-  </nav>
+  </div>
 
-  <section class="scroll-spacer member-profiles-section" id="member-profiles">
-    <h2 class="section-header" style="opacity:1;">Member Profiles</h2>
+  <!-- ============= PAST CHAMPIONS ============= -->
+  <div class="past-heading">Past Champions</div>
+  <div class="past-grid">
 
-    <!-- ============= CARLOS FLORES ============= -->
-    <div class="member-card">
-      <h3 class="member-name">Carlos Flores</h3>
-
-      <div class="member-card-row">
-        <div class="member-photo">
-          <button class="member-photo-btn" data-member="carlos" aria-label="View Carlos Flores full career stats">
-            <img src="images/Current/Carlos-00.png" alt="Carlos Flores" />
-          </button>
-          <span class="member-photo-hint">Click photo for full stats</span>
-        </div>
-
-        <div class="member-content">
-          <div class="summary-row">
-            <div class="summary-item">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">0</span>
-            </div>
-            <div class="summary-item">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">-$850.50 <span class="rank">(5th)</span></span>
-            </div>
-          </div>
-
-          <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The Open Championship</span>
-          </div>
-
-          <p class="member-narrative">Through the 2025 season, Carlos remains the answer to a very specific piece of league trivia: who's the only member of The Honors with zero championships and zero completed career Grand Slams? Heading into 2026, he's built the league's most reliable disappointment in the categories that matter for banner-hanging, propping up the bottom of the standings with the league's worst career made-cut rate (67.7%) and worst career quality lineup rate (33.3%) — numbers that suggest a man who drafts with his heart, not his spreadsheet. And yet: five career major championships, third-most in the league, including a Masters–PGA double in the same 2022 season that briefly made Los look like a real threat. Going into the 2026 season, he needs only The Open Championship to complete the career Grand Slam, a fact he's been one tournament away from for what feels like an eternity. His career earnings sit dead last in the field, which tracks — Carlos shows up big for a few big weeks, then spends the other twenty-five quietly handing the pot back to everyone else. If The Honors ever needs someone to peak at exactly the wrong moments of the calendar, Carlito has already filled that role, and filled it admirably.</p>
-        </div>
-      </div>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2024" aria-label="View 2024 champion stats">
+        <img src="images/2024.png" alt="Kevin McNamara, 2024 Champion">
+      </button>
     </div>
 
-    <!-- ============= GREG WIGTON ============= -->
-    <div class="member-card">
-      <h3 class="member-name">Greg Wigton</h3>
-
-      <div class="member-card-row">
-        <div class="member-photo">
-          <button class="member-photo-btn" data-member="greg" aria-label="View Greg Wigton full career stats">
-            <img src="images/Current/Greg-02.png" alt="Greg Wigton" />
-          </button>
-          <span class="member-photo-hint">Click photo for full stats</span>
-        </div>
-
-        <div class="member-content">
-          <div class="summary-row">
-            <div class="summary-item">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">2 (2022, 2023)</span>
-            </div>
-            <div class="summary-item">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$199.50 <span class="rank">(2nd)</span></span>
-            </div>
-          </div>
-
-          <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The PGA Championship</span>
-          </div>
-
-          <p class="member-narrative">Through the 2025 season, Wigs is one of the league's most complete players without quite being its most dominant. Back-to-back championships in 2022 and 2023 made him the first member to ever go back-to-back, no small feat in a five-man field this competitive. His 40.1% career quality lineup rate and 70.0% made-cut rate both sit inside the league's top three, and his 37 career event wins are third-most in the field. Where things get less flattering: his four career major wins are tied for the fewest in the league, an oddly quiet number for a two-time champion, and he shares that last-place tie with Robert — proof that Sweetchuck wins titles the hard way, one steady week at a time, rather than by stacking trophies in the four events everyone remembers. He also sits one PGA Championship short of a career Grand Slam, a gap he's stared at for years without closing it. Second in career earnings through 2025, Greg — The Wizard, on his better weeks — is the league's model of quiet, steady competence: a two-time champion whose game shows up almost every week, except, it seems, when the four tournaments people actually talk about are on the line. Going into 2026, that missing PGA Championship remains the one carrot he hasn't caught.</p>
-        </div>
-      </div>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2023" aria-label="View 2023 champion stats">
+        <img src="images/2023.png" alt="Greg Wigton, 2023 Champion">
+      </button>
     </div>
 
-    <!-- ============= KEVIN MCNAMARA ============= -->
-    <div class="member-card">
-      <h3 class="member-name">Kevin McNamara</h3>
-
-      <div class="member-card-row">
-        <div class="member-photo">
-          <button class="member-photo-btn" data-member="kevin" aria-label="View Kevin McNamara full career stats">
-            <img src="images/Current/Kevin-04.png" alt="Kevin McNamara" />
-          </button>
-          <span class="member-photo-hint">Click photo for full stats</span>
-        </div>
-
-        <div class="member-content">
-          <div class="summary-row">
-            <div class="summary-item">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">4 (2019, 2021, 2024, 2025)</span>
-            </div>
-            <div class="summary-item">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$1,332.00 <span class="rank">(1st)</span></span>
-            </div>
-          </div>
-
-          <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">1 (2019 The PGA Championship, 2019 The Open Championship, 2021 The Masters, 2023 U.S. Open)</span>
-          </div>
-
-          <p class="member-narrative">Through the 2025 season, Kevin — 'Kmac' to the group and 'The Doctor' when he's operating on a Sunday back nine — is the standard the other four measure themselves against, and the numbers back it up without much argument: four championships (2019, 2021, 2024, 2025), the best career winning percentage (24.0%) and made-cut rate (72.0%) in the league, the most career event wins (44), and the second member to complete the career Grand Slam, closing it out in 2023. His career earnings are comfortably the best in the field, which is what happens when you're this consistently good for this many years. But even the league's greatest player has a skeleton in the closet: Kev also owns the single-season last-place record, a 2020 campaign so bad it's still the worst finishing rate any member has ever posted in a single year. It's the kind of stat that would define a lesser man's career, and instead it's a footnote buried under four trophies and a completed slam. Somehow, the best golfer in league history and the owner of its single worst-ever season are the exact same person, which either makes Kevin refreshingly human or proof that even champions have to hit rock bottom before they can build a dynasty. Going into 2026, he's already started chasing a second Grand Slam cycle.</p>
-        </div>
-      </div>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2022" aria-label="View 2022 champion stats">
+        <img src="images/2022.png" alt="Greg Wigton, 2022 Champion">
+      </button>
     </div>
 
-    <!-- ============= ROBERT BRESNAHAN ============= -->
-    <div class="member-card">
-      <h3 class="member-name">Robert Bresnahan</h3>
-
-      <div class="member-card-row">
-        <div class="member-photo">
-          <button class="member-photo-btn" data-member="robert" aria-label="View Robert Bresnahan full career stats">
-            <img src="images/Current/Robert-01.png" alt="Robert Bresnahan" />
-          </button>
-          <span class="member-photo-hint">Click photo for full stats</span>
-        </div>
-
-        <div class="member-content">
-          <div class="summary-row">
-            <div class="summary-item">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">1 (2020)</span>
-            </div>
-            <div class="summary-item">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">$62.00 <span class="rank">(3rd)</span></span>
-            </div>
-          </div>
-
-          <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The Open Championship</span>
-          </div>
-
-          <p class="member-narrative">Through the 2025 season, Robert's entire career fits into two very different stories. Story one: 2020, a season so good it produced the highest single-season earnings percentage — 46.2% of the pot — that anyone in league history has ever posted, capped off with his only championship. Story two: everything else. Since that peak, Bobby B has settled into a stubbornly respectable, unmistakably top-of-the-middle existence — second in career winning percentage (21.3%), second in career made-cut rate (70.7%), and second in career event wins (39), a level of consistency that borders on statistical suspicion. His career quality lineup rate (42.9%) is actually the best in the league through 2025, proof he's not simply coasting on one great year and calling it a career. Four career majors leave him tied for the fewest in the field, and one Open Championship short of completing the Grand Slam — a gap he shares with Carlos, though Robert at least has a championship banner to point to while he waits. Going into 2026, that missing Open Championship remains the one piece of unfinished business standing between Bressy and a genuinely complete resume. If The Honors ever handed out an award for Most Convincingly Fine, he'd win it every year — and probably finish second in that too.</p>
-        </div>
-      </div>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2021" aria-label="View 2021 champion stats">
+        <img src="images/2021.png" alt="Kevin McNamara, 2021 Champion">
+      </button>
     </div>
 
-    <!-- ============= WILLIAM SULLIVAN ============= -->
-    <div class="member-card">
-      <h3 class="member-name">William Sullivan</h3>
-
-      <div class="member-card-row">
-        <div class="member-photo">
-          <button class="member-photo-btn" data-member="william" aria-label="View William Sullivan full career stats">
-            <img src="images/Current/William-00.png" alt="William Sullivan" />
-          </button>
-          <span class="member-photo-hint">Click photo for full stats</span>
-        </div>
-
-        <div class="member-content">
-          <div class="summary-row">
-            <div class="summary-item">
-              <span class="stat-label">Championships</span>
-              <span class="stat-value">0</span>
-            </div>
-            <div class="summary-item">
-              <span class="stat-label">Career Earnings</span>
-              <span class="stat-value">-$783.00 <span class="rank">(4th)</span></span>
-            </div>
-          </div>
-
-          <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">1 (2019 U.S. Open, 2020 The Masters, 2022 The Open Championship, 2023 The PGA Championship)</span>
-          </div>
-
-          <p class="member-narrative">Through the 2025 season, William remains the league's great unsolved mystery: the most career major championships of anyone (seven), and the first member to ever complete the career Grand Slam, closing his out in 2023, four events before Kevin. By any reasonable measure, that should make him a legend. Instead, he's never won a single season championship, and his numbers outside the four biggest weeks of the year are genuinely rough — the worst career winning percentage in the league (15.8%), the fewest career event wins (29), and the most career diarrhea withdraws of anyone in the field, a category Bildo leads by a comfortable margin. He also owns the longest losing streak in league history: 47 consecutive events without a win, stretching from 2021 into 2022 — more than double the next-longest cold spell anyone else has ever endured. His career earnings through 2025 reflect a player who cashes enormous checks four times a year and quietly bleeds the rest of the season away. William is proof that peak performance and season-long consistency are not the same skill, and that you can own more major hardware than anyone in league history while still needing a good explanation for your regular-season results. Going into 2026, he remains, without question, the most talented player never to win it all — and the league's most reliable source of both jaw-dropping majors and forgettable Sundays.</p>
-        </div>
-      </div>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2020" aria-label="View 2020 champion stats">
+        <img src="images/2020.png" alt="Robert Bresnahan, 2020 Champion">
+      </button>
     </div>
 
-  </section>
+    <div class="past-card">
+      <button class="portrait-frame" data-year="2019" aria-label="View 2019 champion stats">
+        <img src="images/2019.png" alt="Kevin McNamara, 2019 Champion">
+      </button>
+    </div>
 
-  <!-- ============= STAT MODAL ============= -->
-  <div class="modal-overlay" id="statModal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
-      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
-      <div class="modal-badge">Career Stats</div>
-      <div class="modal-name" id="modalName"></div>
-      <div class="modal-stats">
-        <div class="modal-stat">
-          <span class="modal-stat-label">Career Winning</span>
-          <span class="modal-stat-value" id="statWin"></span>
-        </div>
-        <div class="modal-stat">
-          <span class="modal-stat-label">Career Made Cut</span>
-          <span class="modal-stat-value" id="statMC"></span>
-        </div>
-        <div class="modal-stat">
-          <span class="modal-stat-label">Career Quality Lineup</span>
-          <span class="modal-stat-value" id="statQuality"></span>
-        </div>
-        <div class="modal-stat">
-          <span class="modal-stat-label">Diarrhea Withdraws</span>
-          <span class="modal-stat-value" id="statWP"></span>
-        </div>
-        <div class="modal-stat">
-          <span class="modal-stat-label">Events Won</span>
-          <span class="modal-stat-value" id="statEvents"></span>
-        </div>
-        <div class="modal-stat">
-          <span class="modal-stat-label">Majors Won</span>
-          <span class="modal-stat-value" id="statMajors"></span>
-        </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============= STAT MODAL ============= -->
+<div class="modal-overlay" id="statModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <div class="modal-badge">Season Champion</div>
+    <div class="modal-name" id="modalName"></div>
+    <div class="modal-year" id="modalYear"></div>
+    <div class="modal-stats">
+      <div class="modal-stat">
+        <span class="modal-stat-label">Average Score</span>
+        <span class="modal-stat-value" id="modalAvg"></span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-label">Margin of Victory</span>
+        <span class="modal-stat-value" id="modalMargin"></span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-label">Events Won</span>
+        <span class="modal-stat-value" id="modalEvents"></span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-label">Earnings</span>
+        <span class="modal-stat-value" id="modalEarnings"></span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-label">Majors Won</span>
+        <span class="modal-stat-value" id="modalMajors"></span>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    const navToggle = document.getElementById('nav-toggle');
-    const navLinks  = document.getElementById('site-nav-links');
+<script>
+  var nav = document.getElementById('site-nav');
+  var navToggle = document.getElementById('nav-toggle');
+  var navLinks = document.getElementById('site-nav-links');
 
-    navToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  navToggle.addEventListener('click', function () {
+    var isOpen = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  navLinks.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
     });
+  });
 
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      });
+  var CHAMPIONS = {
+    2025: { name: "Kevin McNamara",    avg: "414.65", margin: "73.2 pts",  events: "5",  earnings: "$358.00", majors: "U.S. Open" },
+    2024: { name: "Kevin McNamara",    avg: "443.27", margin: "571.4 pts", events: "10", earnings: "$532.00", majors: "The Open Championship" },
+    2023: { name: "Greg Wigton",       avg: "428.07", margin: "128.5 pts", events: "7",  earnings: "$516.50", majors: "The Masters<br>The Open Championship" },
+    2022: { name: "Greg Wigton",       avg: "403.30", margin: "96.6 pts",  events: "6",  earnings: "$216.00", majors: "None" },
+    2021: { name: "Kevin McNamara",    avg: "412.15", margin: "218.1 pts", events: "9",  earnings: "$445.00", majors: "The Masters" },
+    2020: { name: "Robert Bresnahan",  avg: "422.26", margin: "301.3 pts", events: "8",  earnings: "$683.00", majors: "The PGA Championship<br>U.S. Open" },
+    2019: { name: "Kevin McNamara",    avg: "426.17", margin: "314.5 pts", events: "4",  earnings: "$270.00", majors: "The Open Championship<br>The PGA Championship" }
+  };
+
+  var overlay   = document.getElementById('statModal');
+  var closeBtn  = document.getElementById('modalClose');
+  var lastFocused = null;
+
+  function openModal(year) {
+    var c = CHAMPIONS[year];
+    if (!c) return;
+    document.getElementById('modalName').textContent = c.name;
+    document.getElementById('modalYear').textContent = year;
+    document.getElementById('modalAvg').textContent = c.avg;
+    document.getElementById('modalMargin').textContent = c.margin;
+    document.getElementById('modalEvents').textContent = c.events;
+    document.getElementById('modalEarnings').textContent = c.earnings;
+    document.getElementById('modalMajors').innerHTML = c.majors;
+
+    lastFocused = document.activeElement;
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.portrait-frame').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal(btn.getAttribute('data-year'));
     });
+  });
 
-    // All rankings are out of 5 members, highest raw value = 1st,
-    // computed from Core_Data_AI.csv career totals (2019 through the
-    // current in-progress season).
-    const MEMBERS = {
-      carlos: {
-        name: "Carlos Flores",
-        win:     "17.5% (4th)",
-        mc:      "66.9% (5th)",
-        quality: "35.7% (5th)",
-        wp:      "14 (2nd)",
-        events:  "37 (4th)",
-        majors:  "6 (T-2nd)"
-      },
-      greg: {
-        name: "Greg Wigton",
-        win:     "20.8% (2nd)",
-        mc:      "69.1% (2nd)",
-        quality: "42.9% (1st)",
-        wp:      "9 (T-5th)",
-        events:  "44 (2nd)",
-        majors:  "5 (T-4th)"
-      },
-      kevin: {
-        name: "Kevin McNamara",
-        win:     "21.2% (1st)",
-        mc:      "69.9% (1st)",
-        quality: "40.5% (3rd)",
-        wp:      "9 (T-5th)",
-        events:  "45 (1st)",
-        majors:  "6 (T-2nd)"
-      },
-      robert: {
-        name: "Robert Bresnahan",
-        win:     "20.3% (3rd)",
-        mc:      "69.0% (3rd)",
-        quality: "41.7% (2nd)",
-        wp:      "13 (3rd)",
-        events:  "43 (3rd)",
-        majors:  "5 (T-4th)"
-      },
-      william: {
-        name: "William Sullivan",
-        win:     "16.5% (5th)",
-        mc:      "68.2% (4th)",
-        quality: "36.3% (4th)",
-        wp:      "16 (1st)",
-        events:  "35 (5th)",
-        majors:  "7 (1st)"
-      }
-    };
+  closeBtn.addEventListener('click', closeModal);
 
-    function wrapRank(str) {
-      // splits "17.5% (4th)" into value + styled rank span
-      const m = str.match(/^(.+?)\s*\((.+)\)$/);
-      if (!m) return str;
-      return `${m[1]} <span class="rank">(${m[2]})</span>`;
-    }
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal();
+  });
 
-    const overlay  = document.getElementById('statModal');
-    const closeBtn = document.getElementById('modalClose');
-    let lastFocused = null;
-
-    function openModal(key) {
-      const m = MEMBERS[key];
-      if (!m) return;
-      document.getElementById('modalName').textContent = m.name;
-      document.getElementById('statWin').innerHTML     = wrapRank(m.win);
-      document.getElementById('statMC').innerHTML      = wrapRank(m.mc);
-      document.getElementById('statQuality').innerHTML = wrapRank(m.quality);
-      document.getElementById('statWP').innerHTML      = wrapRank(m.wp);
-      document.getElementById('statEvents').innerHTML  = wrapRank(m.events);
-      document.getElementById('statMajors').innerHTML  = wrapRank(m.majors);
-
-      lastFocused = document.activeElement;
-      overlay.classList.add('active');
-      overlay.setAttribute('aria-hidden', 'false');
-      closeBtn.focus();
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      overlay.classList.remove('active');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      if (lastFocused) lastFocused.focus();
-    }
-
-    document.querySelectorAll('.member-photo-btn').forEach(btn => {
-      btn.addEventListener('click', () => openModal(btn.getAttribute('data-member')));
-    });
-
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
-    });
-  </script>
-
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+  });
+</script>
 </body>
 </html>
