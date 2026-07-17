@@ -137,6 +137,18 @@ body.landing-page {
   transition: opacity 0.2s ease;
 }
 
+.site-nav .nav-disabled {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--masters-green);
+  white-space: nowrap;
+  opacity: 0.45;
+  cursor: default;
+}
+
 .site-nav a:hover { opacity: 1; }
 
 /* ============================================
@@ -459,8 +471,13 @@ body.landing-page {
 
   /* Masters Green is unreadable against the dark dropdown background,
      so links go parchment-colored only while the mobile menu is open */
-  .site-nav-links.open a {
+  .site-nav-links.open a,
+  .site-nav-links.open .nav-disabled {
     color: var(--parchment);
+  }
+
+  .site-nav-links.open .nav-disabled {
+    opacity: 0.55;
   }
 }
 
