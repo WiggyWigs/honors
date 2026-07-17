@@ -158,6 +158,15 @@
       color: var(--ink-light);
     }
 
+    .summary-row .stat-value .years {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+      margin-left: 0.3rem;
+    }
+
     @media (max-width: 649px) {
       .summary-row {
         height: 5.6rem;
@@ -374,18 +383,6 @@
         <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
       </svg>
     </a>
-    <div class="site-nav-links" id="site-nav-links">
-      <a href="ohgr.html">OHGR</a>
-      <a href="weekly_report.html">Weekly Report</a>
-      <a href="member-profiles.html">Member Profiles</a>
-      <a href="champions.html">Championship History</a>
-      <a href="record-books.html">Record Books</a>
-    </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
   </nav>
 
   <section class="scroll-spacer member-profiles-section" id="member-profiles">
@@ -441,7 +438,7 @@
           <div class="summary-row">
             <div class="summary-item">
               <span class="stat-label">Championships</span>
-              <span class="stat-value">2 (2022, 2023)</span>
+              <span class="stat-value">2 <span class="years">(2022, 2023)</span></span>
             </div>
             <div class="summary-item">
               <span class="stat-label">Career Earnings</span>
@@ -475,7 +472,7 @@
           <div class="summary-row">
             <div class="summary-item">
               <span class="stat-label">Championships</span>
-              <span class="stat-value">4 (2019, 2021, 2024, 2025)</span>
+              <span class="stat-value">4 <span class="years">(2019, 2021, 2024, 2025)</span></span>
             </div>
             <div class="summary-item">
               <span class="stat-label">Career Earnings</span>
@@ -515,7 +512,7 @@
           <div class="summary-row">
             <div class="summary-item">
               <span class="stat-label">Championships</span>
-              <span class="stat-value">1 (2020)</span>
+              <span class="stat-value">1 <span class="years">(2020)</span></span>
             </div>
             <div class="summary-item">
               <span class="stat-label">Career Earnings</span>
@@ -528,7 +525,7 @@
             <div class="gs-missing">Missing: The Open Championship</div>
           </div>
 
-          <p class="member-narrative">Through the 2025 season, Robert's entire career fits into two very different stories. Story one: 2020, a season so good it produced the highest single-season earnings percentage — 46.2% of the pot — that anyone in league history has ever posted, capped off with his only championship. Story two: everything else. He's a tremendous slouch. Since that peak, Bobby B has settled into a stubbornly respectable, unmistakably top-of-the-middle existence — second in career winning percentage (21.3%), second in career made-cut rate (70.7%), and second in career event wins (39), a level of consistency that borders on statistical suspicion. His career quality lineup rate (42.9%) is actually the best in the league through 2025, proof he's not simply coasting on one great year and calling it a career. Four career majors leave him tied for the fewest in the field, and one Open Championship short of completing the Grand Slam — a gap he shares with Carlos, though Robert at least has a championship banner to point to while he waits. Going into 2026, that missing Open Championship remains the one piece of unfinished business standing between Bressy and a genuinely complete resume. If The Honors ever handed out an award for Most Convincingly Fine, he'd win it every year — and probably finish second in that too.</p>
+          <p class="member-narrative">Through the 2025 season, Robert's entire career fits into two very different stories. Story one: 2020, a season so good it produced the highest single-season earnings percentage — 46.2% of the pot — that anyone in league history has ever posted, capped off with his only championship. Story two: everything else; he's a tremendous slouch. Since that peak, Bobby B has settled into a stubbornly respectable, unmistakably top-of-the-middle existence — second in career winning percentage (21.3%), second in career made-cut rate (70.7%), and second in career event wins (39), a level of consistency that borders on statistical suspicion. His career quality lineup rate (42.9%) is actually the best in the league through 2025, proof he's not simply coasting on one great year and calling it a career. Four career majors leave him tied for the fewest in the field, and one Open Championship short of completing the Grand Slam — a gap he shares with Carlos, though Robert at least has a championship banner to point to while he waits. Going into 2026, that missing Open Championship remains the one piece of unfinished business standing between Bressy and a genuinely complete resume. If The Honors ever handed out an award for Most Convincingly Fine, he'd win it every year — and probably finish second in that too.</p>
         </div>
       </div>
     </div>
@@ -611,23 +608,6 @@
   </div>
 
   <script>
-    const navToggle = document.getElementById('nav-toggle');
-    const navLinks  = document.getElementById('site-nav-links');
-
-    navToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-
     // All rankings are out of 5 members, highest raw value = 1st,
     // computed from Core_Data_AI.csv career totals (2019 through the
     // current in-progress season).
