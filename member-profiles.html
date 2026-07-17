@@ -114,7 +114,7 @@
       display: flex;
       flex-wrap: nowrap;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
       gap: 0.5rem 1.75rem;
       padding: 0 1rem;
       height: 3.4rem;
@@ -127,7 +127,7 @@
       display: flex;
       flex-wrap: nowrap;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
       gap: 0.4rem 0.6rem;
       white-space: nowrap;
     }
@@ -174,25 +174,20 @@
       }
     }
 
-    /* Page-specific: lighter Grand Slam box than the shared styles.css default */
+    /* Page-specific: lighter Grand Slam box than the shared styles.css default.
+       Every player gets a "Career Grand Slams: #" header. Below that:
+       zero slams -> one missing-majors line. one slam -> 2x2 grid of the
+       completed slam, then a line naming what's left for the next one. */
     .grand-slam-row {
       background: rgba(184, 134, 11, 0.28);
-      justify-content: center;
-      text-align: center;
-    }
-
-    .grand-slam-row .stat-value {
-      font-size: 0.88rem;
-    }
-
-    /* Completed Grand Slam variant: header + 2x2 grid instead of a sentence */
-    .grand-slam-row--complete {
       flex-direction: column;
       align-items: stretch;
+      justify-content: center;
+      text-align: center;
       gap: 0.3rem;
     }
 
-    .grand-slam-row--complete .gs-label {
+    .gs-count {
       font-family: 'Cinzel', serif;
       font-size: 0.62rem;
       font-weight: 700;
@@ -200,6 +195,20 @@
       text-transform: uppercase;
       color: var(--ink-light);
       text-align: center;
+    }
+
+    .gs-missing,
+    .gs-next-missing {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.86rem;
+      color: var(--ink-mid);
+      text-align: center;
+    }
+
+    .gs-next-missing {
+      font-size: 0.76rem;
+      color: var(--ink-light);
     }
 
     .gs-grid {
@@ -211,23 +220,15 @@
     .gs-cell {
       font-family: 'IM Fell English', serif;
       font-style: italic;
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       color: var(--ink-mid);
       text-align: center;
       white-space: nowrap;
       overflow-x: auto;
     }
 
-    .gs-cell .gs-year {
-      font-family: 'Cinzel', serif;
-      font-style: normal;
-      font-weight: 700;
-      color: var(--masters-green);
-      margin-right: 0.25rem;
-    }
-
     @media (max-width: 649px) {
-      .gs-cell { font-size: 0.7rem; }
+      .gs-cell { font-size: 0.72rem; }
     }
 
     .member-narrative {
@@ -415,8 +416,8 @@
           </div>
 
           <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The Open Championship</span>
+            <div class="gs-count">Career Grand Slams: 0</div>
+            <div class="gs-missing">Missing: The Open Championship</div>
           </div>
 
           <p class="member-narrative">Through the 2025 season, Carlos remains the answer to a very specific piece of league trivia: who's the only member of The Honors with zero championships and zero completed career Grand Slams? Heading into 2026, he's built the league's most reliable disappointment in the categories that matter for banner-hanging, propping up the bottom of the standings with the league's worst career made-cut rate (67.7%) and worst career quality lineup rate (33.3%) — numbers that suggest a man who drafts with his heart, not his spreadsheet. And yet: five career major championships, third-most in the league, including a Masters–PGA double in the same 2022 season that briefly made Los look like a real threat. Going into the 2026 season, he needs only The Open Championship to complete the career Grand Slam, a fact he's been one tournament away from for what feels like an eternity. His career earnings sit dead last in the field, which tracks — Carlos shows up big for a few big weeks, then spends the other twenty-five quietly handing the pot back to everyone else. If The Honors ever needs someone to peak at exactly the wrong moments of the calendar, Carlito has already filled that role, and filled it admirably.</p>
@@ -449,8 +450,8 @@
           </div>
 
           <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The PGA Championship</span>
+            <div class="gs-count">Career Grand Slams: 0</div>
+            <div class="gs-missing">Missing: The PGA Championship</div>
           </div>
 
           <p class="member-narrative">Through the 2025 season, Wigs is one of the league's most complete players without quite being its most dominant. Back-to-back championships in 2022 and 2023 made him the first member to ever go back-to-back, no small feat in a five-man field this competitive. His 40.1% career quality lineup rate and 70.0% made-cut rate both sit inside the league's top three, and his 37 career event wins are third-most in the field. Where things get less flattering: his four career major wins are tied for the fewest in the league, an oddly quiet number for a two-time champion, and he shares that last-place tie with Robert — proof that Sweetchuck wins titles the hard way, one steady week at a time, rather than by stacking trophies in the four events everyone remembers. He also sits one PGA Championship short of a career Grand Slam, a gap he's stared at for years without closing it. Second in career earnings through 2025, Greg — The Wizard, on his better weeks — is the league's model of quiet, steady competence: a two-time champion whose game shows up almost every week, except, it seems, when the four tournaments people actually talk about are on the line. Going into 2026, that missing PGA Championship remains the one carrot he hasn't caught.</p>
@@ -483,13 +484,14 @@
           </div>
 
           <div class="grand-slam-row grand-slam-row--complete">
-            <div class="gs-label">First Grand Slam</div>
+            <div class="gs-count">Career Grand Slams: 1</div>
             <div class="gs-grid">
-              <div class="gs-cell"><span class="gs-year">2019</span>PGA Champ.</div>
-              <div class="gs-cell"><span class="gs-year">2019</span>Open Champ.</div>
-              <div class="gs-cell"><span class="gs-year">2021</span>The Masters</div>
-              <div class="gs-cell"><span class="gs-year">2023</span>U.S. Open</div>
+              <div class="gs-cell">2019 PGA Champ.</div>
+              <div class="gs-cell">2019 Open Champ.</div>
+              <div class="gs-cell">2021 The Masters</div>
+              <div class="gs-cell">2023 U.S. Open</div>
             </div>
+            <div class="gs-next-missing">Missing: The Masters, The PGA Championship for next grand slam</div>
           </div>
 
           <p class="member-narrative">Through the 2025 season, Kevin — 'Kmac' to the group, 'The Doctor' on a good Sunday back nine — is the standard the other four measure themselves against: four championships (2019, 2021, 2024, 2025), the best career winning percentage (24.0%) and made-cut rate (72.0%) in the league, the most career event wins (44), and the second member to complete the career Grand Slam, closing it out in 2023. His career earnings are comfortably the best in the field, which is what happens when you're this consistently good for this many years. But even the league's greatest player has a skeleton in the closet: Kev also owns the single-season last-place record, a 2020 campaign so bad it's still the worst finishing rate any member has ever posted — a footnote buried under four trophies and a completed slam. Somehow, the best golfer in league history and the owner of its worst-ever season are the exact same person, proof that even champions hit rock bottom before building a dynasty. Going into 2026, he's already chasing a second Grand Slam cycle.</p>
@@ -522,8 +524,8 @@
           </div>
 
           <div class="grand-slam-row">
-            <span class="stat-label">Career Grand Slam</span>
-            <span class="stat-value">N/A — missing: The Open Championship</span>
+            <div class="gs-count">Career Grand Slams: 0</div>
+            <div class="gs-missing">Missing: The Open Championship</div>
           </div>
 
           <p class="member-narrative">Through the 2025 season, Robert's entire career fits into two very different stories. Story one: 2020, a season so good it produced the highest single-season earnings percentage — 46.2% of the pot — that anyone in league history has ever posted, capped off with his only championship. Story two: everything else. He's a tremendous slouch. Since that peak, Bobby B has settled into a stubbornly respectable, unmistakably top-of-the-middle existence — second in career winning percentage (21.3%), second in career made-cut rate (70.7%), and second in career event wins (39), a level of consistency that borders on statistical suspicion. His career quality lineup rate (42.9%) is actually the best in the league through 2025, proof he's not simply coasting on one great year and calling it a career. Four career majors leave him tied for the fewest in the field, and one Open Championship short of completing the Grand Slam — a gap he shares with Carlos, though Robert at least has a championship banner to point to while he waits. Going into 2026, that missing Open Championship remains the one piece of unfinished business standing between Bressy and a genuinely complete resume. If The Honors ever handed out an award for Most Convincingly Fine, he'd win it every year — and probably finish second in that too.</p>
@@ -556,13 +558,14 @@
           </div>
 
           <div class="grand-slam-row grand-slam-row--complete">
-            <div class="gs-label">First Grand Slam</div>
+            <div class="gs-count">Career Grand Slams: 1</div>
             <div class="gs-grid">
-              <div class="gs-cell"><span class="gs-year">2019</span>U.S. Open</div>
-              <div class="gs-cell"><span class="gs-year">2020</span>The Masters</div>
-              <div class="gs-cell"><span class="gs-year">2022</span>Open Champ.</div>
-              <div class="gs-cell"><span class="gs-year">2023</span>PGA Champ.</div>
+              <div class="gs-cell">2019 U.S. Open</div>
+              <div class="gs-cell">2020 The Masters</div>
+              <div class="gs-cell">2022 Open Champ.</div>
+              <div class="gs-cell">2023 PGA Champ.</div>
             </div>
+            <div class="gs-next-missing">Missing: The PGA Championship, U.S. Open for next grand slam</div>
           </div>
 
           <p class="member-narrative">Through the 2025 season, William remains the league's great unsolved mystery: the most career major championships of anyone (seven), and the first member to ever complete the career Grand Slam, closing his out in 2023, four events before Kevin. By any reasonable measure, that should make him a legend. Instead, he's never won a single season championship, and his numbers outside the four biggest weeks of the year are genuinely rough — the worst career winning percentage in the league (15.8%), the fewest career event wins (29), and the most career diarrhea withdraws of anyone in the field. He also owns the longest losing streak in league history: 47 consecutive events without a win, stretching from 2021 into 2022 — more than double the next-longest cold spell anyone else has endured. His career earnings reflect a player who cashes enormous checks four times a year and quietly bleeds the rest of the season away. William is proof that peak performance and season-long consistency aren't the same skill — the league's most reliable source of both jaw-dropping majors and forgettable Sundays.</p>
