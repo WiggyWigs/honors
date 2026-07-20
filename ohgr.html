@@ -45,15 +45,23 @@
   /* ── NAV ── */
   .site-nav {
     position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-    display: flex; justify-content: flex-end; align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     padding: 1rem 1.5rem;
     background: rgba(26,42,24,0.0);
     transition: background 0.3s ease;
   }
   .site-nav.scrolled { background: rgba(26,42,24,0.85); backdrop-filter: blur(4px); padding: 0.65rem 1.5rem; }
-  .site-nav-links { display: flex; justify-content: center; gap: clamp(1rem,4vw,3rem); }
+  .site-nav.scrolled a,
+  .site-nav.scrolled .nav-home { color: #f2e4c4; }
+  .nav-home {
+    display: flex; align-items: center; color: #006747;
+    flex-shrink: 0; opacity: 0.9; transition: opacity 0.2s ease;
+  }
+  .nav-home:hover { opacity: 1; }
+  .nav-home svg { width: 20px; height: 20px; display: block; }
+  .site-nav-links { display: flex; flex: 1; justify-content: center; gap: clamp(1rem,4vw,3rem); }
   .nav-toggle {
-    display: none; /* hidden — restore with flex */
+    display: none;
     flex-direction: column; justify-content: center; gap: 5px;
     background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 101;
   }
@@ -68,16 +76,20 @@
     opacity: 0.9; transition: opacity 0.2s ease;
   }
   .site-nav a:hover { opacity: 1; }
-  .site-nav-links {
-    position: fixed; top: 0; left: 0; right: 0;
-    flex-direction: column; align-items: center; gap: 1.1rem;
-    padding: 64px 1.5rem 1.5rem;
-    background: rgba(26,42,24,0.92); backdrop-filter: blur(4px);
-    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none;
-    transition: max-height 0.3s ease, opacity 0.25s ease;
+
+  @media (max-width: 640px) {
+    .nav-toggle { display: flex; }
+    .site-nav-links {
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex: none; flex-direction: column; align-items: center; gap: 1.1rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+      background: rgba(26,42,24,0.92); backdrop-filter: blur(4px);
+      max-height: 0; opacity: 0; overflow: hidden; pointer-events: none;
+      transition: max-height 0.3s ease, opacity 0.25s ease;
+    }
+    .site-nav-links.open { max-height: 400px; opacity: 1; pointer-events: auto; }
+    .site-nav-links.open a { color: #f2e4c4; }
   }
-  .site-nav-links.open { max-height: 400px; opacity: 1; pointer-events: auto; }
-  .site-nav-links.open a { color: #f2e4c4; }
 
   /* ── PAGE WRAPPER ── */
   .page-outer { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 8px 0; }
@@ -251,12 +263,18 @@
 <body>
 
 <nav class="site-nav" id="site-nav">
+  <a class="nav-home" href="index.html" aria-label="The Honors home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.5 12 4l9 7.5" />
+      <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
+    </svg>
+  </a>
   <div class="site-nav-links" id="site-nav-links">
-    <a href="index.html#hero">Home</a>
+    <a href="ohgr.html">OHGR</a>
     <a href="weekly_report.html">Weekly Report</a>
-    <a href="index.html#member-profiles">Member Profiles</a>
-    <a href="index.html#championship-history">Championship History</a>
-    <a href="index.html#record-books">Record Books</a>
+    <a href="member-profiles.html">Member Profiles</a>
+    <a href="champions.html">Championship History</a>
+    <a href="record-books.html">Record Books</a>
   </div>
   <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -273,7 +291,7 @@
     </div>
     <div class="hero-center">
       <div class="hero-headline">Official Honors Golf Ranking</div>
-      <div class="hero-subheadline">Rolling 20-Event Performance Index &nbsp;|&nbsp; Through LE#205 — Scottish Open</div>
+      <div class="hero-subheadline">Rolling 20-Event Performance Index &nbsp;|&nbsp; Through LE#206 — The Open Championship</div>
     </div>
     <div class="hero-right"></div>
   </div>
@@ -306,39 +324,39 @@
         </div>
         <div class="rank-details">
           <span class="rank-name" style="color:#8B7010">William Sullivan</span>
-          <span class="rank-meta">Peak: 462.5 &nbsp;|&nbsp; 87.0% of peak</span>
+          <span class="rank-meta">Peak: 462.5 &nbsp;|&nbsp; 91.4% of peak</span>
         </div>
         <div class="rank-score-col">
-          <span class="rank-score" style="color:#8B7010">402.5</span>
-          <span class="rank-delta"><span class="delta-up">▲ 4.5</span></span>
+          <span class="rank-score" style="color:#8B7010">422.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 20.0</span></span>
         </div>
       </div>
       <div class="ranking-row">
         <div class="rank-num">2</div>
         <div class="rank-photo-wrap">
-          <img src="https://www.dropbox.com/scl/fi/e2dgtkri7u22j7gqsi6x9/Greg-02.PNG?rlkey=pheuh2gi09hcubx2f3zrozl87&st=a6tv32oy&raw=1" alt="Greg Wigton" class="rank-photo">
+          <img src="https://www.dropbox.com/scl/fi/zruuex75i80b4acw3pgdg/Carlos-00.png?rlkey=4lzqq6t13fudzbhyng1e3nit4&st=svg8tu96&raw=1" alt="Carlos Flores" class="rank-photo">
         </div>
         <div class="rank-details">
-          <span class="rank-name" style="color:#3A9B4B">Greg Wigton</span>
-          <span class="rank-meta">Peak: 451.5 &nbsp;|&nbsp; 88.9% of peak</span>
+          <span class="rank-name" style="color:#D94040">Carlos Flores</span>
+          <span class="rank-meta">Peak: 438.0 &nbsp;|&nbsp; 91.7% of peak</span>
         </div>
         <div class="rank-score-col">
-          <span class="rank-score" style="color:#3A9B4B">401.5</span>
-          <span class="rank-delta"><span class="delta-down">▼ 18.5</span></span>
+          <span class="rank-score" style="color:#D94040">401.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 10.0</span></span>
         </div>
       </div>
       <div class="ranking-row">
         <div class="rank-num">3</div>
         <div class="rank-photo-wrap">
-          <img src="https://www.dropbox.com/scl/fi/zruuex75i80b4acw3pgdg/Carlos-00.png?rlkey=4lzqq6t13fudzbhyng1e3nit4&st=svg8tu96&raw=1" alt="Carlos Flores" class="rank-photo">
+          <img src="https://www.dropbox.com/scl/fi/e2dgtkri7u22j7gqsi6x9/Greg-02.PNG?rlkey=pheuh2gi09hcubx2f3zrozl87&st=a6tv32oy&raw=1" alt="Greg Wigton" class="rank-photo">
         </div>
         <div class="rank-details">
-          <span class="rank-name" style="color:#D94040">Carlos Flores</span>
-          <span class="rank-meta">Peak: 438.0 &nbsp;|&nbsp; 89.4% of peak</span>
+          <span class="rank-name" style="color:#3A9B4B">Greg Wigton</span>
+          <span class="rank-meta">Peak: 451.5 &nbsp;|&nbsp; 88.0% of peak</span>
         </div>
         <div class="rank-score-col">
-          <span class="rank-score" style="color:#D94040">391.5</span>
-          <span class="rank-delta"><span class="delta-down">▼ 1.0</span></span>
+          <span class="rank-score" style="color:#3A9B4B">397.5</span>
+          <span class="rank-delta"><span class="delta-down">▼ 4.0</span></span>
         </div>
       </div>
       <div class="ranking-row">
@@ -348,11 +366,11 @@
         </div>
         <div class="rank-details">
           <span class="rank-name" style="color:#3B72C9">Kevin McNamara</span>
-          <span class="rank-meta">Peak: 478.5 &nbsp;|&nbsp; 78.9% of peak</span>
+          <span class="rank-meta">Peak: 478.5 &nbsp;|&nbsp; 79.1% of peak</span>
         </div>
         <div class="rank-score-col">
-          <span class="rank-score" style="color:#3B72C9">377.5</span>
-          <span class="rank-delta"><span class="delta-up">▲ 4.5</span></span>
+          <span class="rank-score" style="color:#3B72C9">378.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 1.0</span></span>
         </div>
       </div>
       <div class="ranking-row">
@@ -362,11 +380,11 @@
         </div>
         <div class="rank-details">
           <span class="rank-name" style="color:#7B4BB5">Robert Bresnahan</span>
-          <span class="rank-meta">Peak: 456.5 &nbsp;|&nbsp; 75.2% of peak</span>
+          <span class="rank-meta">Peak: 456.5 &nbsp;|&nbsp; 82.3% of peak</span>
         </div>
         <div class="rank-score-col">
-          <span class="rank-score" style="color:#7B4BB5">343.5</span>
-          <span class="rank-delta"><span class="delta-down">▼ 6.5</span></span>
+          <span class="rank-score" style="color:#7B4BB5">375.5</span>
+          <span class="rank-delta"><span class="delta-up">▲ 32.0</span></span>
         </div>
       </div>
     </div>
@@ -376,17 +394,17 @@
       <div class="weeks-row">
         <span class="weeks-name" style="color:#3B72C9">Kevin</span>
         <div class="weeks-track"><div class="weeks-fill" style="width:100.0%;background:#3B72C9"></div></div>
-        <span class="weeks-stat">56 <span class="weeks-pct">(30.1%)</span></span>
+        <span class="weeks-stat">56 <span class="weeks-pct">(29.9%)</span></span>
       </div>
       <div class="weeks-row">
         <span class="weeks-name" style="color:#3A9B4B">Greg</span>
         <div class="weeks-track"><div class="weeks-fill" style="width:89.3%;background:#3A9B4B"></div></div>
-        <span class="weeks-stat">50 <span class="weeks-pct">(26.9%)</span></span>
+        <span class="weeks-stat">50 <span class="weeks-pct">(26.7%)</span></span>
       </div>
       <div class="weeks-row">
         <span class="weeks-name" style="color:#8B7010">William</span>
-        <div class="weeks-track"><div class="weeks-fill" style="width:83.9%;background:#8B7010"></div></div>
-        <span class="weeks-stat">47 <span class="weeks-pct">(25.3%)</span></span>
+        <div class="weeks-track"><div class="weeks-fill" style="width:85.7%;background:#8B7010"></div></div>
+        <span class="weeks-stat">48 <span class="weeks-pct">(25.7%)</span></span>
       </div>
       <div class="weeks-row">
         <span class="weeks-name" style="color:#7B4BB5">Robert</span>
@@ -413,18 +431,18 @@
   <!-- NARRATIVE -->
   <div class="narrative-section">
     <div class="narrative-label">OHGR Notes</div>
-    <div class="narrative-text">William Sullivan grabbed the OHGR's top spot this week, climbing 4.5 points to lead at 402.5, enough to pass Greg Wigton, who slides to second after dropping 18.5. The shakeup traces straight to the rolling window: the Scottish Open now anchors the recent end, while the Waste Management Phoenix Open — an Elevated event that carried extra weight — rolled off the back.
+    <div class="narrative-text">William Sullivan grew his OHGR lead to 422.5, and did it in a hurry — he's up 51 points over the last 10 events, the biggest gain in the field, and up 20 just this week as The Open Championship rolled into the window in place of the AT&T Pebble Beach Pro-Am. What was a 1-point edge over the field last week is now a 21-point cushion. He's sitting at 91.4% of his career peak, closer to his ceiling than anyone else near the top.
 
-Robert Bresnahan also lost ground, falling 6.5 points to last place, now 59.0 back of Sullivan at the top. Kevin McNamara stayed put at 4th, but he is the model of consistency here — his last ten scores never strayed outside a 369.5–384.5 band, for better or worse. Carlos Flores held third; his standout number in the window came at the PGA Championship, where his 28.0 was the best single-event score anyone posted over the last ten.
+Carlos Flores holds second at 401.5, ten points better than last week, while Greg Wigton slides to third at 397.5 after the field's biggest single drop. Kevin McNamara is the model of stability in fourth at 378.5, holding inside a 15-point band all window even as everyone around him swings. Robert Bresnahan is last at 375.5 despite posting the week's biggest jump, up 32 points — proof that even a big week isn't enough when you're this far off the pace.
 
-Next up is the Open Championship — a major, worth double weight in this formula — and with the top five packed into a 59-point band, one big week could reshuffle this list top to bottom.</div>
+Only 47 points separate first from last, so nobody is safely anywhere. It's also worth remembering Kevin has spent more weeks at number one than anyone in league history, 56 of 187 — a reminder that this board can flip fast. With no majors left on the schedule and six events to go, William will need to hold serve through a stretch of Tour and Elevated events where the whole field has a puncher's chance to climb back into the lead.</div>
   </div>
 
   <!-- FOOTER -->
   <div class="page-footer">
     <div class="footer-text">The Honors Fantasy Golf League</div>
     <div class="footer-rule"></div>
-    <div class="footer-text">OHGR &nbsp;|&nbsp; Through LE#205 — Scottish Open</div>
+    <div class="footer-text">OHGR &nbsp;|&nbsp; Through LE#206 — The Open Championship</div>
   </div>
 
 </div><!-- end .page -->
@@ -434,9 +452,9 @@ Next up is the Open Championship — a major, worth double weight in this formul
 <script>
 const players  = ["Carlos Flores", "Greg Wigton", "Kevin McNamara", "Robert Bresnahan", "William Sullivan"];
 const colors   = {"Carlos Flores": "#D94040", "Greg Wigton": "#3A9B4B", "Kevin McNamara": "#3B72C9", "Robert Bresnahan": "#7B4BB5", "William Sullivan": "#8B7010"};
-const scores10 = {"Carlos Flores": [388.0,415.5,418.5,416.5,422.5,412.0,417.0,390.5,392.5,391.5], "Greg Wigton": [401.5,417.0,411.0,406.5,409.0,399.0,429.0,415.0,420.0,401.5], "Kevin McNamara": [382.0,379.5,374.5,369.5,378.5,380.0,384.5,376.0,373.0,377.5], "Robert Bresnahan": [380.5,389.5,378.5,380.5,390.0,382.0,381.0,350.0,350.0,343.5], "William Sullivan": [371.5,397.0,394.0,379.0,402.0,399.5,418.5,408.0,398.0,402.5]};
-const ranks20  = {"Carlos Flores": [4,4,2,4,4,4,3,2,2,2,2,2,1,1,1,1,3,3,3,3], "Greg Wigton": [5,3,1,3,2,1,1,1,1,1,1,1,2,2,2,3,1,1,1,2], "Kevin McNamara": [2,2,3,1,3,3,4,4,4,3,3,5,5,5,5,5,4,4,4,4], "Robert Bresnahan": [1,1,4,2,1,2,2,3,3,4,4,4,4,3,4,4,5,5,5,5], "William Sullivan": [3,5,5,5,5,5,5,5,5,5,5,3,3,4,3,2,2,2,2,1]};
-const xLabels  = ["Triust Chmapionsh\u2026", "PGA Champ.", "", "", "", "", "U.S. Open", "", "", "Scottish Open"];
+const scores10 = {"Carlos Flores": [415.5,418.5,416.5,422.5,412.0,417.0,390.5,392.5,391.5,401.5], "Greg Wigton": [417.0,411.0,406.5,409.0,399.0,429.0,415.0,420.0,401.5,397.5], "Kevin McNamara": [379.5,374.5,369.5,378.5,380.0,384.5,376.0,373.0,377.5,378.5], "Robert Bresnahan": [389.5,378.5,380.5,390.0,382.0,381.0,350.0,350.0,343.5,375.5], "William Sullivan": [397.0,394.0,379.0,402.0,399.5,418.5,408.0,398.0,402.5,422.5]};
+const ranks20  = {"Carlos Flores": [4,2,4,4,4,3,2,2,2,2,2,1,1,1,1,3,3,3,3,2], "Greg Wigton": [3,1,3,2,1,1,1,1,1,1,1,2,2,2,3,1,1,1,2,3], "Kevin McNamara": [2,3,1,3,3,4,4,4,3,3,5,5,5,5,5,4,4,4,4,4], "Robert Bresnahan": [1,4,2,1,2,2,3,3,4,4,4,4,3,4,4,5,5,5,5,5], "William Sullivan": [5,5,5,5,5,5,5,5,5,5,3,3,4,3,2,2,2,2,1,1]};
+const xLabels  = ["PGA Champ.", "", "", "", "", "U.S. Open", "", "", "", "Open Champ."];
 const yMin     = 320;
 
 const gridColor = 'rgba(0,103,71,0.12)';
