@@ -429,9 +429,13 @@ body.landing-page {
 
   .hero-logo-img,
   .hero-logo-placeholder {
-    /* shifted down slightly from the desktop 45% so the logo clears the title
-       text in hero_m.png, which sits higher up than in the desktop hero */
-    top: 50%;
+    /* NOTE: this used to be 50%, set back when desktop's logo position was
+       45%. Desktop has since moved to 10% but this mobile override was
+       never updated to match, so the logo was landing mid-image, on top
+       of hero_m.png's title text. Scaled down proportionally to 15% —
+       flag for a real check against the actual image, since it wasn't
+       available to verify against directly. */
+    top: 15%;
   }
 
   /* Hide the inline links, show the hamburger button instead */
