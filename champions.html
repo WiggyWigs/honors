@@ -498,20 +498,9 @@
       <path d="M5.5 9.5V20a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5" />
     </svg>
   </a>
-  <div class="site-nav-links" id="site-nav-links">
-    <a href="ohgr.html">OHGR</a>
-    <a href="weekly_report.html">Weekly Report</a>
-    <a href="member-profiles.html">Member Profiles</a>
-    <a href="champions.html">Championship History</a>
-    <a href="record-books.html">Record Books</a>
-  </div>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
 </nav>
 <div class="page-outer">
+
 <div class="page">
 
   <div class="champ-header">
@@ -608,26 +597,10 @@
 
 <script>
   var nav = document.getElementById('site-nav');
-  var navToggle = document.getElementById('nav-toggle');
-  var navLinks = document.getElementById('site-nav-links');
 
   window.addEventListener('scroll', function () {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
-
-  navToggle.addEventListener('click', function () {
-    var isOpen = navLinks.classList.toggle('open');
-    navToggle.classList.toggle('open', isOpen);
-    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
-
-  navLinks.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', function () {
-      navLinks.classList.remove('open');
-      navToggle.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    });
-  });
 
   var CHAMPIONS = {
     2025: { name: "Kevin McNamara",    avg: "414.65", margin: "73.2 pts",  events: "5",  earnings: "$358.00", majors: "U.S. Open" },
