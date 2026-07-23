@@ -28,6 +28,20 @@
        to push content down, so the top section needs its own offset) */
     .member-profiles-section { padding-top: 7rem; }
 
+    /* Small-font season label directly under the page title */
+    .section-subtitle {
+      display: block;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      opacity: 0.75;
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
     /* Page-specific: divider between member cards */
     .member-card + .member-card {
       margin-top: 3.5rem;
@@ -387,6 +401,7 @@
 
   <section class="scroll-spacer member-profiles-section" id="member-profiles">
     <h2 class="section-header" style="opacity:1;">Member Profiles</h2>
+    <span class="section-subtitle">As of 2025 Season</span>
 
     <!-- ============= CARLOS FLORES ============= -->
     <div class="member-card">
